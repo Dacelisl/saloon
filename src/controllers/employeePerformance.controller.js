@@ -12,40 +12,31 @@ class EmployeePerformanceController {
       return sendErrorResponse(res, error)
     }
   }
-  async getEmployeePerformanceById(req, res) {
-    const employeePerformanceId = req.params.tid
-    try {
-      const response = await employeePerformanceService.getemployeePerformanceById(employeePerformanceId)
-      return sendSuccessResponse(res, response)
-    } catch (error) {
-      req.logger.error(error)
-      return sendErrorResponse(res, error)
-    }
-  }
-  async getEmployeePerformanceByEmployeePerformanceNumber(req, res) {
-    const employeePerformanceNum = req.params.tnum
-    try {
-      const response = await employeePerformanceService.getemployeePerformanceByemployeePerformanceNumber(parseInt(employeePerformanceNum))
-      return sendSuccessResponse(res, response)
-    } catch (error) {
-      req.logger.error(error)
-      return sendErrorResponse(res, error)
-    }
-  }
-  async getEmployeePerformancesByCustomerDNI(req, res) {
+
+  async getPerformancesByCustomerDNI(req, res) {
     const employeePerformanceCustomer = req.params.cid
     try {
-      const response = await employeePerformanceService.getemployeePerformancesByCustomerDNI(employeePerformanceCustomer)
+      const response = await employeePerformanceService.getPerformancesByCustomerDNI(employeePerformanceCustomer)
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)
       return sendErrorResponse(res, error)
     }
   }
-  async getEmployeePerformancesByEmployeeDNI(req, res) {
-    const employeePerformanceEmployee = req.params.eid
+  async getPerformancesByEmployeeDNI(req, res) {
+    const performanceEmployee = req.params.eid
     try {
-      const response = await employeePerformanceService.getemployeePerformancesByEmployeeDNI(employeePerformanceEmployee)
+      const response = await employeePerformanceService.getPerformancesByEmployeeDNI(performanceEmployee)
+      return sendSuccessResponse(res, response)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
+  async getPerformanceByDate(req, res) {
+    const performanceEmployee = req.body
+    try {
+      const response = await employeePerformanceService.getPerformanceByDate(performanceEmployee)
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)

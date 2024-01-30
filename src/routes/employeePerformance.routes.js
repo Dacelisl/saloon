@@ -3,10 +3,9 @@ import { employeePerformanceController } from '../controllers/employeePerformanc
 export const EmployeePerformanceRoutes = express.Router()
 
 EmployeePerformanceRoutes.get('/', employeePerformanceController.getAllEmployeePerformances)
-EmployeePerformanceRoutes.get('/:tid', employeePerformanceController.getEmployeePerformanceById)
-EmployeePerformanceRoutes.get('/employeePerformance/:tnum', employeePerformanceController.getEmployeePerformanceByEmployeePerformanceNumber)
-EmployeePerformanceRoutes.get('/customer/:cid', employeePerformanceController.getEmployeePerformancesByCustomerDNI)
-EmployeePerformanceRoutes.get('/employee/:eid', employeePerformanceController.getEmployeePerformancesByEmployeeDNI)
+EmployeePerformanceRoutes.get('/customer/:cid', employeePerformanceController.getPerformancesByCustomerDNI)
+EmployeePerformanceRoutes.get('/employee/:eid', employeePerformanceController.getPerformancesByEmployeeDNI)
+EmployeePerformanceRoutes.get('/range/', employeePerformanceController.getPerformanceByDate)
 /* EmployeePerformanceRoutes.post('/', employeePerformanceController.createEmployeePerformance) */
 EmployeePerformanceRoutes.put('/:tid', employeePerformanceController.updateEmployeePerformance)
 EmployeePerformanceRoutes.delete('/:tid', employeePerformanceController.deleteEmployeePerformance)

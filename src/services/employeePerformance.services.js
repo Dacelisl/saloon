@@ -23,20 +23,20 @@ class EmployeePerformanceServices {
       return {
         status: 'error',
         code: 500,
-        message: `error getting all employeePerformances : getEmployeePerformances ${error}`,
+        message: `error getting all employeePerformances : getPerformances ${error}`,
         payload: {},
       }
     }
   }
-  async getEmployeePerformanceById(uid) {
+  
+  async getPerformancesByCustomerDNI(customerId) {
     try {
-      isValid(uid)
-      const employeePerformanceFound = await employeePerformanceFactory.getEmployeePerformanceById(uid)
+      const employeePerformanceFound = await employeePerformanceFactory.getPerformancesByCustomerDNI(customerId)
       if (!employeePerformanceFound) {
         return {
           status: 'Fail',
           code: 404,
-          message: 'EmployeePerformance not exist getEmployeePerformanceById',
+          message: 'EmployeePerformance not exist getPerformancesByCustomerDNI',
           payload: {},
         }
       }
@@ -50,19 +50,19 @@ class EmployeePerformanceServices {
       return {
         status: 'Fail',
         code: 400,
-        message: `Error getEmployeePerformanceById ${error}`,
+        message: `Error getPerformancesByCustomerDNI ${error}`,
         payload: {},
       }
     }
   }
-  async getEmployeePerformanceByEmployeePerformanceNumber(employeePerformanceNumber) {
+  async getPerformancesByEmployeeDNI(employeeId) {
     try {
-      const employeePerformanceFound = await employeePerformanceFactory.getEmployeePerformanceByEmployeePerformanceNumber(employeePerformanceNumber)
+      const employeePerformanceFound = await employeePerformanceFactory.getPerformancesByEmployeeDNI(employeeId)
       if (!employeePerformanceFound) {
         return {
           status: 'Fail',
           code: 404,
-          message: 'EmployeePerformance not exist getEmployeePerformanceByEmployeePerformanceNumber',
+          message: 'EmployeePerformance not exist getPerformancesByEmployeeDNI',
           payload: {},
         }
       }
@@ -76,19 +76,19 @@ class EmployeePerformanceServices {
       return {
         status: 'Fail',
         code: 400,
-        message: `Error getEmployeePerformanceByEmail ${error}`,
+        message: `Error getPerformancesByEmployeeDNI ${error}`,
         payload: {},
       }
     }
   }
-  async getEmployeePerformancesByCustomerDNI(customerId) {
+  async getPerformanceByDate(employeeId) {
     try {
-      const employeePerformanceFound = await employeePerformanceFactory.getEmployeePerformancesByCustomerDNI(customerId)
+      const employeePerformanceFound = await employeePerformanceFactory.getPerformanceByDate(employeeId)
       if (!employeePerformanceFound) {
         return {
           status: 'Fail',
           code: 404,
-          message: 'EmployeePerformance not exist getEmployeePerformancesByCustomerDNI',
+          message: 'EmployeePerformance not exist getPerformanceByDate',
           payload: {},
         }
       }
@@ -102,40 +102,14 @@ class EmployeePerformanceServices {
       return {
         status: 'Fail',
         code: 400,
-        message: `Error getEmployeePerformancesByCustomerDNI ${error}`,
-        payload: {},
-      }
-    }
-  }
-  async getEmployeePerformancesByEmployeeDNI(employeeId) {
-    try {
-      const employeePerformanceFound = await employeePerformanceFactory.getEmployeePerformancesByEmployeeDNI(employeeId)
-      if (!employeePerformanceFound) {
-        return {
-          status: 'Fail',
-          code: 404,
-          message: 'EmployeePerformance not exist getEmployeePerformancesByEmployeeDNI',
-          payload: {},
-        }
-      }
-      return {
-        status: 'success',
-        code: 200,
-        message: 'employeePerformance found',
-        payload: employeePerformanceFound,
-      }
-    } catch (error) {
-      return {
-        status: 'Fail',
-        code: 400,
-        message: `Error getEmployeePerformancesByEmployeeDNI ${error}`,
+        message: `Error getPerformanceByDate ${error}`,
         payload: {},
       }
     }
   }
   async updateEmployeePerformance(employeePerformance) {
     try {
-      const employeePerformanceFound = await employeePerformanceFactory.getEmployeePerformanceByEmployeePerformanceNumber(employeePerformance.employeePerformanceNumber)
+      const employeePerformanceFound = await employeePerformanceFactory.getPerformanceByEmployeePerformanceNumber(employeePerformance.employeePerformanceNumber)
       if (!employeePerformanceFound) {
         return {
           status: 'Fail',
@@ -146,7 +120,7 @@ class EmployeePerformanceServices {
       }
       const employeePerformanceUpdate = await employeePerformanceFactory.updateEmployeePerformance(employeePerformance)
       if (employeePerformanceUpdate.modifiedCount > 0) {
-        const responseUpdate = await employeePerformanceFactory.getEmployeePerformanceByEmployeePerformanceNumber(employeePerformance.employeePerformanceNumber)
+        const responseUpdate = await employeePerformanceFactory.getPerformanceByEmployeePerformanceNumber(employeePerformance.employeePerformanceNumber)
         return {
           status: 'success',
           code: 200,
@@ -172,7 +146,7 @@ class EmployeePerformanceServices {
   }
   async deleteEmployeePerformance(id) {
     try {
-      const employeePerformance = await employeePerformanceFactory.getEmployeePerformanceById(id)
+      const employeePerformance = await employeePerformanceFactory.getPerformanceById(id)
       if (!employeePerformance) {
         return {
           status: 'error',

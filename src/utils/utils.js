@@ -99,6 +99,11 @@ function sendSuccessResponse(res, data) {
 function formatDate(date) {
   return date === undefined ? 'none' : new Date(date).toLocaleDateString('es-CO')
 }
+function convertToMongoDate(simpleDate) {
+  const jsDate = new Date(simpleDate)
+  const isoDate = jsDate.toISOString()
+  return isoDate
+}
 function formatCurrency(amount) {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(amount)
 }
@@ -125,6 +130,7 @@ export {
   parsedQuery,
   isValid,
   randomCode,
+  convertToMongoDate,
   convertCurrencyToNumber,
   extractFunctionAndFile,
   timeDifference,
