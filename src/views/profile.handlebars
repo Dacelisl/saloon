@@ -1,0 +1,21 @@
+<div class='profile-container'>
+  <h1>User Profile</h1>
+  <div class='profile-info'>
+    <p><strong>Name:</strong> {{user}}</p>
+    <p><strong>Email:</strong> {{email}}</p>
+    <p><strong>Rol:</strong>
+
+      {{#if isAdmin}}
+        <p>Administrator</p>
+        <a id='settings' href='/api/users/admin'>settings</a>
+      {{else}}
+        <span>User</span>
+      {{/if}}
+    </p>
+  </div>
+  <div class='buttons'>
+    <button><a href='/api/products/'>Go to Home</a></button>
+    <button><a href='/api/users/logout/'>Logout</a></button>
+
+  </div>
+</div>

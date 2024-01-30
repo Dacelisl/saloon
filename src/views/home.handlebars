@@ -1,0 +1,58 @@
+<div class='top-bar'>
+  <div class='search'>
+    <input class='input-search' type='text' placeholder='Category like Garden, Tools... ' />
+    <button class='button-search'>Search</button>
+  </div>
+  <div class='cart'>
+    <a href='/api/carts/' class='cart-icon'>Cart</a>
+  </div>
+  <div id='session'>
+    {{#if session.user}}
+      <a href='/api/users/profile/'>{{session.user}}</a>
+    {{else}}
+      <a href='/api/users/login/'>Login</a>
+    {{/if}}
+  </div>
+</div>
+
+{{#if session.message}}
+  <div class='alert alert-success'>{{session.message}}</div>
+{{/if}}
+
+<h1 class='title'>PRODUCT LIST</h1>
+<div id='product-container' class='center'>
+  {{#each payload}}
+    <ul class='product-list'>
+      <li class='product-item'>title: {{title}}</li>
+      <li class='product-item'>description: {{description}}</li>
+      <li class='product-item'>category: {{category}}</li>
+      <li class='product-item'>price: {{price}}</li>
+      <li class='product-item'>status: {{status}}</li>
+      <li class='product-item'>thumbnail: {{thumbnail}}</li>
+      <li class='product-item'>code: {{code}}</li>
+      <li class='product-item'>stock: {{stock}}</li>
+      <li class='button-item'>
+        {{#if session.user.isAdmin}}
+          <button class='delete-button' id='product-button' data-id={{_id}}>Delete</button>
+          <button class='update-button' id='product-button' data-id={{_id}}>Update</button>
+        {{else}}
+          <button class='addCart-button' id='product-button' data-id={{_id}}>Add To Cart</button>
+        {{/if}}
+      </li>
+    </ul>
+  {{/each}}
+</div>
+<footer class='footer'>
+  <ul class='pagination'>
+    {{#if hasPrevPage}}
+      <li><a href='{{prevLink}}'>Anterior</a></li>
+    {{/if}}
+    <li><a>Page: {{page}} of {{totalPages}}</a></li>
+    {{#if hasNextPage}}
+      <li><a href='{{nextLink}}'>Siguiente</a></li>
+    {{/if}}
+  </ul>
+</footer>
+<script src='https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js'></script>
+<script src='/socket.io/socket.io.js'></script>
+<script src='/js/index.js'></script>
