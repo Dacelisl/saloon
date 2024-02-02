@@ -66,6 +66,15 @@ function timeDifference(connectionTime, timeMinutes) {
   const hoursDifference = timeDifference / (1000 * 60)
   return hoursDifference > timeMinutes
 }
+function randomTicketNumber() {
+  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'
+  let code = ''
+  for (let i = 0; i < 7; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * caracteres.length)
+    code += caracteres.charAt(indiceAleatorio)
+  }
+  return code
+}
 function randomCode(length) {
   const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let code = ''
@@ -134,6 +143,7 @@ export {
   convertCurrencyToNumber,
   extractFunctionAndFile,
   timeDifference,
+  randomTicketNumber,
   formatCurrency,
   formatPercentage,
   formatDate,

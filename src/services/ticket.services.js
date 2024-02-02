@@ -1,5 +1,4 @@
 import { ticketFactory } from '../DAO/factory.js'
-import { isValid } from '../utils/utils.js'
 
 class TicketServices {
   async getTickets() {
@@ -28,33 +27,6 @@ class TicketServices {
       }
     }
   }
-  async getTicketById(uid) {
-    try {
-      isValid(uid)
-      const ticketFound = await ticketFactory.getTicketById(uid)
-      if (!ticketFound) {
-        return {
-          status: 'Fail',
-          code: 404,
-          message: 'Ticket not exist getTicketById',
-          payload: {},
-        }
-      }
-      return {
-        status: 'success',
-        code: 200,
-        message: 'ticket found',
-        payload: ticketFound,
-      }
-    } catch (error) {
-      return {
-        status: 'Fail',
-        code: 400,
-        message: `Error getTicketById ${error}`,
-        payload: {},
-      }
-    }
-  }
   async getTicketByTicketNumber(ticketNumber) {
     try {
       const ticketFound = await ticketFactory.getTicketByTicketNumber(ticketNumber)
@@ -76,7 +48,59 @@ class TicketServices {
       return {
         status: 'Fail',
         code: 400,
-        message: `Error getTicketByEmail ${error}`,
+        message: `Error getTicketByTicketNumber ${error}`,
+        payload: {},
+      }
+    }
+  }
+  async getTicketWithBalanceDueByNum(ticketNumber) {
+    try {
+      const ticketFound = await ticketFactory.getTicketWithBalanceDueByNum(ticketNumber)
+      if (!ticketFound) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: 'Ticket not exist getTicketWithBalanceDueByNum',
+          payload: {},
+        }
+      }
+      return {
+        status: 'success',
+        code: 200,
+        message: 'ticket found',
+        payload: ticketFound,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 400,
+        message: `Error getTicketWithBalanceDueByNum ${error}`,
+        payload: {},
+      }
+    }
+  }
+  async getTicketByBalanceDue() {
+    try {
+      const ticketFound = await ticketFactory.getTicketByBalanceDue()
+      if (!ticketFound) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: 'There are no tickets with a balance due',
+          payload: {},
+        }
+      }
+      return {
+        status: 'success',
+        code: 200,
+        message: 'tickets with balanceDue found',
+        payload: ticketFound,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 400,
+        message: `Error getTicketByBalanceDue ${error}`,
         payload: {},
       }
     }
@@ -196,9 +220,9 @@ class TicketServices {
       }
     }
   }
-  async deleteTicket(id) {
+  async deleteTicket(ticketNumber) {
     try {
-      const ticket = await ticketFactory.getTicketById(id)
+      const ticket = await ticketFactory.getTicketByTicketNumber(ticketNumber)
       if (!ticket) {
         return {
           status: 'error',
@@ -207,7 +231,7 @@ class TicketServices {
           payload: {},
         }
       }
-      const result = await ticketFactory.deleteTicket(id)
+      const result = await ticketFactory.deleteTicket(ticketNumber)
       if (result.deletedCount > 0) {
         return {
           status: 'Success',

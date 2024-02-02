@@ -6,6 +6,3 @@ EmployeePerformanceRoutes.get('/', employeePerformanceController.getAllEmployeeP
 EmployeePerformanceRoutes.get('/customer/:cid', employeePerformanceController.getPerformancesByCustomerDNI)
 EmployeePerformanceRoutes.get('/employee/:eid', employeePerformanceController.getPerformancesByEmployeeDNI)
 EmployeePerformanceRoutes.get('/range/', employeePerformanceController.getPerformanceByDate)
-/* EmployeePerformanceRoutes.post('/', employeePerformanceController.createEmployeePerformance) */
-EmployeePerformanceRoutes.put('/:tid', employeePerformanceController.updateEmployeePerformance)
-EmployeePerformanceRoutes.delete('/:tid', employeePerformanceController.deleteEmployeePerformance)

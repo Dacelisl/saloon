@@ -53,7 +53,6 @@ class EmployeePerformanceDAO {
       throw new Error(`function DAO getPerformanceByDate  ${error}`)
     }
   }
-  
 
   async createEmployeePerformance(dataEmployeePerformance) {
     try {
@@ -64,24 +63,27 @@ class EmployeePerformanceDAO {
       throw new Error(`function DAO createemployeePerformance ${error}`)
     }
   }
-  async deleteEmployeePerformance(objectId) {
+  async deleteEmployeePerformance(ticketNumber) {
     try {
-      const result = await EmployeePerformanceModel.deleteOne({ _id: objectId })
+      const result = await EmployeePerformanceModel.deleteOne({
+        'earningsDetails.ticketNumber': ticketNumber,
+      })
       return result
     } catch (error) {
       throw new Error(`function DAO deleteemployeePerformance ${error}`)
     }
   }
-  async updateEmployeePerformance(employeePerformanceId, dataEmployeePerformance) {
+  async updateEmployeePerformance(ticket) {
     try {
-      const result = await EmployeePerformanceModel.updateOne({ _id: employeePerformanceId }, dataEmployeePerformance)
+      const performance = new EmployeePerformanceSaveDTO(ticket)
+      const ticketNumber = performance.earningsDetails[0].ticketNumber
+      const result = await EmployeePerformanceModel.updateOne({ 'earningsDetails.ticketNumber': ticketNumber }, performance)
       return result
     } catch (error) {
       throw new Error(`function DAO updateEmployeePerformance: ${error}`)
     }
   }
 
-  
   async updatePerformanceById(performanceId, updatedData) {
     try {
       const result = await EmployeePerformanceModel.findByIdAndUpdate(performanceId, updatedData, { new: true })
@@ -90,14 +92,5 @@ class EmployeePerformanceDAO {
       throw new Error(`function DAO updatePerformanceById  ${error}`)
     }
   }
-  async deletePerformanceById(performanceId) {
-    try {
-      const result = await EmployeePerformanceModel.findByIdAndDelete(performanceId)
-      return result
-    } catch (error) {
-      throw new Error(`function DAO deletePerformanceById  ${error}`)
-    }
-  }
 }
-
 export const employeePerformanceDAO = new EmployeePerformanceDAO()

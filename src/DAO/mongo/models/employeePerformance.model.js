@@ -5,7 +5,7 @@ const EmployeePerformanceSchema = new Schema({
   date: { type: Date, required: true, default: Date.now },
   earningsDetails: [
     {
-      ticketNumber: { type: Number, required: true, unique: true },
+      ticketNumber: { type: String, required: true, unique: true },
       customerId: { type: Schema.Types.ObjectId, ref: 'user', required: true },
       serviceOrProduct: { type: String, required: true },
       itemType: { type: String, required: true, enum: ['service', 'product'] },

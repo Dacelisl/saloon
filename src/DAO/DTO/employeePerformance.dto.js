@@ -38,16 +38,6 @@ class EarningsDetailDTO {
       lastName: customer.lastName,
     }
   }
-
-  /* mapTicket(ticket) {
-    return Array.isArray(ticket)
-      ? ticket.map((entry) => ({
-          ticketNumber: entry.ticketNumber,
-          purchaseDate: formatDate(entry.purchaseDate),
-          totalPayment: formatCurrency(entry.totalPayment),
-        }))
-      : []
-  } */
   mapServiceOrProduct(sale) {
     return Array.isArray(sale)
       ? sale.map((entry) => ({

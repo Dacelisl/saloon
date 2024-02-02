@@ -1,5 +1,4 @@
 import { employeePerformanceFactory } from '../DAO/factory.js'
-import { isValid } from '../utils/utils.js'
 
 class EmployeePerformanceServices {
   async getAllEmployeePerformances() {
@@ -28,7 +27,6 @@ class EmployeePerformanceServices {
       }
     }
   }
-  
   async getPerformancesByCustomerDNI(customerId) {
     try {
       const employeePerformanceFound = await employeePerformanceFactory.getPerformancesByCustomerDNI(customerId)
@@ -107,6 +105,7 @@ class EmployeePerformanceServices {
       }
     }
   }
+  
   async updateEmployeePerformance(employeePerformance) {
     try {
       const employeePerformanceFound = await employeePerformanceFactory.getPerformanceByEmployeePerformanceNumber(employeePerformance.employeePerformanceNumber)
@@ -140,42 +139,6 @@ class EmployeePerformanceServices {
         status: 'Fail',
         code: 400,
         message: `Error updateEmployeePerformance : ${error}`,
-        payload: {},
-      }
-    }
-  }
-  async deleteEmployeePerformance(id) {
-    try {
-      const employeePerformance = await employeePerformanceFactory.getPerformanceById(id)
-      if (!employeePerformance) {
-        return {
-          status: 'error',
-          code: 404,
-          message: 'EmployeePerformance not found',
-          payload: {},
-        }
-      }
-      const result = await employeePerformanceFactory.deleteEmployeePerformance(id)
-      if (result.deletedCount > 0) {
-        return {
-          status: 'Success',
-          code: 204,
-          message: 'employeePerformance deleted successfully',
-          payload: {},
-        }
-      } else {
-        return {
-          status: 'Fail',
-          code: 404,
-          message: `Error, employeePerformance not found deleteEmployeePerformance`,
-          payload: {},
-        }
-      }
-    } catch (error) {
-      return {
-        status: 'error',
-        code: 500,
-        message: `Something went wrong deleteEmployeePerformance: ${error}`,
         payload: {},
       }
     }

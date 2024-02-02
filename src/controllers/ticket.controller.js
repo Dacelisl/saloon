@@ -12,20 +12,29 @@ class TicketController {
       return sendErrorResponse(res, error)
     }
   }
-  async getTicketById(req, res) {
-    const ticketId = req.params.tid
+  async getTicketByTicketNumber(req, res) {
+    const ticketNum = req.params.tnum
     try {
-      const response = await ticketService.getTicketById(ticketId)
+      const response = await ticketService.getTicketByTicketNumber(ticketNum)
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)
       return sendErrorResponse(res, error)
     }
   }
-  async getTicketByTicketNumber(req, res) {
+  async getTicketWithBalanceDueByNum(req, res) {
     const ticketNum = req.params.tnum
     try {
-      const response = await ticketService.getTicketByTicketNumber(parseInt(ticketNum))
+      const response = await ticketService.getTicketWithBalanceDueByNum(ticketNum)
+      return sendSuccessResponse(res, response)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
+  async getTicketByBalanceDue(req, res) {
+    try {
+      const response = await ticketService.getTicketByBalanceDue()
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)
@@ -34,7 +43,6 @@ class TicketController {
   }
   async getTicketsByCustomerDNI(req, res) {
     const ticketCustomer = req.params.cid
-    console.log('customr', ticketCustomer);
     try {
       const response = await ticketService.getTicketsByCustomerDNI(ticketCustomer)
       return sendSuccessResponse(res, response)

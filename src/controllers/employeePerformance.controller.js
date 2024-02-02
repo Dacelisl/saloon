@@ -12,7 +12,6 @@ class EmployeePerformanceController {
       return sendErrorResponse(res, error)
     }
   }
-
   async getPerformancesByCustomerDNI(req, res) {
     const employeePerformanceCustomer = req.params.cid
     try {
@@ -37,26 +36,6 @@ class EmployeePerformanceController {
     const performanceEmployee = req.body
     try {
       const response = await employeePerformanceService.getPerformanceByDate(performanceEmployee)
-      return sendSuccessResponse(res, response)
-    } catch (error) {
-      req.logger.error(error)
-      return sendErrorResponse(res, error)
-    }
-  }
-  async updateEmployeePerformance(req, res) {
-    const data = req.body
-    try {
-      const resUpdate = await employeePerformanceService.updateEmployeePerformance(data)
-      return sendSuccessResponse(res, resUpdate)
-    } catch (error) {
-      req.logger.error(error)
-      return sendErrorResponse(res, error)
-    }
-  }
-  async deleteEmployeePerformance(req, res) {
-    try {
-      const employeePerformanceId = req.params.tid
-      const response = await employeePerformanceService.deleteemployeePerformance(employeePerformanceId)
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)
