@@ -1,5 +1,5 @@
 export function registeredUser(req, res, next) {
-  if (req.session.user?.email) {
+  if (req.user?.email) {
     return next()
   }
   req.logger.warning('Authentication Error!')
@@ -7,7 +7,7 @@ export function registeredUser(req, res, next) {
 }
 
 export function adminAccess(req, res, next) {
-  if (req.session.user?.rol === 'admin' || req.session.user?.rol === 'premium') {
+  if (req.user?.rol === 'admin' || req.user?.rol === 'premium') {
     return next()
   }
   const ruta = req.originalUrl
@@ -15,7 +15,7 @@ export function adminAccess(req, res, next) {
   return res.status(403).render('error', { error: 'authorization error!', code: 403 })
 }
 export function isUser(req, res, next) {
-  if (req.session.user?.rol !== 'admin') {
+  if (req.user?.rol !== 'admin') {
     return next()
   }
   req.logger.warning(`authorization error  ${req.method} ${ruta} from ${funcion}`)

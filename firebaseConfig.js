@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import dataConfig from './process.config.JS'
+import dataConfig from './server/config/process.config.js'
 const firebaseConfig = {
   apiKey: dataConfig.fire_apiKey,
   authDomain: dataConfig.fire_authDomain,

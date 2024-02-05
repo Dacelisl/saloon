@@ -1,7 +1,7 @@
 import { TicketModel } from '../models/ticket.model.js'
 import { ProductModel } from '../models/product.model.js'
 import { ServiceModel } from '../models/service.model.js'
-import { employeePerformanceDAO } from '../class/employeePerformance.dao.js'
+import { employeePerformanceDAO } from './employeePerformance.dao.js'
 import { TicketDTO } from '../../DTO/ticket.dto.js'
 import { totalPrice, randomTicketNumber } from '../../../utils/utils.js'
 

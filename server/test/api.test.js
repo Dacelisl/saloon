@@ -1,8 +1,8 @@
 import chai from 'chai'
 import supertest from 'supertest'
-import dataConfig from '../src/config/process.config.js'
+import dataConfig from '../config/process.config.js'
 import { faker } from '@faker-js/faker'
-import { __dirname } from '../src/utils/utils.js'
+import { __dirname } from '../utils/utils.js'
 import { unlinkSync } from 'fs'
 import superagent from 'superagent'
 

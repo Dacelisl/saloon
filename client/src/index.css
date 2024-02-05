@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-agregado: 255 115 179;
+    --color-secondary: 111 114 185;
+  }
+}
+@layer base {
+  .table-head-car {
+    @apply table-cell text-center align-middle;
+  }
+}
+@layer components {
+  .head-table {
+    @apply w-1/5 text-center font-medium border-b-2 border-solid border-slate-200;
+  }
+}
+@layer components {
+  .data-table {
+    @apply pb-3 uppercase font-extralight text-lg from-stone-400;
+  }
+}
+@layer components {
+  .detail-table {
+    @apply text-center border-b-2 border-solid border-slate-200;
+  }
+}
