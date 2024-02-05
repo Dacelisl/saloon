@@ -2,7 +2,7 @@ import { Command } from 'commander'
 import dotenv from 'dotenv'
 
 const program = new Command()
-program.option('--mode <mode>', 'modo de trabajo', 'development')
+program.option('--mode <mode>', 'Work Mode', 'development')
 
 program.parse()
 const mode = program.opts()
@@ -26,5 +26,11 @@ const dataConfig = {
   secret: process.env.SECRET,
   email_google: process.env.EMAIL,
   key_email_google: process.env.KEY_GOOGLE,
+  fire_apiKey: process.env.FIRE_APIKEY,
+  fire_authDomain: process.env.FIRE_AUTHDOMAIN,
+  fire_projectId: process.env.FIRE_PROJECTID,
+  fire_storageBucket: process.env.FIRE_STORAGEBUCKET,
+  fire_messagingSenderId: process.env.FIRE_MESSAGINGSENDERID,
+  fire_appId: process.env.FIRE_APPID,
 }
 export default dataConfig
