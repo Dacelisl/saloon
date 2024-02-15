@@ -43,9 +43,9 @@ class EmployeeDAO {
       throw new Error(`function DAO deleteEmployee: ${error}`)
     }
   }
-  async updateEmployee(employeeData) {
+  async updateEmployee(employeeData, id) {
     try {
-      const result = await EmployeeModel.updateOne({ email: employeeData.email }, employeeData)
+      const result = await EmployeeModel.updateOne({ _id: id }, employeeData)
       return result
     } catch (error) {
       throw new Error(`function DAO updateEmployee: ${error}`)

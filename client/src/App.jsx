@@ -1,28 +1,31 @@
 import { useState } from 'react'
-import matrix from './assets/matrix.jpg'
-import viteLogo from '/vite.svg'
-
+import Login from './components/login/Login'
+import {logOut} from './firebase/firebase'
+import ModalRegister from './components/modalRegister/ModalRegister'
 function App() {
-  const [count, setCount] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+  const close = () => {
+    logOut()
+  }
   return (
     <>
-      <div>
-        <a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank' rel='noreferrer'>
-          <img src={matrix} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
+      <Login></Login>
+      <button onClick={openModal} className='bg-blue-500 absolute text-white px-4 py-2 rounded-md'>
+        Abrir Modal
+      </button>
+      <button onClick={close} className='bg-red-600 right-[2%] top-[1%] absolute text-white px-4 py-2 rounded-md'>
+        LogOut
+      </button>
+
+      <ModalRegister isOpen={isModalOpen} onClose={closeModal} />
     </>
   )
 }

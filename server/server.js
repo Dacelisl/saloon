@@ -1,6 +1,8 @@
 import express from 'express'
 import 'express-async-errors'
 import MongoStore from 'connect-mongo'
+import session from 'express-session'
+import cors from 'cors'
 import { __dirname } from './utils/utils.js'
 import { addLogger, logger } from './utils/logger.js'
 import { connectMongo } from './utils/connectMongo.js'
@@ -15,6 +17,15 @@ import { EmployeePerformanceRoutes } from './routes/employeePerformance.routes.j
 import dataConfig from './config/process.config.js'
 
 const app = express()
+const corsOptions = {
+  origin: `http://localhost:5173`,
+  optionsSuccessStatus: 200,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type, Authorization',
+}
+
+app.use(cors(corsOptions))
 app.use(addLogger)
 
 app.listen(dataConfig.port, () => logger.info(`listen on http://localhost:${dataConfig.port}, mode:`, dataConfig.mode))
@@ -25,10 +36,18 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(__dirname + '/public'))
 
-MongoStore.create({
+const store = MongoStore.create({
   mongoUrl: dataConfig.url_mongo,
   ttl: dataConfig.ttl,
 })
+app.use(
+  session({
+    store,
+    secret: dataConfig.secret,
+    resave: true,
+    saveUninitialized: false,
+  })
+)
 
 app.use('/api/products', ProductRoutes)
 app.use('/api/users', UserRoutes)

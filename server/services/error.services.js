@@ -4,7 +4,7 @@ import { generateProductErrorInfo, generateUserErrorInfo } from '../utils/errors
 
 export function handleUserCreationError(req, res, next) {
   const data = req.body
-  if (!data.firstName || !data.lastName || !data.email || !data.age || !data.password) {
+  if (!data.firstName || !data.lastName || !data.email || !data.age) {
     req.logger.error('something went wrong UserCreation')
     next(new CustomError(EErrors.USER_CREATION, generateUserErrorInfo(data)))
   } else {

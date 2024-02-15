@@ -11,6 +11,7 @@ const employeeSchema = new Schema({
   },
   dni: {
     type: Number,
+    unique: true,
     required: true,
   },
   phone: {
@@ -39,11 +40,6 @@ const employeeSchema = new Schema({
     },
   },
   dateBirthday: { type: Date, required: true },
-  password: {
-    type: String,
-    required: true,
-    max: 100,
-  },
   role: { type: Schema.Types.ObjectId, ref: 'role', required: true },
   documents: [
     {

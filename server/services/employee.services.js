@@ -4,7 +4,7 @@ import dataConfig from '../config/process.config.js'
 
 class EmployeeServices {
   validateEmployee(dataEmployee) {
-    const requiredProperties = ['firstName', 'lastName', 'dni', 'password', 'phone', 'address', 'email', 'dateBirthday', 'role']
+    const requiredProperties = ['firstName', 'lastName', 'dni', 'phone', 'address', 'email', 'dateBirthday', 'role']
     const missingProperties = requiredProperties.filter((property) => {
       return !(property in dataEmployee) || dataEmployee[property] === undefined
     })
@@ -119,9 +119,10 @@ class EmployeeServices {
       }
     }
   }
-  async updateEmployee(employee) {
+  async updateEmployee(employee, id) {
     try {
-      const employeeFound = await employeeFactory.getEmployeeByEmail(employee.email)
+      console.log('data ', employee)
+      const employeeFound = await employeeFactory.getEmployeeById(id)
       if (!employeeFound) {
         return {
           status: 'Fail',
@@ -130,9 +131,10 @@ class EmployeeServices {
           payload: {},
         }
       }
-      const employeeUpdate = await employeeFactory.updateEmployee(employee)
+      const employeeUpdate = await employeeFactory.updateEmployee(employee, id)
+      console.log('data', employeeUpdate)
       if (employeeUpdate.modifiedCount > 0) {
-        const employee = await employeeFactory.getEmployeeByEmail(employee.email)
+        const employee = await employeeFactory.getEmployeeById(id)
         return {
           status: 'success',
           code: 200,
@@ -144,7 +146,7 @@ class EmployeeServices {
           status: 'Fail',
           code: 404,
           message: `Error updateEmployee`,
-          payload: employeeUpdate,
+          payload: {},
         }
       }
     } catch (error) {

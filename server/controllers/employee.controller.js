@@ -1,5 +1,6 @@
 import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
 import { employeeService } from '../services/employee.services.js'
+import admin from '../../firebase.js'
 
 class EmployeeController {
   async getAllEmployees(req, res) {
@@ -11,6 +12,36 @@ class EmployeeController {
       return sendErrorResponse(res, error)
     }
   }
+  async createRol(req, res) {
+    const { accessToken, rol } = req.body
+    try {
+      await admin.auth().setCustomUserClaims(accessToken, { rol })
+      res.status(200).json({ success: true })
+    } catch (error) {
+      res.status(500).json({ success: false, error: 'Error creating custom claims' })
+    }
+  }
+
+  async getLogOut(req, res) {
+    req.session.destroy((e) => {
+      if (!e) res.send('logOut ok')
+      else res.send('error logOut')
+    })
+    console.log('cerro session en controller')
+  }
+  async getLogin(req, res) {
+    const accessToken = req.body.accessToken
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(accessToken)
+      console.log('data de session en login', req.session)
+      req.session.user = decodedToken
+
+      res.status(200).json({ success: true, token: decodedToken })
+    } catch (error) {
+      res.status(500).send('Error: authentication server')
+    }
+  }
+
   async getEmployeeById(req, res) {
     const employeeId = req.params.id
     try {
@@ -43,8 +74,9 @@ class EmployeeController {
   }
   async updateEmployee(req, res) {
     const employeeData = req.body
+    const id = req.params.id
     try {
-      const result = await employeeService.updateEmployee(employeeData)
+      const result = await employeeService.updateEmployee(employeeData, id)
       return sendSuccessResponse(res, result)
     } catch (error) {
       req.logger.error(error)

@@ -1,4 +1,4 @@
-import { formatDate } from '../../utils/utils.js'
+import { formatDate, createHash } from '../../utils/utils.js'
 
 class EmployeeDTO {
   constructor(employee) {

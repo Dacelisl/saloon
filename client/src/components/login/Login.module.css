@@ -1,0 +1,66 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 30, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .container::before {
+    content: " ";
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: url("../../assets/images/login_background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+  }
+  .loginContainer {
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    padding: 15px;
+  }
+  .appTitle {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    color: #3575a3;
+  }
+  .info {
+    font-family: "Open Sans", sans-serif;
+    color: #555;
+    margin: 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .form input[type="text"] {
+    border: none;
+    margin: 10px;
+    background-color: white;
+    font-family: "Open Sans", sans-serif;
+    padding: 5px;
+    width: 100%;
+  }
+  .form input[type="submit"] {
+    border: none;
+    color: white;
+    background-color: #d62b5e;
+    width: 70%;
+    padding: 10px;
+  }
+  .form input[type="submit"]:hover {
+    background-color: #7c1a37;
+    cursor: pointer;
+  }
