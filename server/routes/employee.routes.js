@@ -5,7 +5,7 @@ import { adminAccess, registeredUser } from '../middleware/auth.js'
 export const EmployeeRoutes = express.Router()
 
 EmployeeRoutes.post('/create', employeeController.createRol)
-EmployeeRoutes.post('/logOut',registeredUser,adminAccess, employeeController.getLogOut)
+EmployeeRoutes.post('/logOut',registeredUser, employeeController.getLogOut)
 EmployeeRoutes.post('/login', employeeController.getLogin)
 EmployeeRoutes.get('/', registeredUser, employeeController.getAllEmployees)
 EmployeeRoutes.get('/:id', employeeController.getEmployeeById)

@@ -2,6 +2,7 @@ import { auth } from './firebaseApp'
 import { isValidPassword } from '../utils/utils'
 import axios from 'axios'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+axios.defaults.withCredentials = true
 
 export const getRoles = async () => {
   try {
@@ -28,22 +29,21 @@ export const registerEmployeeFire = async (email, password, rol) => {
 export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
-    await axios.post('http://localhost:3000/api/employee/login', { accessToken: response.user.accessToken }, { withCredentials: true })
+    await axios.post('http://localhost:3000/api/employee/login', { accessToken: response.user.accessToken })
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
   }
 }
 export const logOut = async () => {
-  await axios.post('http://localhost:3000/api/employee/logOut')
-
-  /* signOut(auth)
-    .then(() => {
+  await signOut(auth)
+    .then(async () => {
+      await axios.post('http://localhost:3000/api/employee/logOut')
       return true
     })
     .catch(() => {
       return false
-    }) */
+    })
 }
 export const registerEmployeeMongo = async (dataUser) => {
   try {

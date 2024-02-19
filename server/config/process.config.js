@@ -32,5 +32,7 @@ const dataConfig = {
   fire_storageBucket: process.env.FIRE_STORAGEBUCKET,
   fire_messagingSenderId: process.env.FIRE_MESSAGINGSENDERID,
   fire_appId: process.env.FIRE_APPID,
+  redis_host: process.env.REDIS_HOST,
+  redis_port: process.env.REDIS_PORT,
 }
 export default dataConfig

@@ -9,7 +9,10 @@ let mongoConnectionInstance = null
 export const connectMongo = async () => {
   if (!mongoConnectionInstance) {
     try {
-      const dbConnection = await connect(`mongodb+srv://${dataConfig.userName}:${dataConfig.secretKey}@backendcoder.tu6mnjp.mongodb.net/${dataConfig.databaseName}?retryWrites=true&w=majority`)
+      const dbConnection = await connect(`${dataConfig.url_mongo}`, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
       logger.info('Connected to MongoDB!')
       mongoConnectionInstance = dbConnection
       await dbConnection.syncIndexes()
