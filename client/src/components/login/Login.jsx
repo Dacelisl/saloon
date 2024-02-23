@@ -1,11 +1,13 @@
 import { useState } from 'react'
 /* import { useNavigate } from 'react-router-dom' */
 import matrix from '../../assets/matrix.jpg'
-import { registerWithGoogle, singIn, logOut } from '../../firebase/firebase'
+import { singIn, logOut } from '../../firebase/firebase'
 import ButtonIcon from '../utils/ButtonIcon'
 import Toast from '../utils/Toast'
+import ModalRecoveryPassword from '../modals/ModalRecoveryPassword'
 
 const Login = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [user, setUser] = useState({
     userName: '',
     password: '',
@@ -17,18 +19,13 @@ const Login = () => {
     type: 'alert',
   })
 
-  const recoverPassword = async () => {
-    const res = await registerWithGoogle()
-    setUser({
-      userName: res.displayName,
-      mail: res.email,
-    })
+  const handleOpenModal = () => {
+    setIsModalOpen(true)
+  }
+  const handleCloseModal = async () => {
+    setIsModalOpen(false)
   }
   const singOut = async (e) => {
-    /* display: flex;
-    position: absolute;
-    left: 50%;
-    top: inherit; */
     e.preventDefault()
     try {
       await logOut()
@@ -40,12 +37,15 @@ const Login = () => {
   const login = async (e) => {
     e.preventDefault()
     try {
-      await singIn(user.userName, user.password)
-      setUser({
-        userName: '',
-        mail: '',
-      })
-      msgToast('Login Successful')
+      if (user.userName || user.password != '') {
+        await singIn(user.userName, user.password)
+        setUser({
+          userName: '',
+          password: '',
+        })
+        return msgToast('Login Successful')
+      }
+      return msgToast('enter username and passwords')
     } catch (error) {
       msgToast('Invalid username or password')
     }
@@ -64,7 +64,7 @@ const Login = () => {
       setToast(false)
       /* res ? navigate('/') : res === false ? setRegister(true) : <></> */
       console.log('navega segun respuesta ', res)
-    }, 2000)
+    }, 9000)
   }
   return (
     <div
@@ -84,6 +84,7 @@ const Login = () => {
             id='username'
             autoComplete='off'
             required
+            value={user.userName}
             onChange={(e) => setUser({ ...user, userName: e.target.value })}
             placeholder='Enter your Username'
             className='block h-10 w-full bg-slate-700 rounded px-3 mt-2 mb-4 text-lg font-extralight placeholder:text-slate-400 '
@@ -93,6 +94,7 @@ const Login = () => {
             required
             autoComplete='off'
             type='password'
+            value={user.password}
             onChange={(e) => setUser({ ...user, password: e.target.value })}
             placeholder='Enter your password'
             className='block h-10 w-full bg-slate-700 rounded px-3 mt-2 mb-4 text-lg font-extralight placeholder:text-slate-400 '
@@ -114,11 +116,12 @@ const Login = () => {
             />
           </span>
           <span className='block text-center text-xs font-extralight mt-3 md:text-lg'>
-            <span className='cursor-pointer' onClick={recoverPassword}>
+            <span className='cursor-pointer' onClick={handleOpenModal}>
               Forgot password ?
             </span>
           </span>
         </form>
+        <ModalRecoveryPassword isOpen={isModalOpen} onClose={handleCloseModal} />
       </div>
       <span className=' flex mt-4 mb-4  justify-center'>
         <ButtonIcon
@@ -136,6 +139,7 @@ const Login = () => {
           onClick={singOut}
         />
       </span>
+
       {toast.state ? (
         <>
           <Toast message={toast.message} type={toast.type} />

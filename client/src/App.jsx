@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Login from './components/login/Login'
 import {logOut} from './firebase/firebase'
-import ModalRegister from './components/modalRegister/ModalRegister'
+import ModalRegister from './components/modals/ModalRegister'
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
 

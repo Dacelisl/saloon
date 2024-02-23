@@ -1,7 +1,7 @@
 import { auth } from './firebaseApp'
 import { isValidPassword } from '../utils/utils'
 import axios from 'axios'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword,sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
 
 export const getRoles = async () => {
@@ -29,6 +29,7 @@ export const registerEmployeeFire = async (email, password, rol) => {
 export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
+    if (!response) return false
     await axios.post('http://localhost:3000/api/employee/login', { accessToken: response.user.accessToken })
     return response
   } catch (error) {
@@ -44,6 +45,20 @@ export const logOut = async () => {
     .catch(() => {
       return false
     })
+}
+export const passwordRecovery = async (email) => {
+  try {
+    sendPasswordResetEmail(auth, email)
+      .then((e) => {
+        console.log('se envio el email de recover',e);
+      })
+      .catch((error) => {
+        console.log('error en el recovery 1', error);
+      })
+  } catch (error) {
+    console.log('error en el recovery', error)
+    return error.response.data
+  }
 }
 export const registerEmployeeMongo = async (dataUser) => {
   try {
@@ -63,14 +78,6 @@ export const verifyUser = async (emailUser, userPassw) => {
     const formattedDate = currentDate.toLocaleString()
     await axios.put(`http://localhost:3000/api/employee/${res.payload.id}`, { lastConnection: formattedDate })
     return true
-  } catch (error) {
-    console.error('Error en la solicitud de registro:', error.message)
-  }
-}
-export const registerWithGoogle = async (passUser) => {
-  try {
-    const response = await axios.get(`http://localhost:3000/api/employee/email/${passUser}`)
-    console.log(response.data)
   } catch (error) {
     console.error('Error en la solicitud de registro:', error.message)
   }

@@ -8,13 +8,13 @@ const ButtonIcon = ({ title, nameIcon, sizeIcon, color, ...others }) => {
         {...others}
       >
         {nameIcon ? (
-          <span className='text-justify mt-1 px-1'>
+          <span className='inline-flex relative  left-[-10%]'>
             <ion-icon name={nameIcon} size={sizeIcon}></ion-icon>
           </span>
         ) : (
           <></>
         )}
-        {title}
+        <span className="p-1">{title}</span>
       </button>
     </>
   )

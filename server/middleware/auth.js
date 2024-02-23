@@ -1,14 +1,12 @@
-
 export async function registeredUser(req, res, next) {
   try {
-    console.log('usuario', req.session);
-  if (req.session.user) next()
-  else {console.log('no esta registrado');}
+    if (req.session.user) next()
+    else {
+      console.log('no esta registrado')
+    }
   } catch (error) {
-    console.log('error auth', error);
-    
+    console.log('error auth', error)
   }
-  
 }
 
 export function adminAccess(req, res, next) {

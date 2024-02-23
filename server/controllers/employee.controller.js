@@ -23,7 +23,6 @@ class EmployeeController {
   }
 
   async getLogOut(req, res) {
-    console.log('se desconecto');
     req.session.destroy((e) => {
       if (!e) res.json({ status: true, message: 'logOut ok' })
       else res.json({ status: true, message: 'error logOut' })
@@ -34,7 +33,6 @@ class EmployeeController {
     try {
       const decodedToken = await admin.auth().verifyIdToken(accessToken)
       req.session.user = decodedToken
-      console.log('user', req.session.user);
       res.json({ message: 'Login successful' })
     } catch (error) {
       res.json('Error: authentication server')

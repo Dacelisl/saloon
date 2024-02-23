@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
-import { PasswordValid } from '../../utils/utils'
-import Toast from '../utils/Toast'
+import { PasswordValid } from '../../utils/utils.js'
+import Toast from '../utils/Toast.jsx'
 
-import { getRoles, registerEmployeeMongo, registerEmployeeFire } from '../../firebase/firebase'
+import { getRoles, registerEmployeeMongo, registerEmployeeFire } from '../../firebase/firebase.js'
 
 const ModalRegister = ({ isOpen, onClose }) => {
   const [userData, setUserData] = useState({
@@ -60,12 +60,12 @@ const ModalRegister = ({ isOpen, onClose }) => {
         return
       }
       const resMongo = await registerEmployeeMongo(userData)
-      console.log('data mongo', resMongo);
       switch (resMongo.code) {
         case 201:
           await registerEmployeeFire(userData.email, userData.password, role)
           msgToast('Successfully registered user')
           resetUser()
+          onClose()
           break
         case 400:
           msgToast('Some properties are missing or undefined')

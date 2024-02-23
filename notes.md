@@ -24,4 +24,4 @@
   
 -usar el servicio de email para la recuperacion de contraseña link:https://firebase.google.com/docs/auth/admin/email-action-links?hl=es-419
 
-/verificar el uso de la session y las cookies no registra en el cliente en aplicacion, teniendo claro el uso de session implementar adecuadamente los middleware 
+-en el middleware de auth modificar para redirigir a ruta 404
