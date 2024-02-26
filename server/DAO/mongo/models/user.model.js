@@ -14,7 +14,7 @@ const schema = new Schema({
     required: true,
     validate: {
       validator: async function (value) {
-        return /^\d{12}$/.test(value.toString())
+        return /^\d{10,}$/.test(value.toString())
       },
       message: 'The phone number is not valid',
     },
@@ -37,6 +37,16 @@ const schema = new Schema({
   dateBirthday: {
     type: Date,
     required: true,
+  },
+  firstDate: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  lastDate: {
+    type: Date,
+    required: true,
+    default: Date.now,
   },
   photo: {
     type: String,

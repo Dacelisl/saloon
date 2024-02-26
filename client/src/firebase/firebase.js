@@ -1,9 +1,17 @@
 import { auth } from './firebaseApp'
 import { isValidPassword } from '../utils/utils'
 import axios from 'axios'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword,sendPasswordResetEmail, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
 
+export const getClients = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/users/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getRoles ${error.message}`)
+  }
+}
 export const getRoles = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/role/')
@@ -50,10 +58,10 @@ export const passwordRecovery = async (email) => {
   try {
     sendPasswordResetEmail(auth, email)
       .then((e) => {
-        console.log('se envio el email de recover',e);
+        console.log('se envio el email de recover', e)
       })
       .catch((error) => {
-        console.log('error en el recovery 1', error);
+        console.log('error en el recovery 1', error)
       })
   } catch (error) {
     console.log('error en el recovery', error)
@@ -63,6 +71,14 @@ export const passwordRecovery = async (email) => {
 export const registerEmployeeMongo = async (dataUser) => {
   try {
     const response = await axios.post('http://localhost:3000/api/employee/', dataUser)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
+}
+export const registerClient = async (dataUser) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/users/', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
