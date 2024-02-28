@@ -1,5 +1,6 @@
 import { productService } from '../services/product.services.js'
-import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
+import { sendErrorResponse, sendSuccessResponse, uploadToFirebase } from '../utils/utils.js'
+import admin from '../../firebase.js'
 
 class ProductController {
   async getAllProducts(req, res) {
@@ -60,9 +61,16 @@ class ProductController {
   }
   async createProduct(req, res) {
     try {
-      const { name, description, category, price, thumbnail, code, provider, stock, profitPercentage } = req.body
-      const newProduct = { name, description, category, price, thumbnail, code, provider, stock, profitPercentage }
+      const { name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon } = req.body
+      const newProduct = { name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon }
+
+      /* const img = await resizeAndCompress(newProduct.thumbnail) */
+
+      const resFire = await uploadToFirebase(img, 'imagenTest')
+      console.log('resfire', resFire);
+
       const response = await productService.createProduct(newProduct)
+      
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)
@@ -81,7 +89,8 @@ class ProductController {
         code: data.code,
         provider: data.provider,
         stock: data.stock,
-        profitPercentage: data.profitPercentage,
+        profitEmployee: data.profitEmployee,
+        profitSaloon: data.profitSaloon,
       }
       newProduct.id = req.params.pid
       const resUpdate = await productService.updateProduct(newProduct)

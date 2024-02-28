@@ -1,5 +1,5 @@
 import { auth } from './firebaseApp'
-import { isValidPassword } from '../utils/utils'
+import { isValidPassword } from '../utils/utils.js'
 import axios from 'axios'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
@@ -82,6 +82,17 @@ export const registerClient = async (dataUser) => {
     return response.data
   } catch (error) {
     return error.response.data
+  }
+}
+export const registerProduct = async (dataProduct) => {
+  try {
+    console.log('product new ', dataProduct)
+    /* const response = await axios.post('http://localhost:3000/api/products', dataProduct)
+    console.log('data en fire front', response); */
+    return true
+  } catch (error) {
+    console.log('error en fire', error)
+    return error
   }
 }
 

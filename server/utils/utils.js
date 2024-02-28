@@ -3,6 +3,10 @@ import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import bcryptjs from 'bcryptjs'
+import sharp from 'sharp'
+import imagemin from 'imagemin'
+
+import admin from '../../firebase.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.resolve(__filename, '../../')
@@ -89,6 +93,7 @@ function convertCurrencyToNumber(currencyString) {
   return isNaN(numericValue) ? 0 : numericValue
 }
 function sendErrorResponse(res, error) {
+  console.log('data error', error)
   return res.status(500).json({
     status: 'error',
     code: 500,
@@ -128,6 +133,30 @@ function extractFunctionAndFile(error) {
   const fileName = filePathPart.split('/').pop()
   const functionName = beforeParentheses.split('.').pop()
   return { functionName, fileName }
+}
+
+export const uploadToFirebase = async (buffer, filename) => {
+  const bucket = admin.storage().bucket()
+  const file = bucket.file(filename)
+  await file.save(buffer)
+  return file.getMetadata()
+}
+export const resizeAndCompress = async (file) => {
+  console.log('file', file)
+  const buffer = await sharp(file.buffer)
+    .resize(180, 190) // Tamaño máximo
+    .toBuffer()
+  const optimizedBuffer = await imagemin.buffer(buffer, {
+    plugins: [
+      imagemin.imageminPngquant({
+        quality: [0.6, 0.8], // Rango de calidad
+      }),
+      imagemin.imageminMozjpeg({
+        quality: 70, // Calidad JPEG
+      }),
+    ],
+  })
+  return optimizedBuffer
 }
 
 export const createHash = (password) => bcryptjs.hashSync(password, bcryptjs.genSaltSync(10))

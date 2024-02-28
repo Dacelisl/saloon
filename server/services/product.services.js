@@ -4,7 +4,7 @@ import dataConfig from '../config/process.config.js'
 
 class ProductServices {
   validateProduct(dataProduct) {
-    const requiredProperties = ['name', 'description', 'category', 'price', 'thumbnail', 'code', 'provider', 'stock', 'profitPercentage']
+    const requiredProperties = ['name', 'description', 'category', 'price', 'thumbnail', 'code', 'provider', 'stock', 'profitEmployee, profitSaloon']
     const missingProperties = requiredProperties.filter((property) => {
       return !(property in dataProduct) || dataProduct[property] === undefined
     })

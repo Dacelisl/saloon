@@ -3,8 +3,8 @@ import { Schema, model } from 'mongoose'
 const categoryEnum = ['cleaning', 'sale', 'inUse', 'inventory']
 
 const schema = new Schema({
-  name: { type: String, required: true, max: 100 },
-  description: { type: String, required: true, max: 100 },
+  name: { type: String, required: true, max: 80 },
+  description: { type: String, required: true, max: 150 },
   category: { type: String, required: true, enum: categoryEnum },
   price: { type: Number, required: true },
   thumbnail: { type: String, required: true, max: 100 },
@@ -12,7 +12,8 @@ const schema = new Schema({
   provider: { type: String, required: false, max: 30 },
   stock: { type: Number, required: true, max: 110 },
   dateCreation: { type: Date, default: Date.now },
-  profitPercentage: { type: Number, required: true },
+  profitEmployee: { type: Number, required: true },
+  profitSaloon: { type: Number, required: true },
 })
 
 export const ProductModel = model('product', schema)
