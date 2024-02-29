@@ -1,6 +1,7 @@
 import { auth } from './firebaseApp'
 import { isValidPassword } from '../utils/utils.js'
 import axios from 'axios'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
 
@@ -21,6 +22,22 @@ export const getRoles = async () => {
     return roles
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
+  }
+}
+export const getCategories = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/products/categories/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getCategories ${error.message}`)
+  }
+}
+export const getProviders = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/provider/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getCategories ${error.message}`)
   }
 }
 
@@ -84,15 +101,27 @@ export const registerClient = async (dataUser) => {
     return error.response.data
   }
 }
+
+export const uploadFire = async (data, url) => {
+  try {
+    const storage = getStorage()
+    const storageRef = ref(storage, url)
+    const snapshot = await uploadBytes(storageRef, data)
+    const downloadURL = await getDownloadURL(snapshot.ref)
+    return downloadURL
+  } catch (error) {
+    throw new Error(`Error server uploadFire ${error}`)
+  }
+}
+
 export const registerProduct = async (dataProduct) => {
   try {
-    console.log('product new ', dataProduct)
-    /* const response = await axios.post('http://localhost:3000/api/products', dataProduct)
-    console.log('data en fire front', response); */
-    return true
+    const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
+    dataProduct.thumbnail = url
+    const response = await axios.post('http://localhost:3000/api/products', dataProduct)
+    return response.status
   } catch (error) {
-    console.log('error en fire', error)
-    return error
+    throw new Error(`Error server registerProduct ${error}`)
   }
 }
 

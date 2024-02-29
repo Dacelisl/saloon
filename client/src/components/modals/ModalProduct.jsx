@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { registerProduct } from '../../firebase/firebase'
+import { useState, useEffect } from 'react'
+import { registerProduct, getCategories, getProviders } from '../../firebase/firebase'
 import { resizeAndCompress } from '../../utils/utils'
 
-const NuevoProductoModal = () => {
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
+const ModalProduct = () => {
   const [productData, setProductData] = useState({
     name: '',
     provider: '',
@@ -15,53 +16,65 @@ const NuevoProductoModal = () => {
     profitSaloon: '',
     description: '',
   })
-
   const [imagenPreview, setImagenPreview] = useState('')
+  const [categories, setCategories] = useState([])
+  const [providers, setProviders] = useState([])
+
+  useEffect(() => {
+    const fetchCategoriesFromDatabase = async () => {
+      try {
+        const categ = await getCategories()
+        setCategories(categ)
+        const prov = await getProviders()
+        setProviders(prov)
+      } catch (error) {
+        throw new Error(`error getting data`)
+      }
+    }
+    fetchCategoriesFromDatabase()
+  }, [])
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    let { name, value } = e.target
+    if (name === 'stock' || name === 'price' || name === 'profitEmployee' || name === 'profitSaloon') {
+      value = parseInt(value)
+    }
     setProductData({
       ...productData,
       [name]: value,
     })
-    /* const isFormValid = Object.values(productData).every((value) => value.trim() !== '')
-    if (isFormValid) {
-      setSend(false)
-    } */
   }
 
-  const handleImagenChange = (event) => {
+  const handleImagenChange = async (event) => {
     const file = event.target.files[0]
-    
     if (file) {
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
       if (!allowedTypes.includes(file.type)) {
         alert('Solo se permiten archivos de imagen (JPEG, PNG, GIF).')
         return
       }
-      const reader = new FileReader()
-      reader.onload = async function (e) {
-        const base64Image = btoa(e.target.result)
-        const resizedImageBlob = await resizeAndCompress(e.target.result)
-        console.log('img new', resizedImageBlob);
-        
-        setProductData({
-          ...productData,
-          ['thumbnail']: base64Image,
-        })
-        setImagenPreview(e.target.result)
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        alert('La imagen es demasiado grande. Por favor, selecciona una imagen más pequeña.')
+        return
       }
-      reader.readAsDataURL(file)
+      const resizedImageBlob = await resizeAndCompress(file)
+      setImagenPreview(URL.createObjectURL(resizedImageBlob))
+      setProductData({
+        ...productData,
+        ['thumbnail']: resizedImageBlob,
+      })
     }
   }
-
   const handleAddUser = async (e) => {
     e.preventDefault()
     try {
       const res = await registerProduct(productData)
-      console.log('respuesta enviar ', res)
+      if (res === 201) {
+        console.log('se almaceno correctamente ')
+      } else {
+        console.log('error en la carga')
+      }
     } catch (error) {
-      console.log('error', error);
       throw new Error('Unhandled Error:', error)
     }
   }
@@ -79,32 +92,44 @@ const NuevoProductoModal = () => {
                   <input value={productData.name} onChange={handleInputChange} type='text' autoComplete='off' name='name' className='w-full px-3 py-1 border rounded-md' />
                 </label>
               </div>
-              <div className='mb-1'>
+              <div className='mb-3'>
                 <label className='block text-sm font-semibold text-gray-600'>
                   Proveedor:
-                  <input value={productData.provider} onChange={handleInputChange} type='text' autoComplete='off' name='provider' className='w-full px-3 py-1 border rounded-md' />
+                  <select name='provider' value={productData.provider} onChange={handleInputChange} className='w-full px-3 py-1 border rounded-md'>
+                    {providers.map((provider) => (
+                      <option key={provider.id} value={provider.name}>
+                        {provider.name}
+                      </option>
+                    ))}
+                  </select>
                 </label>
               </div>
-              <div className='mb-1'>
+              <div className='mb-3'>
                 <label className='block text-sm font-semibold text-gray-600'>
                   Categoria:
-                  <input value={productData.category} onChange={handleInputChange} type='text' autoComplete='off' name='category' className='w-full px-3 py-1 border rounded-md' />
+                  <select name='category' value={productData.category} onChange={handleInputChange} className='w-full px-3 py-1 border rounded-md'>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
                 </label>
               </div>
 
-              <div className='mb-1'>
+              <div className='mb-3'>
                 <label className='block text-sm font-semibold text-gray-600'>
                   Codigo:
                   <input value={productData.code} onChange={handleInputChange} type='text' autoComplete='off' name='code' className='w-full px-3 py-1 border rounded-md' />
                 </label>
               </div>
-              <div className='mb-1'>
+              <div className='mb-3'>
                 <label className='block text-sm font-semibold text-gray-600'>
                   Stock:
                   <input value={productData.stock} onChange={handleInputChange} type='number' autoComplete='off' name='stock' className='w-full px-3 py-1 border rounded-md' />
                 </label>
               </div>
-              <div className='mb-1'>
+              <div className='mb-3'>
                 <label className='block text-sm font-semibold text-gray-600'>
                   Ganancia Empleado:
                   <input value={productData.profitEmployee} onChange={handleInputChange} type='number' autoComplete='off' name='profitEmployee' className='w-full px-3 py-1 border rounded-md' />
@@ -112,7 +137,6 @@ const NuevoProductoModal = () => {
               </div>
             </div>
           </div>
-
           <div className='w-[45%] ml-4  mt-9'>
             <div className='border p-4 mb-2 h-[190px]  rounded-md'>
               <label className='block text-gray-300 text-sm font-bold mb-2 cursor-pointer' htmlFor='imagen'>
@@ -120,19 +144,22 @@ const NuevoProductoModal = () => {
                   id='imagen-preview'
                   src={imagenPreview}
                   alt='Click para cargar imagen'
-                  className='w-full max-h-36  text-center   bg-center bg-cover cursor-pointer'
-                  onClick={() => document.getElementById('imagen').click()}
+                  className='w-auto max-h-40  text-center m-auto bg-center bg-cover cursor-pointer'
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    document.getElementById('uploadImage').click()
+                  }}
                 />
               </label>
-              <input type='file' name='thumbnail' id='imagen' className='hidden' onChange={handleImagenChange} />
+              <input type='file' name='thumbnail' id='uploadImage' className='hidden' onChange={handleImagenChange} />
             </div>
-            <div className='mb-1'>
+            <div className='mb-3'>
               <label className='block text-sm font-semibold text-gray-600'>
                 Precio:
                 <input value={productData.price} onChange={handleInputChange} type='number' autoComplete='off' name='price' className='w-full px-3 py-1 border rounded-md' />
               </label>
             </div>
-            <div className='mb-1'>
+            <div className='mb-3'>
               <label className='block text-sm font-semibold text-gray-600'>
                 Ganancia Salon:
                 <input value={productData.profitSaloon} onChange={handleInputChange} type='number' autoComplete='off' name='profitSaloon' className='w-full px-3 py-1 border rounded-md' />
@@ -176,4 +203,4 @@ const NuevoProductoModal = () => {
   )
 }
 
-export default NuevoProductoModal
+export default ModalProduct

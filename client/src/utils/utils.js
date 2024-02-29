@@ -1,5 +1,4 @@
 import bcryptjs from 'bcryptjs'
-import { createCanvas, loadImage } from 'canvas'
 
 export const isValidPassword = (password, hashPassword) => bcryptjs.compareSync(password, hashPassword)
 
@@ -13,46 +12,29 @@ export function PasswordValid(password) {
 
   return hasLowercase && hasUppercase && hasDigit
 }
-
-const readFileAsArrayBuffer = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      resolve(event.target.result);
-    };
-    reader.onerror = reject;
-    reader.readAsArrayBuffer(file);
-  });
-};
 export const resizeAndCompress = async (file) => {
-  const MAX_IMAGE_SIZE = 5 * 1024 * 1024
-  if (file.size > MAX_IMAGE_SIZE) {
-    console.error('La imagen es demasiado grande. Tamaño máximo permitido:', MAX_IMAGE_SIZE)
-    return null // Puedes manejar este caso según tus necesidades
-  }
-
-  const arrayBuffer = await  readFileAsArrayBuffer(file);
-
-  // Crear un objeto Uint8Array a partir del ArrayBuffer
-  const uint8Array = new Uint8Array(arrayBuffer)
-
-  // Crear un objeto Blob con el Uint8Array
-  const blob = new Blob([uint8Array], { type: file.type })
-
-  const img = await loadImage(URL.createObjectURL(blob))
-  const canvas = createCanvas(180, 190)
-  const ctx = canvas.getContext('2d')
-  ctx.drawImage(img, 0, 0, 180, 190)
-  console.log('img ctk', ctx)
-
+  const img = new Image()
+  const reader = new FileReader()
+  const maxSize = { width: 220, height: 270 }
   return new Promise((resolve) => {
-    canvas.toBlob(
-      (blob) => {
-        resolve(blob)
-      },
-      'image/jpeg',
-      0.8
-    ) // Puedes ajustar el tipo y la calidad según tus necesidades
+    reader.onload = (e) => {
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        canvas.width = maxSize.width
+        canvas.height = maxSize.height
+        ctx.drawImage(img, 0, 0, maxSize.width, maxSize.height)
+        canvas.toBlob(
+          (blob) => {
+            resolve(blob)
+          },
+          'image/jpeg',
+          0.8
+        )
+      } 
+      img.src = e.target.result
+    }
+    reader.readAsDataURL(file)
   })
 }
 

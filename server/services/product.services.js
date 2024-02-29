@@ -4,7 +4,7 @@ import dataConfig from '../config/process.config.js'
 
 class ProductServices {
   validateProduct(dataProduct) {
-    const requiredProperties = ['name', 'description', 'category', 'price', 'thumbnail', 'code', 'provider', 'stock', 'profitEmployee, profitSaloon']
+    const requiredProperties = ['name', 'description', 'category', 'price', 'thumbnail', 'code', 'provider', 'stock', 'profitEmployee', 'profitSaloon']
     const missingProperties = requiredProperties.filter((property) => {
       return !(property in dataProduct) || dataProduct[property] === undefined
     })
@@ -35,6 +35,32 @@ class ProductServices {
         status: 'Fail',
         code: 500,
         message: `Internal Server Error getAllProducts`,
+        payload: {},
+      }
+    }
+  }
+  async getCategories() {
+    try {
+      const payload = await productFactory.getCategories()
+      if (!payload) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, products not found getCategories`,
+          payload: {},
+        }
+      }
+      return {
+        status: 'Success',
+        code: 201,
+        message: 'categories found getCategories',
+        payload: payload,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 500,
+        message: `Internal Server Error getCategories`,
         payload: {},
       }
     }

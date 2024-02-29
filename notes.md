@@ -36,5 +36,3 @@
 - ui en color
 - agregar mejor estructura a la tabla react, en datelle debe poderse ver toda la info del cliente 
 
--realizar el modulo de productos, falta cargar imagen en firebase y direccion en  mongo
-

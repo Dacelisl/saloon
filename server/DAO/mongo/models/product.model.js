@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
 
-const categoryEnum = ['cleaning', 'sale', 'inUse', 'inventory']
+const categoryEnum = ['cleaning', 'sale', 'inUse', 'inventory','refund']
 
-const schema = new Schema({
+const productSchema = new Schema({
   name: { type: String, required: true, max: 80 },
   description: { type: String, required: true, max: 150 },
   category: { type: String, required: true, enum: categoryEnum },
@@ -16,4 +16,4 @@ const schema = new Schema({
   profitSaloon: { type: Number, required: true },
 })
 
-export const ProductModel = model('product', schema)
+export const ProductModel = model('product', productSchema)

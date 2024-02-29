@@ -24,6 +24,14 @@ class ProductDAO {
       throw new Error(`function DAO getAllProducts  ${error}`)
     }
   }
+  async getCategories() {
+    try {
+      const enumValues = Object.values(ProductModel.schema.path('category').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getCategories  ${error}`)
+    }
+  }
   async getProductByID(id) {
     try {
       const product = await ProductModel.findById(id)

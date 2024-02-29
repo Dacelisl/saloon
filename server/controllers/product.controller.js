@@ -12,6 +12,15 @@ class ProductController {
       return sendErrorResponse(res, error)
     }
   }
+  async getCategories(req, res) {
+    try {
+      const categories = await productService.getCategories()
+      return sendSuccessResponse(res, categories)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
   async getProductsFilter(req, res) {
     const { limit, page, sort, query } = req.query
     const opcionesConsulta = {
@@ -63,14 +72,7 @@ class ProductController {
     try {
       const { name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon } = req.body
       const newProduct = { name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon }
-
-      /* const img = await resizeAndCompress(newProduct.thumbnail) */
-
-      const resFire = await uploadToFirebase(img, 'imagenTest')
-      console.log('resfire', resFire);
-
       const response = await productService.createProduct(newProduct)
-      
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)

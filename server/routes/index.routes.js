@@ -1,6 +1,7 @@
 import express from 'express'
 import {errorHandler} from '../middleware/errors.js '
 import { ProductRoutes } from '../routes/products.routes.js'
+import { ProviderRoutes } from '../routes/provider.routes.js'
 import { RoleRoutes } from '../routes/role.routes.js'
 import { ServiceRoutes } from '../routes/service.routes.js'
 import { UserRoutes } from '../routes/user.routes.js'
@@ -10,6 +11,7 @@ import { EmployeePerformanceRoutes } from '../routes/employeePerformance.routes.
 
 export const router = express.Router()
 router.use('/api/products', ProductRoutes)
+router.use('/api/provider', ProviderRoutes)
 router.use('/api/users', UserRoutes)
 router.use('/api/employee', EmployeeRoutes)
 router.use('/api/role', RoleRoutes)
