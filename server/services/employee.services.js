@@ -121,7 +121,6 @@ class EmployeeServices {
   }
   async updateEmployee(employee, id) {
     try {
-      console.log('data ', employee)
       const employeeFound = await employeeFactory.getEmployeeById(id)
       if (!employeeFound) {
         return {
@@ -132,7 +131,6 @@ class EmployeeServices {
         }
       }
       const employeeUpdate = await employeeFactory.updateEmployee(employee, id)
-      console.log('data', employeeUpdate)
       if (employeeUpdate.modifiedCount > 0) {
         const employee = await employeeFactory.getEmployeeById(id)
         return {

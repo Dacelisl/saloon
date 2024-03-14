@@ -5,14 +5,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
 
-export const getClients = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/api/users/')
-    return response.data.payload
-  } catch (error) {
-    throw new Error(`Error server getRoles ${error.message}`)
-  }
-}
+/* SLECTS */
 export const getRoles = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/role/')
@@ -41,16 +34,7 @@ export const getProviders = async () => {
   }
 }
 
-export const registerEmployeeFire = async (email, password, rol) => {
-  try {
-    const response = await createUserWithEmailAndPassword(auth, email, password)
-    await axios.post('http://localhost:3000/api/employee/create', { accessToken: response.user.uid, rol })
-    return response.user
-  } catch (error) {
-    throw new Error(`Error server registerEmployeeFire ${error.message}`)
-  }
-}
-
+/* LOGIN */
 export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
@@ -93,12 +77,13 @@ export const registerEmployeeMongo = async (dataUser) => {
     return error.response.data
   }
 }
-export const registerClient = async (dataUser) => {
+export const registerEmployeeFire = async (email, password, rol) => {
   try {
-    const response = await axios.post('http://localhost:3000/api/users/', dataUser)
-    return response.data
+    const response = await createUserWithEmailAndPassword(auth, email, password)
+    await axios.post('http://localhost:3000/api/employee/create', { accessToken: response.user.uid, rol })
+    return response.user
   } catch (error) {
-    return error.response.data
+    throw new Error(`Error server registerEmployeeFire ${error.message}`)
   }
 }
 
@@ -113,7 +98,7 @@ export const uploadFire = async (data, url) => {
     throw new Error(`Error server uploadFire ${error}`)
   }
 }
-
+/* PRODUCTS */
 export const registerProduct = async (dataProduct) => {
   try {
     const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
@@ -122,6 +107,48 @@ export const registerProduct = async (dataProduct) => {
     return response.status
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
+  }
+}
+export const getProducts = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/products/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getRoles ${error.message}`)
+  }
+}
+export const getProductsByName = async (name) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/products/name/${name}`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getRoles ${error.message}`)
+  }
+}
+
+/* CLIENTS */
+export const getClients = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/users/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getRoles ${error.message}`)
+  }
+}
+export const registerClient = async (dataUser) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/users/', dataUser)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
+}
+export const getClientsByName = async (name) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/users/name/${name}`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getRoles ${error.message}`)
   }
 }
 
@@ -138,3 +165,4 @@ export const verifyUser = async (emailUser, userPassw) => {
     console.error('Error en la solicitud de registro:', error.message)
   }
 }
+

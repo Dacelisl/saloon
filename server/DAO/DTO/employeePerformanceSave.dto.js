@@ -17,7 +17,7 @@ class EarningsDetailSaveDTO {
   }
   employeeEarning(sale) {
     let total = sale.itemPrice * sale.quantity
-    let employeeTotal = total * (sale.profitPercentage / 100)
+    let employeeTotal = total * (sale.profitEmployee / 100)
     return employeeTotal
   }
 }

@@ -4,6 +4,6 @@ export class ServiceDTO {
     this.id = service._id
     this.name = service.name
     this.description = service.description
-    this.profitPercentage = formatPercentage(service.profitPercentage)
+    this.profitEmployee = formatPercentage(service.profitEmployee)
   }
 }

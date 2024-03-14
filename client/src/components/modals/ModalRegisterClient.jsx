@@ -1,20 +1,21 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
 import Toast from '../utils/Toast.jsx'
 import { registerClient } from '../../firebase/firebase'
 import { paises } from '../../utils/utils.js'
 
-// eslint-disable-next-line react/prop-types
+const userDefault = {
+  firstName: '',
+  lastName: '',
+  dni: '',
+  phone: '',
+  address: '',
+  email: '',
+  dateBirthday: '',
+  code: '',
+}
 const ModalRegisterClient = ({ isOpen, onClose }) => {
-  const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    dni: '',
-    phone: '',
-    address: '',
-    email: '',
-    dateBirthday: '',
-    code: '',
-  })
+  const [userData, setUserData] = useState(userDefault)
   const [toast, setToast] = useState({
     state: false,
     message: '',
@@ -90,21 +91,12 @@ const ModalRegisterClient = ({ isOpen, onClose }) => {
     }, 3000)
   }
   const resetUser = () => {
-    setUserData({
-      firstName: '',
-      lastName: '',
-      dni: '',
-      phone: '',
-      address: '',
-      email: '',
-      dateBirthday: '',
-      code: '',
-    })
+    setUserData(userDefault)
   }
 
   return (
     <>
-      <div className={`flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100 ${isOpen ? 'visible' : 'invisible'}`}>
+      <div className={`z-50 flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100 ${isOpen ? 'visible' : 'invisible'}`}>
         <div className='w-full max-w-md p-4 bg-white rounded-lg shadow-md'>
           <h1 className='text-xl font-bold mb-4 text-gray-700'>Registro Cliente</h1>
           <form>

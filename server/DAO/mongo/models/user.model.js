@@ -54,19 +54,17 @@ const schema = new Schema({
   },
   serviceHistory: [
     {
-      stylist: { type: Schema.Types.ObjectId, ref: 'employee', required: true },
+      employeeId: { type: Schema.Types.ObjectId, ref: 'employee', required: true },
       service: { type: Schema.Types.ObjectId, ref: 'service', required: true },
       price: { type: Number },
       dateService: { type: Date, default: Date.now },
-      observations: { type: String, required: false },
     },
   ],
   shopping: [
     {
+      employeeId: { type: Schema.Types.ObjectId, ref: 'employee', required: true },
       products: { type: [ProductSchema], required: false, default: [] },
       dateShopping: { type: Date, default: Date.now },
-      employee: { type: Schema.Types.ObjectId, ref: 'employee', required: true },
-      observations: { type: String, required: false },
     },
   ],
 })

@@ -4,7 +4,7 @@ const FloatingDots = () => {
   const [dots, setDots] = useState([])
 
   useEffect(() => {
-    const numberOfDots = 10 // Ajusta según la cantidad de esferas que desees
+    const numberOfDots = 15 // Ajusta según la cantidad de esferas que desees
     const speed = 1 // Ajusta la velocidad de movimiento
     const containerWidth = 800 // Ajusta el ancho del contenedor
     const containerHeight = 600 // Ajusta la altura del contenedor
@@ -14,7 +14,7 @@ const FloatingDots = () => {
         id: index,
         top: Math.random() * containerHeight,
         left: Math.random() * containerWidth,
-        size: Math.random() * 0.2 + 3, // Tamaños aleatorios entre 10 y 30
+        size: Math.random() * 0.1 + 1, // Tamaños aleatorios entre 10 y 30
         directionX: Math.random() < 0.5 ? 1 : -1,
         directionY: Math.random() < 0.5 ? 1 : -1,
         isVisible: Math.random() < 0.5, // Define si la esfera es visible inicialmente
@@ -58,7 +58,7 @@ const FloatingDots = () => {
     const intervalId = setInterval(() => {
       moveDots()
       toggleVisibility()
-    }, 3000) // Ajusta el intervalo según la velocidad de movimiento y resplandor
+    }, 1000) // Ajusta el intervalo según la velocidad de movimiento y resplandor
 
     createDots()
 
@@ -66,7 +66,6 @@ const FloatingDots = () => {
   }, [])
 
   return (
-    <>
     <div className=''>
       {dots.map(
         (dot) =>
@@ -79,32 +78,12 @@ const FloatingDots = () => {
                 left: dot.left,
                 width: dot.size,
                 height: dot.size,
-                boxShadow: '0 0 10px 5px rgba(29, 112, 212, 0.5)',
-              }}
-            ></div>
-          )
-      )}
-    </div>
-    <div className=''>
-      {dots.map(
-        (dot) =>
-          dot.isVisible && (
-            <div
-              key={dot.id}
-              className='rounded-full absolute bg-slate-100  animate-pulse'
-              style={{
-                bottom: dot.left ,
-                right: dot.top,
-                width: dot.size,
-                height: dot.size,
                 boxShadow: '0 0 10px 5px rgba(255, 105, 180, 0.5)',
               }}
             ></div>
           )
       )}
     </div>
-    </>
-    
   )
 }
 

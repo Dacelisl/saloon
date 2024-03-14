@@ -34,7 +34,7 @@ class ItemDetailDTO {
     this.itemType = itemDetail.itemType
     this.quantity = itemDetail.quantity
     this.itemPrice = formatCurrency(itemDetail.itemPrice)
-    this.profitPercentage = itemDetail.profitPercentage
+    this.profitEmployee = itemDetail.profitEmployee
   }
 }
 class PartialPaymentDTO {

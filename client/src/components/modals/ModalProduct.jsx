@@ -3,19 +3,20 @@ import { registerProduct, getCategories, getProviders } from '../../firebase/fir
 import { resizeAndCompress } from '../../utils/utils'
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
+const defaultProduct = {
+  name: '',
+  provider: '',
+  category: '',
+  code: '',
+  stock: '',
+  price: '',
+  thumbnail: '',
+  profitEmployee: '',
+  profitSaloon: '',
+  description: '',
+}
 const ModalProduct = () => {
-  const [productData, setProductData] = useState({
-    name: '',
-    provider: '',
-    category: '',
-    code: '',
-    stock: '',
-    price: '',
-    thumbnail: '',
-    profitEmployee: '',
-    profitSaloon: '',
-    description: '',
-  })
+  const [productData, setProductData] = useState(defaultProduct)
   const [imagenPreview, setImagenPreview] = useState('')
   const [categories, setCategories] = useState([])
   const [providers, setProviders] = useState([])
@@ -65,11 +66,13 @@ const ModalProduct = () => {
       })
     }
   }
-  const handleAddUser = async (e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault()
     try {
       const res = await registerProduct(productData)
       if (res === 201) {
+        setProductData(defaultProduct)
+        setImagenPreview('')
         console.log('se almaceno correctamente ')
       } else {
         console.log('error en la carga')
@@ -140,19 +143,14 @@ const ModalProduct = () => {
           <div className='w-[45%] ml-4  mt-9'>
             <div className='border p-4 mb-2 h-[190px]  rounded-md'>
               <label className='block text-gray-300 text-sm font-bold mb-2 cursor-pointer' htmlFor='imagen'>
-                <img
-                  id='imagen-preview'
-                  src={imagenPreview}
-                  alt='Click para cargar imagen'
-                  className='w-auto max-h-40  text-center m-auto bg-center bg-cover cursor-pointer'
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    document.getElementById('uploadImage').click()
-                  }}
-                />
+                {imagenPreview && <img className='w-auto max-h-40  text-center m-auto bg-center bg-cover cursor-pointer' src={imagenPreview} alt='Imagen del producto' />}
+                <input type='file' name='thumbnail' id='uploadImage' className='hidden' onChange={handleImagenChange} />
+                <label htmlFor='uploadImage' className={imagenPreview ? 'hidden' : 'cursor-pointer mt-8 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'}>
+                  Subir imagen
+                </label>
               </label>
-              <input type='file' name='thumbnail' id='uploadImage' className='hidden' onChange={handleImagenChange} />
             </div>
+
             <div className='mb-3'>
               <label className='block text-sm font-semibold text-gray-600'>
                 Precio:
@@ -192,7 +190,7 @@ const ModalProduct = () => {
           <button
             type='submit'
             /* disabled={send}*/
-            onClick={handleAddUser}
+            onClick={handleAddProduct}
             className='ml-4 px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500'
           >
             Agregar

@@ -161,6 +161,33 @@ class ProductServices {
       }
     }
   }
+  async getProductsByName(name) {
+    try {
+      const payload = await productFactory.getProductsByName(name)
+      if (payload) {
+        return {
+          status: 'Success',
+          code: 201,
+          message: 'product found',
+          payload: payload,
+        }
+      } else {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, product not found getProductsByName`,
+          payload: {},
+        }
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 500,
+        message: `Internal Server Error getProductsByName`,
+        payload: {},
+      }
+    }
+  }
   async createProduct(dataProduct) {
     try {
       this.validateProduct(dataProduct)

@@ -34,7 +34,7 @@ class ProductDAO {
   }
   async getProductByID(id) {
     try {
-      const product = await ProductModel.findById(id)
+      const product = await ProductModel.findById(id).lean()
       return product ? new ProductDTO(product) : null
     } catch (error) {
       throw new Error(`function DAO getProductByID  ${error}`)
@@ -46,6 +46,28 @@ class ProductDAO {
       return product ? new ProductDTO(product) : null
     } catch (error) {
       throw new Error(`function DAO getProductByCode ${error}`)
+    }
+  }
+  async getProductsByName(search) {
+    try {
+      const products = await ProductModel.find({
+        $or: [
+          {
+            name: {
+              $regex: new RegExp(search, 'si'),
+            },
+          },
+          {
+            provider: {
+              $regex: new RegExp(search, 'si'),
+            },
+          },
+        ],
+      }).lean()
+      const formattedProducts = products.map((product) => (product ? new ProductDTO(product) : null))
+      return formattedProducts
+    } catch (error) {
+      throw new Error(`function DAO getProductsByName ${error}`)
     }
   }
   async getTotalProducts(query) {

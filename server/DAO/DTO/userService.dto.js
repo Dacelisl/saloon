@@ -9,11 +9,10 @@ class UserService {
   mapServiceHistory(serviceHistory) {
     return Array.isArray(serviceHistory)
       ? serviceHistory.map((entry) => ({
-          stylist: this.mapEmployee(entry.stylist),
+        employeeId: this.mapEmployee(entry.employeeId),
           service: this.mapService(entry.service),
           price: entry.price,
           dateService: formatDate(entry.dateService),
-          observations: entry.observations,
         }))
       : []
   }
@@ -23,8 +22,7 @@ class UserService {
       ? shopping.map((entry) => ({
           products: this.mapProducts(entry.products),
           dateShopping: formatDate(entry.dateShopping),
-          employee: this.mapEmployee(entry.employee),
-          observations: entry.observations,
+          employeeId: this.mapEmployee(entry.employeeId),
         }))
       : []
   }

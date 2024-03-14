@@ -17,14 +17,19 @@ export const connectMongo = async () => {
       mongoConnectionInstance = dbConnection
       await dbConnection.syncIndexes()
 
-      /* const getRandomCategory = () => {
+      /*  const getRandomCategory = () => {
         const categoryEnum = ['cleaning', 'sale', 'inUse', 'inventory']
         const randomIndex = Math.floor(Math.random() * categoryEnum.length)
         return categoryEnum[randomIndex]
       }
-      async function poblar() {
+       const getRandomProvider = () => {
+        const categoryEnum = ['Tec Italy', 'Alfapharf', 'Wella', 'Alter Ego', 'Igora']
+        const randomIndex = Math.floor(Math.random() * categoryEnum.length)
+        return categoryEnum[randomIndex]
+      }
+     async function poblar() {
         const products = []
-        for (let i = 0; i < 3000; i++) {
+        for (let i = 0; i < 300; i++) {
           products.push({
             name: faker.commerce.product(),
             description: faker.commerce.productDescription(),
@@ -32,10 +37,11 @@ export const connectMongo = async () => {
             price: faker.commerce.price(),
             thumbnail: faker.system.fileName(),
             code: faker.string.alphanumeric(10),
-            provider: faker.company.name(),
+            provider: getRandomProvider(),
             stock: faker.number.int(100),
             dateCreation: faker.date.anytime(),
-            profitPercentage: faker.number.int({ min: 10, max: 60 }),
+            profitSaloon: faker.number.int({ min: 10, max: 60 }),
+            profitEmployee: faker.number.int({ min: 10, max: 60 }),
           })
         }
         try {

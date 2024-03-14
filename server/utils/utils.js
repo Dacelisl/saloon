@@ -142,7 +142,6 @@ export const uploadToFirebase = async (buffer, filename) => {
   return file.getMetadata()
 }
 export const resizeAndCompress = async (file) => {
-  console.log('file', file)
   const buffer = await sharp(file.buffer)
     .resize(180, 190) // Tamaño máximo
     .toBuffer()

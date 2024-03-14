@@ -36,3 +36,9 @@
 - ui en color
 - agregar mejor estructura a la tabla react, en datelle debe poderse ver toda la info del cliente 
 
+usar un componente principal para ejecutar el modalProduct y productDetailTable, en el principal se envian los datos obtenidos en mongo y se realizan las operaciones de guardado 
+
+
+--se debe verificar la insercion de datos en el historico de consumo y servicios de los clicnetes, lo mas seguro sea tres estados: el estado iniciail del servicio, el estado de pago y finalmente actualizacion del estado del cliente.
+
+--dos interfaces mas con tablas y listas para veficar los usuarios a la hora de pagar y otra para listar

@@ -68,6 +68,16 @@ class ProductController {
       return sendErrorResponse(res, error)
     }
   }
+  async getProductsByName(req, res) {
+    const productName = req.params.name
+    try {
+      const productFound = await productService.getProductsByName(productName)
+      return sendSuccessResponse(res, productFound)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
   async createProduct(req, res) {
     try {
       const { name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon } = req.body

@@ -1,17 +1,20 @@
 import { userModel } from '../models/user.model.js'
 import { UserDTO } from '../../DTO/user.dto.js'
+import { UserTicketDTO } from '../../DTO/userTicket.dto.js'
+import { Types } from 'mongoose'
 
 class UserDAO {
   async getAllUsers() {
     try {
       const users = await userModel
         .find()
-        .populate('serviceHistory.stylist', 'firstName lastName')
+        .populate('serviceHistory.employeeId', 'firstName lastName')
         .populate('serviceHistory.service', 'name description')
-        .populate('shopping.employee', 'firstName lastName')
+        .populate('shopping.employeeId', 'firstName lastName')
         .populate('shopping.products.product', 'name price')
-        .lean()
+
       const formattedUsers = users.map((user) => (user ? new UserDTO(user) : null))
+
       return formattedUsers
     } catch (error) {
       throw new Error(`function DAO getAllUsers: ${error}`)
@@ -21,9 +24,9 @@ class UserDAO {
     try {
       const user = await userModel
         .findById(id)
-        .populate('serviceHistory.stylist', 'firstName lastName')
+        .populate('serviceHistory.employeeId', 'firstName lastName')
         .populate('serviceHistory.service', 'name description')
-        .populate('shopping.employee', 'firstName lastName')
+        .populate('shopping.employeeId', 'firstName lastName')
         .populate('shopping.products.product', 'name price')
         .lean()
 
@@ -34,10 +37,44 @@ class UserDAO {
   }
   async getUserByEmail(email) {
     try {
-      const user = await userModel.findOne({ email }).populate('serviceHistory.stylist').populate('serviceHistory.service').populate('shopping.employee').populate('shopping.products.product').lean()
+      const user = await userModel
+        .findOne({ email })
+        .populate('serviceHistory.employeeId')
+        .populate('serviceHistory.service')
+        .populate('shopping.employeeId')
+        .populate('shopping.products.product')
+        .lean()
       return user ? new UserDTO(user) : null
     } catch (error) {
       throw new Error(`function DAO getUserByEmail: ${error}`)
+    }
+  }
+  async getUsersByName(search) {
+    try {
+      const users = await userModel
+        .find({
+          $or: [
+            {
+              firstName: {
+                $regex: new RegExp(search, 'si'),
+              },
+            },
+            {
+              lastName: {
+                $regex: new RegExp(search, 'si'),
+              },
+            },
+          ],
+        })
+        .populate('serviceHistory.employeeId')
+        .populate('serviceHistory.service')
+        .populate('shopping.employeeId')
+        .populate('shopping.products.product')
+        .lean()
+      const formattedUsers = users.map((user) => (user ? new UserDTO(user) : null))
+      return formattedUsers
+    } catch (error) {
+      throw new Error(`function DAO getUsersByName: ${error}`)
     }
   }
   async saveUser(userData) {
@@ -76,10 +113,34 @@ class UserDAO {
           },
         }
       )
-
       return user
     } catch (error) {
       throw new Error(`function DAO updateUser: ${error}`)
+    }
+  }
+  async updateHistorysUser(ticket) {
+    try {
+      const employee = new Types.ObjectId(ticket.employeeId)
+      const user = await userModel.findById(ticket.customerId)
+      const ticketDTO = new UserTicketDTO(ticket)
+      user.serviceHistory.push(
+        ...ticketDTO.services.map((service) => ({
+          employeeId: employee,
+          service: service.serviceId,
+          price: service.price,
+        }))
+      )
+      user.shopping.push({
+        products: ticketDTO.products.map((product) => ({
+          product: product.productId,
+          quantity: product.quantity,
+        })),
+        employeeId: employee,
+      })
+      await user.save()
+      return true
+    } catch (error) {
+      throw new Error(`function DAO updateHistorysUser: ${error}`)
     }
   }
 }

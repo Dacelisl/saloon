@@ -12,7 +12,6 @@ class ProviderDAO {
   }
   async createProvider(dataProvider) {
     try {
-      console.log('data provider', dataProvider);
       const provider = await ProviderModel.create(dataProvider)
       return  provider ? new ProviderDTO(provider) : null
     } catch (error) {

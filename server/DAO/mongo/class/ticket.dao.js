@@ -2,6 +2,7 @@ import { TicketModel } from '../models/ticket.model.js'
 import { ProductModel } from '../models/product.model.js'
 import { ServiceModel } from '../models/service.model.js'
 import { employeePerformanceDAO } from './employeePerformance.dao.js'
+import { userDAO } from './user.dao.js'
 import { TicketDTO } from '../../DTO/ticket.dto.js'
 import { totalPrice, randomTicketNumber } from '../../../utils/utils.js'
 
@@ -16,7 +17,6 @@ class TicketDAO {
           return { ...ticket, items }
         })
       )
-
       const formattedTickets = tickets.map((ticket) => (ticket ? new TicketDTO(ticket) : null))
       return formattedTickets
     } catch (error) {
@@ -104,6 +104,7 @@ class TicketDAO {
       ticket.ticketNumber = await this.genTicketNumber()
       ticket.balanceDue = ticket.totalPayment - ticket.partialPayments[0].amount
       await employeePerformanceDAO.createEmployeePerformance(ticket)
+      await userDAO.updateHistorysUser(ticket)
       const result = await TicketModel.create(ticket)
       return result
     } catch (error) {
@@ -167,12 +168,12 @@ class TicketDAO {
           const service = await ServiceModel.findById(item.itemId)
           item.itemId = service ? service._id : null
           item.name = service ? service.name : null
-          item.profitPercentage = service ? service.profitPercentage : null
+          item.profitEmployee = service ? service.profitEmployee : null
         } else {
           const product = await ProductModel.findById(item.itemId)
           item.itemId = product ? product._id : null
           item.name = product ? product.name : null
-          item.profitPercentage = product ? product.profitPercentage : null
+          item.profitEmployee = product ? product.profitEmployee : null
         }
         return item
       })

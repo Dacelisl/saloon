@@ -20,7 +20,6 @@ class ProviderServices {
         payload: payload,
       }
     } catch (error) {
-      console.log('error provider', error);
       return {
         status: 'Fail',
         code: 500,

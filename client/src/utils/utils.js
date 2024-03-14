@@ -15,7 +15,7 @@ export function PasswordValid(password) {
 export const resizeAndCompress = async (file) => {
   const img = new Image()
   const reader = new FileReader()
-  const maxSize = { width: 220, height: 270 }
+  const maxSize = { width: 148, height: 160 }
   return new Promise((resolve) => {
     reader.onload = (e) => {
       img.onload = () => {
