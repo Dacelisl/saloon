@@ -21,6 +21,16 @@ class UserController {
       return sendErrorResponse(res, error)
     }
   }
+  async getClientsByName(req, res) {
+    const usersName = req.params.name
+    try {
+      const users = await userService.getClientsByName(usersName)
+      return sendSuccessResponse(res, users)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
   async getUserByEmail(req, res) {
     const userEmail = req.params.email
     try {

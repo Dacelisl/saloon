@@ -65,6 +65,32 @@ class UserServices {
       }
     }
   }
+  async getClientsByName(mail) {
+    try {
+      const userFound = await userFactory.getClientsByName(mail)
+      if (!userFound) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: 'Users not exist getClientsByName',
+          payload: {},
+        }
+      }
+      return {
+        status: 'success',
+        code: 200,
+        message: 'users found',
+        payload: userFound,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 400,
+        message: `Error getClientsByName ${error}`,
+        payload: {},
+      }
+    }
+  }
   async getUserByEmail(mail) {
     try {
       const userFound = await userFactory.getUserByEmail(mail)

@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Toast from '../utils/Toast.jsx'
 import { registerClient } from '../../firebase/firebase'
-import { paises } from '../../utils/utils.js'
+import { countries } from '../../utils/utils.js'
 
 const userDefault = {
   firstName: '',
@@ -183,7 +183,7 @@ const ModalRegisterClient = ({ isOpen, onClose }) => {
                 <label className='block text-sm font-medium text-gray-700'>Phone:</label>
                 <div className='inline-flex aspect-auto'>
                   <select name='code' value={userData.code} className='inline-flex' onChange={handleInputChange}>
-                    {paises.map((pais) => (
+                    {countries.map((pais) => (
                       <option key={pais.nombre} value={pais.indicativo}>
                         {'+' + pais.indicativo}
                       </option>

@@ -10,7 +10,9 @@ class UserDTO {
     this.address = user.address
     this.email = user.email
     this.dateBirthday = formatDate(user.dateBirthday)
-    this.photo = user.photo
+    this.firstDate = formatDate(user.firstDate)
+    this.lastDate = formatDate(user.lastDate)
+    this.thumbnail = user.thumbnail
     this.serviceHistory = this.mapServiceHistory(user.serviceHistory)
     this.shopping = this.mapShopping(user.shopping)
   }

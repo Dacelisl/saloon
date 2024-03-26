@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-const InputEdit = ({ label, value, edit, inputChange, type, name }) => {
+const InputEdit = ({ label, value, edit, inputChange, type = 'text', name }) => {
   return (
     <div className='mb-2'>
       <label className='block text-xs font-semibold text-gray-600'>
@@ -9,5 +9,4 @@ const InputEdit = ({ label, value, edit, inputChange, type, name }) => {
     </div>
   )
 }
-
 export default InputEdit

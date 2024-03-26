@@ -1,5 +1,5 @@
 import { auth } from './firebaseApp'
-import { isValidPassword } from '../utils/utils.js'
+import { isValidPassword, formattUpdate } from '../utils/utils.js'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
@@ -20,7 +20,10 @@ export const getRoles = async () => {
 export const getCategories = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/products/categories/')
-    return response.data.payload
+    const options = response.data.payload.map((item, index) => {
+      return { id: index.toString(), name: item }
+    })
+    return options
   } catch (error) {
     throw new Error(`Error server getCategories ${error.message}`)
   }
@@ -125,6 +128,21 @@ export const getProductsByName = async (name) => {
     throw new Error(`Error server getRoles ${error.message}`)
   }
 }
+export const updateProduct = async (dataProduct) => {
+  try {
+    if (typeof dataProduct.thumbnail === 'object') {
+      const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
+      dataProduct.thumbnail = url
+    } else {
+      dataProduct.thumbnail = ''
+    }
+    const productFormatted = formattUpdate(dataProduct)
+    const response = await axios.put(`http://localhost:3000/api/products/${dataProduct.id}`, productFormatted)
+    return response.status
+  } catch (error) {
+    throw new Error(`Error server registerProduct ${error}`)
+  }
+}
 
 /* CLIENTS */
 export const getClients = async () => {
@@ -151,6 +169,40 @@ export const getClientsByName = async (name) => {
     throw new Error(`Error server getRoles ${error.message}`)
   }
 }
+export const getClientsById = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/users/${id}`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getClientsById ${error.message}`)
+  }
+}
+export const updateClients = async (dataClient) => {
+  try {
+    if (typeof dataClient.thumbnail === 'object') {
+      const url = await uploadFire(dataClient.thumbnail, `clients/${dataClient.dni}`)
+      dataClient.thumbnail = url
+    } else {
+      dataClient.thumbnail = ''
+    }
+    const userFormatted = formattUpdate(dataClient)
+
+    const response = await axios.put(`http://localhost:3000/api/users/${dataClient.id}`, userFormatted)
+    return response.status
+  } catch (error) {
+    throw new Error(`Error server updateUser ${error}`)
+  }
+}
+
+/* TICKETS */
+export const getTickets = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/tickets/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getTickets ${error.message}`)
+  }
+}
 
 export const verifyUser = async (emailUser, userPassw) => {
   try {
@@ -165,4 +217,3 @@ export const verifyUser = async (emailUser, userPassw) => {
     console.error('Error en la solicitud de registro:', error.message)
   }
 }
-

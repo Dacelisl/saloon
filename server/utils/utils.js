@@ -111,7 +111,13 @@ function sendSuccessResponse(res, data) {
 }
 
 function formatDate(date) {
-  return date === undefined ? 'none' : new Date(date).toLocaleDateString('es-CO')
+  if (!date) return null
+  const parsedDate = new Date(date)
+  const year = parsedDate.getFullYear()
+  const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+  const day = String(parsedDate.getDate()).padStart(2, '0')
+  const formattedDate = `${year}-${month}-${day}`
+  return formattedDate
 }
 function convertToMongoDate(simpleDate) {
   const jsDate = new Date(simpleDate)

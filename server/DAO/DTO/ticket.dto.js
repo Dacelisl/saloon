@@ -7,10 +7,10 @@ class TicketDTO {
     this.employee = this.mapEmployee(ticket.employeeId)
     this.items = ticket.items.map((item) => new ItemDetailDTO(item))
     this.paymentMethod = ticket.paymentMethod
-    this.totalPayment = formatCurrency(ticket.totalPayment)
+    this.totalPayment = ticket.totalPayment
     this.partialPayments = ticket.partialPayments.map((payment) => new PartialPaymentDTO(payment))
     const totalPartialPayments = ticket.partialPayments.reduce((total, payment) => total + payment.amount, 0)
-    this.balanceDue = formatCurrency(ticket.totalPayment - totalPartialPayments)
+    this.balanceDue = (ticket.totalPayment - totalPartialPayments)
   }
 
   mapEmployee(employee) {
@@ -21,6 +21,7 @@ class TicketDTO {
   }
   mapCustomer(customer) {
     return {
+      id:customer._id,
       firstName: customer.firstName,
       lastName: customer.lastName,
     }
@@ -33,14 +34,14 @@ class ItemDetailDTO {
     this.name = itemDetail.name
     this.itemType = itemDetail.itemType
     this.quantity = itemDetail.quantity
-    this.itemPrice = formatCurrency(itemDetail.itemPrice)
+    this.itemPrice = itemDetail.itemPrice
     this.profitEmployee = itemDetail.profitEmployee
   }
 }
 class PartialPaymentDTO {
   constructor(partialPayment) {
     this.paymentDate = formatDate(partialPayment.paymentDate)
-    this.amount = formatCurrency(partialPayment.amount)
+    this.amount = partialPayment.amount
   }
 }
 

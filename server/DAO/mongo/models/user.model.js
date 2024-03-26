@@ -48,9 +48,10 @@ const schema = new Schema({
     required: true,
     default: Date.now,
   },
-  photo: {
+  thumbnail: {
     type: String,
     required: false,
+    default: 'Not Photo',
   },
   serviceHistory: [
     {

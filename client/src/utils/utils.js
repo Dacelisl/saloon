@@ -31,14 +31,29 @@ export const resizeAndCompress = async (file) => {
           'image/jpeg',
           0.8
         )
-      } 
+      }
       img.src = e.target.result
     }
     reader.readAsDataURL(file)
   })
 }
 
-export const paises = [
+export function formattUpdate(dataUser) {
+  if (dataUser.phone) dataUser.phone = dataUser.phone.replace(/\+/, '').replace(/\s/g, '')
+  const formattedData = {}
+  for (const property in dataUser) {
+    if (dataUser[property] !== null && dataUser[property] !== '') {
+      if (property === 'dni' || property === 'phone' || property === 'price' || property === 'stock' || property === 'profitEmployee' || property === 'profitSaloon') {
+        formattedData[property] = parseInt(dataUser[property], 10)
+      } else {
+        formattedData[property] = dataUser[property]
+      }
+    }
+  }
+  return formattedData
+}
+
+export const countries = [
   {
     nombre: 'Estados Unidos',
     iso3: 'USA',

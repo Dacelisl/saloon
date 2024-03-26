@@ -1,11 +1,12 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 
-const FloatingDots = () => {
+const MovingDots = ({ number = 10, speed = 1 }) => {
   const [dots, setDots] = useState([])
 
   useEffect(() => {
-    const numberOfDots = 5
-    const speed = 1
+    const numberOfDots = number
+    const vel = speed
     const containerWidth = 800
     const containerHeight = 600
 
@@ -25,7 +26,7 @@ const FloatingDots = () => {
     const moveDots = () => {
       setDots((prevDots) =>
         prevDots.map((dot) => {
-          let newBottom = dot.bottom + dot.directionY * speed
+          let newBottom = dot.bottom + dot.directionY * vel
 
           if (newBottom < 0 || newBottom > containerHeight - dot.size) {
             dot.directionY *= -1
@@ -41,7 +42,7 @@ const FloatingDots = () => {
 
     const intervalId = setInterval(() => {
       moveDots()
-    }, 30) // Reducir el intervalo para un movimiento más fluido
+    }, 20) // Reducir el intervalo para un movimiento más fluido
 
     createDots()
 
@@ -90,4 +91,4 @@ const FloatingDots = () => {
   )
 }
 
-export default FloatingDots
+export default MovingDots

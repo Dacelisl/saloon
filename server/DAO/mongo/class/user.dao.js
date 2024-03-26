@@ -49,7 +49,7 @@ class UserDAO {
       throw new Error(`function DAO getUserByEmail: ${error}`)
     }
   }
-  async getUsersByName(search) {
+  async getClientsByName(search) {
     try {
       const users = await userModel
         .find({
@@ -105,7 +105,7 @@ class UserDAO {
             phone: updatedData.phone,
             address: updatedData.address,
             dateBirthday: updatedData.dateBirthday,
-            photo: updatedData.photo,
+            thumbnail: updatedData.thumbnail,
           },
           $push: {
             serviceHistory: { $each: updatedData.serviceHistory || [] },

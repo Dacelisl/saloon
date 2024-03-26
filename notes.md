@@ -18,6 +18,8 @@
   }
 - correr el deploy  firebase deploy --only hosting:fabiosaloon
 
+.-tener en cuenta los estilos para movil en modo vertil y horizontal
+
 # ROLES
 
 -en los roles se empleo solo el 'name' pero se puede asignar el objeto completo con id, name, y permisions
@@ -34,11 +36,11 @@
 
 - creacion de la UI princiapl
 - ui en color
-- agregar mejor estructura a la tabla react, en datelle debe poderse ver toda la info del cliente 
 
 usar un componente principal para ejecutar el modalProduct y productDetailTable, en el principal se envian los datos obtenidos en mongo y se realizan las operaciones de guardado 
 
 
---se debe verificar la insercion de datos en el historico de consumo y servicios de los clicnetes, lo mas seguro sea tres estados: el estado iniciail del servicio, el estado de pago y finalmente actualizacion del estado del cliente.
+--interfaz de historico de procedimientos, se podria gregar un estado (en proceso, cotizacion, pago) 
 
---dos interfaces mas con tablas y listas para veficar los usuarios a la hora de pagar y otra para listar
+--interfaz de listar el historico de consumo en servicios y productos
+--agregar notificaciones de acciones 

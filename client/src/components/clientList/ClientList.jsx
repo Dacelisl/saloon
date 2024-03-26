@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react'
 import ClientTable from './ClientTable'
 import ClientDetail from './ClientDetail'
-import Test from '../modals/Test'
 import SearchClient from '../utils/SearchClient'
-import { getClientsByName } from '../../firebase/firebase'
+import { getClients, updateClients } from '../../firebase/firebase'
+import FloatingDots from '../utils/FloatingDots'
+import MovingDots from '../utils/MovingDots'
 
 const defaultClient = {
   firstName: '',
@@ -16,13 +17,29 @@ const defaultClient = {
   dateBirthday: '',
   firstDate: '',
   lastDate: '',
+  thumbnail: '',
+  code: '',
 }
 
-const ClientList = ({ clients }) => {
+const ClientList = () => {
+  const [clients, setClients] = useState([])
   const [selectedClient, setSelectedClient] = useState(defaultClient)
   const [selectedClientId, setSelectedClientId] = useState('')
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
+  const [editable, setEditable] = useState(false)
+
+  useEffect(() => {
+    const fetchFromDatabase = async () => {
+      try {
+        const allClients = await getClients()
+        setClients(allClients)
+      } catch (error) {
+        throw new Error(`error getting data`, error)
+      }
+    }
+    fetchFromDatabase()
+  }, [])
 
   useEffect(() => {
     const selected = clients.find((client) => client.id === selectedClientId)
@@ -34,40 +51,39 @@ const ClientList = ({ clients }) => {
     setSelectedClientId(clientId.id)
   }
 
-  const saveChange = () => {
-    console.log('se guardo todo ', selectedClient)
+  const saveChange = async () => {
+    await updateClients(selectedClient)
+    setEditable(false)
+    const clientsUpdate = await getClients()
+    setClients(clientsUpdate)
   }
 
-  const handleSearch = async (searchTerm) => {
-    const clients = await getClientsByName(searchTerm)
-    setSearch(clients)
-  }
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setSelectedClient((prevFields) => ({
-      ...prevFields,
-      [name]: value,
-    }))
+  const handleSearch = (searchTerm) => {
+    if (searchTerm === '') return setSearch('')
+    const filtered = clients.filter((client) =>
+      Object.entries(client).some(([key, value]) => typeof value === 'string' && key !== 'thumbnail' && value.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+    setSearch(filtered)
   }
 
   return (
     <>
-      <div className=' fixed inset-0 flex items-center top-[-5%] md:top-0 justify-center bg-secondary-light backdrop-blur-xl  bg-opacity-75'>
-        <Test></Test>
-        <div className='z-10 bg-primary-light  p-4 max-w-md mx-auto rounded-lg shadow-xl shadow-slate-800'>
+      <div className=' fixed inset-0 flex items-center top-[-5%] md:top-0 justify-center bg-secondary-dark backdrop-blur-xl  bg-opacity-75'>
+        <MovingDots number={4} />
+        <FloatingDots number={3} />
+        <div className='z-10 bg-primary-light  p-4 max-w-md mx-auto rounded-lg shadow-sm shadow-slate-700'>
           <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>Clients</h2>
           <ClientDetail
             selectedClient={selectedClient}
+            setSelectedClient={setSelectedClient}
             imagenPreview={imagenPreview}
             setImagenPreview={setImagenPreview}
-            setSelectedClient={setSelectedClient}
-            handleInputChange={handleInputChange}
+            editable={editable}
+            setEditable={setEditable}
             saveChange={saveChange}
           />
           <SearchClient onSearch={handleSearch} />
-          <ClientTable onClientSelected={handleClientSelect} data={search ? search : clients} />
-          {/* <div className='flex-1'>{clients.length > 0 ? <ClientTable onClientSelected={handleClientSelect} data={clients} /> : <></>}</div> */}
+          <ClientTable onClientSelected={handleClientSelect} data={search !== '' ? search : clients} />
         </div>
       </div>
     </>
