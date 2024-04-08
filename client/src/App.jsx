@@ -7,6 +7,7 @@ import Test from './components/modals/Test'
 import ProductList from './components/productList/ProductList.jsx'
 import { logOut, getTickets } from './firebase/firebase.js'
 import ClientList from './components/clientList/ClientList.jsx'
+import TicketList from './components/ticket/TicketList.jsx'
 import HistoricalClientList from './components/clientList/HistoricalClient/HistoricalClientList.jsx'
 
 
@@ -26,7 +27,8 @@ function App() {
   return (
     <>
       <div>
-        <HistoricalClientList/>
+        {/* <HistoricalClientList/> */}
+        <TicketList  />
         {/* <ClientList  /> */}
         {/* <ProductList /> */}
         {/* <ModalRegisterClient isOpen={isModalOpen} onClose={closeModal} />

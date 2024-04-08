@@ -12,6 +12,15 @@ class TicketController {
       return sendErrorResponse(res, error)
     }
   }
+  async getPaymentMethods(req, res) {
+    try {
+      const methods = await ticketService.getPaymentMethods()
+      return sendSuccessResponse(res, methods)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
   async getTicketByTicketNumber(req, res) {
     const ticketNum = req.params.tnum
     try {

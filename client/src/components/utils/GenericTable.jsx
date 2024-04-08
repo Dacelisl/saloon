@@ -5,7 +5,6 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@
 const GenericTable = ({ data, columns, selectedRowId, setRowSelected, groupBy = 'ticketNumber' }) => {
   const [sorting, setSorting] = useState([])
   const currentRef = useRef(null)
-  console.log('data', data);
 
   const RowStyle = (row) => {
     if (!row.original[groupBy]) return
@@ -58,7 +57,7 @@ const GenericTable = ({ data, columns, selectedRowId, setRowSelected, groupBy = 
             </thead>
             <tbody>
               {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} onClick={() => setRowSelected(row.original)} style={RowStyle(row)} className={row.id === selectedRowId ? 'bg-secondary-light' : ''}>
+                <tr key={row.id} onClick={() => setRowSelected(row.original)} style={RowStyle(row)} className= {row.id === selectedRowId ? 'bg-secondary-light' : ''}>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className='py-2 px-2 border-b border-gray-300'>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

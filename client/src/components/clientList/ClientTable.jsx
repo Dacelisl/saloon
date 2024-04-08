@@ -3,6 +3,7 @@ import { useState } from 'react'
 import GenericTable from '../utils/GenericTable.jsx'
 
 const ClientTable = ({ data, onClientSelected }) => {
+  
   const [selectedColumnId, setSelectedColumnId] = useState(null)
 
   const columns = [
@@ -12,11 +13,11 @@ const ClientTable = ({ data, onClientSelected }) => {
     },
     {
       header: 'Últ. Servicio',
-      accessorFn: (row) => (row.serviceHistory.length > 0 ? row.serviceHistory[0].service.name : 'N/A'),
+      accessorFn: (row) => (row.serviceHistory.length > 0 ? row.serviceHistory[row.serviceHistory.length-1].service.name :'N/A'),
     },
     {
       header: 'Fecha',
-      accessorFn: (row) => (row.shopping.length > 0 ? row.shopping[0].dateShopping : 'N/A'),
+      accessorFn: (row) => (row.shopping.length > 0 ? row.shopping[row.shopping.length-1]?.date : row.serviceHistory[row.serviceHistory.length-1]?.date || 'N/A'),
     },
     {
       id: 'more-details',

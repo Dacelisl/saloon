@@ -49,3 +49,8 @@
   border-bottom-right-radius: 0.25rem;
 }
 
+
+/* toggle */
+input:checked + .slider:before {
+  transform: translateX(42px);
+}

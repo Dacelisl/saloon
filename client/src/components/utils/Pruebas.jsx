@@ -135,8 +135,8 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, imagenPreview, set
     <div className='flex mb-1 border-solid border-2 border-gray-200'>
       <div className='w-[50%]'>
         <div className=' p-4 rounded-md'>
-          <InputEdit label={'Nombre'} value={selectedProduct.name} disabled={!editable} inputChange={handleFieldChange} type={'text'} name={'name'} />
-          <InputEdit label={'Precio'} value={selectedProduct.price} edit={!editable} inputChange={handleFieldChange} type={'number'} name={'price'} />
+          <InputEdit labelName={'Nombre'} value={selectedProduct.name} disabled={!editable} inputChange={handleFieldChange} type={'text'} name={'name'} />
+          <InputEdit labelName={'Precio'} value={selectedProduct.price} edit={!editable} inputChange={handleFieldChange} type={'number'} name={'price'} />
           {editable ? (
             <div className='flex'>
               <ButtonDefault title='Save' onClick={saveChange} />

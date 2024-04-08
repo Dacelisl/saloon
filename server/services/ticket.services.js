@@ -27,6 +27,32 @@ class TicketServices {
       }
     }
   }
+  async getPaymentMethods() {
+    try {
+      const methods = await ticketFactory.getPaymentMethods()
+      if (!methods) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, methods not found getPaymentMethods`,
+          payload: {},
+        }
+      }
+      return {
+        status: 'success',
+        code: 200,
+        message: 'all methods',
+        payload: methods,
+      }
+    } catch (error) {
+      return {
+        status: 'error',
+        code: 500,
+        message: `error getting all methods : getPaymentMethods ${error}`,
+        payload: {},
+      }
+    }
+  }
   async getTicketByTicketNumber(ticketNumber) {
     try {
       const ticketFound = await ticketFactory.getTicketByTicketNumber(ticketNumber)
@@ -186,6 +212,7 @@ class TicketServices {
   async updateTicket(ticket) {
     try {
       const ticketFound = await ticketFactory.getTicketByTicketNumber(ticket.ticketNumber)
+
       if (!ticketFound) {
         return {
           status: 'Fail',
@@ -195,21 +222,11 @@ class TicketServices {
         }
       }
       const ticketUpdate = await ticketFactory.updateTicket(ticket)
-      if (ticketUpdate.modifiedCount > 0) {
-        const responseUpdate = await ticketFactory.getTicketByTicketNumber(ticket.ticketNumber)
-        return {
-          status: 'success',
-          code: 200,
-          message: 'ticket update successfully',
-          payload: responseUpdate,
-        }
-      } else {
-        return {
-          status: 'Fail',
-          code: 404,
-          message: `Error updateTicket`,
-          payload: ticketUpdate,
-        }
+      return {
+        status: 'success',
+        code: 200,
+        message: 'ticket update successfully',
+        payload: ticketUpdate,
       }
     } catch (error) {
       return {

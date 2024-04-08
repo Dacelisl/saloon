@@ -42,10 +42,6 @@ const HistoricalClientTable = ({ data, onClientSelected }) => {
       accessorFn: (row) => `${row.employee.firstName} ${row.employee.lastName}`,
     },
     {
-      header: 'Pago',
-      accessorFn: (row) => `${row.paymentMethod}`,
-    },
-    {
       header: 'Total',
       accessorFn: (row) => `$ ${row.totalPayment}`,
     },

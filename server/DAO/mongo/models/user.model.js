@@ -58,14 +58,14 @@ const schema = new Schema({
       employeeId: { type: Schema.Types.ObjectId, ref: 'employee', required: true },
       service: { type: Schema.Types.ObjectId, ref: 'service', required: true },
       price: { type: Number },
-      dateService: { type: Date, default: Date.now },
+      date: { type: Date, default: Date.now },
     },
   ],
   shopping: [
     {
       employeeId: { type: Schema.Types.ObjectId, ref: 'employee', required: true },
       products: { type: [ProductSchema], required: false, default: [] },
-      dateShopping: { type: Date, default: Date.now },
+      date: { type: Date, default: Date.now },
     },
   ],
 })

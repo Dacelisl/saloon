@@ -1,13 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
-import InputEdit from '../../utils/InputEdit.jsx'
-import ButtonDefault from '../../utils/ButtonDefault'
 import ImagePreview from '../../utils/ImagePreview'
-import GenericTable from '../../utils/GenericTable.jsx'
-import InputPhone from '../../utils/InputPhone.jsx'
 
 const HistoricalClientDetail = ({ selectedClient, ticket, imagenPreview }) => {
-  console.log('partial', ticket)
   return (
     <div className='flex mb-1 border-solid border-2 border-gray-200'>
       <div className='w-[70%]'>
@@ -29,20 +23,22 @@ const HistoricalClientDetail = ({ selectedClient, ticket, imagenPreview }) => {
             </ul>
           </div>
         </div>
-        {ticket?.balanceDue > 0 ? (
+        {ticket? (
           <div className='overflow-x-auto mb-3'>
           <table className='text-center m-auto overflow-y-scroll'>
             <thead className='bg-button-primary px-4 text-button-text_primary text-xs font-extralight'>
               <tr>
                 <th className='text-center px-2'>Fecha</th>
                 <th className='text-center px-2'>Abono</th>
+                <th className='text-center px-2'>Pago</th>
               </tr>
             </thead>
             <tbody>
               {ticket.partialPayments.map((item) => (
-                <tr key={item.paymentDate}>
+                <tr key={item.id}>
                   <td className='text-center px-2'>{item.paymentDate}</td>
                   <td className='text-center px-2'>${item.amount}</td>
+                  <td className='text-center px-2'>{item.paymentMethod}</td>
                 </tr>
               ))}
             </tbody>

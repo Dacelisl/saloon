@@ -76,6 +76,7 @@ class EmployeePerformanceDAO {
   async updateEmployeePerformance(ticket) {
     try {
       const performance = new EmployeePerformanceSaveDTO(ticket)
+      console.log('earnings ', performance);
       const ticketNumber = performance.earningsDetails[0].ticketNumber
       const result = await EmployeePerformanceModel.updateOne({ 'earningsDetails.ticketNumber': ticketNumber }, performance)
       return result

@@ -42,5 +42,10 @@ usar un componente principal para ejecutar el modalProduct y productDetailTable,
 
 --interfaz de historico de procedimientos, se podria gregar un estado (en proceso, cotizacion, pago) 
 
---interfaz de listar el historico de consumo en servicios y productos
 --agregar notificaciones de acciones 
+
+
+-modulo de tickets: a tener en cuenta el id del cliente y el empleado, el id del cleinte puede ser enviado como prop, los empleados pueden ser cargados en un select,  
+datos a mostrar: fecha, nombre cliente, nombre empleado, select con producto o servicio, tabla con los datos segun seleccion. (la tabla debe tener el boton de agregar una vez agregado mostrar una ventana modal para asignar cantidad y valor ), metodo de pago seria un select, informativo total a pagar, valor a pagar y de manera informativa se queda deuda pendiente 
+
+datos: recibe como prop, cliente. dentro del componente se llama a los productos, servicios, y medios de pago para llenar los selects.

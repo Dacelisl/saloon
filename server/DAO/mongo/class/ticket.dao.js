@@ -97,6 +97,15 @@ class TicketDAO {
     }
   }
 
+  async getPaymentMethods() {
+    try {
+      const enumValues = Object.values(TicketModel.schema.path('partialPayments.paymentMethod').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getPaymentMethods  ${error}`)
+    }
+  }
+
   async createTicket(ticketData) {
     try {
       let ticket = totalPrice(ticketData)
@@ -120,44 +129,19 @@ class TicketDAO {
       throw new Error(`function DAO deleteTicketById  ${error}`)
     }
   }
+
   async updateTicket(updatedData) {
     try {
-      const ticketNumber = updatedData.ticketNumber
-      const itemsToUpdate = updatedData.items || []
-      // Eliminar elementos existentes del array por su itemId
-      await TicketModel.updateOne({ ticketNumber }, { $pull: { items: { itemId: { $in: itemsToUpdate.map((item) => item.itemId) } } } })
-      // Obtener el ticket actual para calcular el totalPayment existente
-      const existingTicket = await TicketModel.findOne({ ticketNumber })
-      if (!existingTicket) {
-        throw new Error(`Ticket not found for ticketNumber: ${ticketNumber}`)
-      }
-      // Calcular el totalPayment existente
-      const existingTotalPayment = existingTicket.items.reduce((total, item) => total + item.itemPrice, 0)
-      // Calcular el totalPayment actualizado
-      const updatedTotalPayment = existingTotalPayment + itemsToUpdate.reduce((total, item) => total + item.itemPrice * item.quantity, 0)
-      // Actualizar el ticket con los nuevos elementos y el totalPayment actualizado
-      const result = await TicketModel.updateOne(
-        { ticketNumber },
-        {
-          $set: {
-            ticketNumber,
-            purchaseDate: updatedData.purchaseDate,
-            customerId: updatedData.customerId,
-            employeeId: updatedData.employeeId,
-            paymentMethod: updatedData.paymentMethod,
-            totalPayment: updatedTotalPayment,
-          },
-          $push: { items: { $each: itemsToUpdate } },
-        },
-        { upsert: true }
-      )
-      let ticket = await TicketModel.findOne({ ticketNumber }).lean()
-      ticket.items = await this.mapItemNames(ticket.items)
-      await employeePerformanceDAO.updateEmployeePerformance(ticket)
-
-      return result
+      const ticket = await TicketModel.findOne({ ticketNumber: updatedData.ticketNumber })
+      ticket.partialPayments.push(updatedData.partialPayments)
+      const totalPagos = ticket.partialPayments.reduce((total, pago) => total + pago.amount, 0)
+      ticket.totalPayment = totalPagos
+      const totalItems = ticket.items.reduce((total, item) => total + item.quantity * item.itemPrice, 0)
+      ticket.balanceDue = totalItems - totalPagos
+      await ticket.save()
+      return ticket
     } catch (error) {
-      throw new Error(`function DAO updateTicket ${error}`)
+      throw new Error(`Function DAO updateTicket ${error}`)
     }
   }
 

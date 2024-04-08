@@ -39,7 +39,7 @@ const ProductTable = ({ data, onProductSelected }) => {
   return (
     <>
       <GenericTable data={data} setRowSelected={onProductSelected} columns={columns} selectedRowId={selectedColumnId} />
-    </> 
+    </>
   )
 }
 export default ProductTable

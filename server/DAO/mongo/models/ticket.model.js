@@ -15,10 +15,10 @@ const TicketSchema = new Schema({
       itemPrice: { type: Number, required: true },
     },
   ],
-  paymentMethod: { type: String, required: true, enum: paymentMethodsEnum },
   totalPayment: { type: Number, required: true },
   partialPayments: [
     {
+      paymentMethod: { type: String, required: true, enum: paymentMethodsEnum },
       paymentDate: { type: Date, default: Date.now },
       amount: { type: Number, required: true },
     },

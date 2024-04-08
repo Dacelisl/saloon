@@ -13,6 +13,8 @@
   "author": "Diego celis",
   "license": "ISC",
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/react": "^2.8.2",
     "@tanstack/react-table": "^8.12.0",
     "bcryptjs": "^2.4.3",
     "commander": "^11.0.0",

@@ -28,12 +28,39 @@ export const getCategories = async () => {
     throw new Error(`Error server getCategories ${error.message}`)
   }
 }
+export const getPaymentsMethod = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/tickets/paymentMethods/')
+    const options = response.data.payload.map((item, index) => {
+      return { id: index.toString(), name: item }
+    })
+    return options
+  } catch (error) {
+    throw new Error(`Error server getPaymentsMethod ${error.message}`)
+  }
+}
 export const getProviders = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/provider/')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getCategories ${error.message}`)
+  }
+}
+export const getServices = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/service/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getServices ${error.message}`)
+  }
+}
+export const getEmployee = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/employee/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getEmployee ${error.message}`)
   }
 }
 
@@ -186,7 +213,6 @@ export const updateClients = async (dataClient) => {
       dataClient.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataClient)
-
     const response = await axios.put(`http://localhost:3000/api/users/${dataClient.id}`, userFormatted)
     return response.status
   } catch (error) {
@@ -201,6 +227,19 @@ export const getTickets = async () => {
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getTickets ${error.message}`)
+  }
+}
+export const updateTicket = async (ticket, data) => {
+  try {
+    data.amount = parseInt(data.amount, 10)
+    const dataChange = {
+      ticketNumber: ticket.ticketNumber,
+      partialPayments: data,
+    }
+    const response = await axios.put(`http://localhost:3000/api/tickets/${ticket.ticketNumber}`, dataChange)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server updateTicket ${error.message}`)
   }
 }
 

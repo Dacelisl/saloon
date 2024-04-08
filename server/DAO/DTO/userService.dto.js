@@ -12,7 +12,7 @@ class UserService {
         employeeId: this.mapEmployee(entry.employeeId),
           service: this.mapService(entry.service),
           price: entry.price,
-          dateService: formatDate(entry.dateService),
+          date: formatDate(entry.date),
         }))
       : []
   }
@@ -21,7 +21,7 @@ class UserService {
     return Array.isArray(shopping)
       ? shopping.map((entry) => ({
           products: this.mapProducts(entry.products),
-          dateShopping: formatDate(entry.dateShopping),
+          date: formatDate(entry.date),
           employeeId: this.mapEmployee(entry.employeeId),
         }))
       : []

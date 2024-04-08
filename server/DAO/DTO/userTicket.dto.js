@@ -17,7 +17,6 @@ class UserTicketDTO {
         })
       }
     })
-    this.paymentMethod = ticket.paymentMethod
     this.totalPayment = ticket.totalPayment
   }
 }

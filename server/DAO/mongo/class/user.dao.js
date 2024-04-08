@@ -107,14 +107,11 @@ class UserDAO {
             dateBirthday: updatedData.dateBirthday,
             thumbnail: updatedData.thumbnail,
           },
-          $push: {
-            serviceHistory: { $each: updatedData.serviceHistory || [] },
-            shopping: { $each: updatedData.shopping || [] },
-          },
         }
       )
       return user
     } catch (error) {
+      console.log('error en el DAO user', error)
       throw new Error(`function DAO updateUser: ${error}`)
     }
   }
@@ -123,20 +120,26 @@ class UserDAO {
       const employee = new Types.ObjectId(ticket.employeeId)
       const user = await userModel.findById(ticket.customerId)
       const ticketDTO = new UserTicketDTO(ticket)
-      user.serviceHistory.push(
-        ...ticketDTO.services.map((service) => ({
+      user.lastDate = Date.now()
+
+      if (ticketDTO.services.length > 0) {
+        user.serviceHistory.push(
+          ...ticketDTO.services.map((service) => ({
+            employeeId: employee,
+            service: service.serviceId,
+            price: service.price,
+          }))
+        )
+      }
+      if (ticketDTO.products.length > 0) {
+        user.shopping.push({
+          products: ticketDTO.products.map((product) => ({
+            product: product.productId,
+            quantity: product.quantity,
+          })),
           employeeId: employee,
-          service: service.serviceId,
-          price: service.price,
-        }))
-      )
-      user.shopping.push({
-        products: ticketDTO.products.map((product) => ({
-          product: product.productId,
-          quantity: product.quantity,
-        })),
-        employeeId: employee,
-      })
+        })
+      }
       await user.save()
       return true
     } catch (error) {
