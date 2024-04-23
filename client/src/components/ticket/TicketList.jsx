@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-/* import ClientTable from './ClientTable' */
 import TicketDetail from '../ticket/TicketDetail'
+import TicketPayment from '../ticket/TicketPayment.jsx'
 import ButtonDefault from '../utils/ButtonDefault.jsx'
-import { now } from 'mongoose'
+import Modal from '../utils/Modal.jsx'
+import { createTicket } from '../../firebase/firebase.js'
 
 const defaultClient = {
   id: '660cba4b8ace03583c01e741',
@@ -15,39 +16,45 @@ const defaultClient = {
   email: 'newMaria@gmail.com',
 }
 const ticketDefault = {
-  customerId: '',
+  customerId: '660cba4b8ace03583c01e741',
   employeeId: '',
-  partialPayments: [
-    {
-      paymentDate: Date(now),
-      paymentMethod: '',
-      amount: '',
-    },
-  ],
+  totalPayment: '',
+  partialPayments: [],
   items: [],
 }
 
 const TicketList = () => {
   const [selectedClient, setSelectedClient] = useState(defaultClient)
   const [ticket, setTicket] = useState(ticketDefault)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const handleClick = () => {
-    setTicket({ ...ticket, ['customerId']:selectedClient.id  })
-    console.log('data del ticket list', ticket)
+  const saveData = async (data) => {
+    if (data.amount === '') data.amount = ticket.totalPayment
+    ticket.partialPayments.push(data)
+    const res = await createTicket(ticket)
+    if (res.code === 201) {
+      console.log('todo funciono ok')
+    }
   }
-
+  const showModal = async () => {
+    if (ticket.employeeId != '' && ticket.items.length > 0) {
+      setIsModalOpen(!isModalOpen)
+    }
+    console.log('ingrese datos faltantes')
+  }
   return (
     <>
-      <div className=' fixed inset-0 flex items-center top-[-5%] md:top-0 justify-center bg-secondary-dark backdrop-blur-xl  bg-opacity-75'>
-        <div className='z-10 bg-primary-light  p-4 max-w-fit mx-auto rounded-lg shadow-sm shadow-slate-700'>
+      <Modal type={2}>
+        <div className=' z-50'>
           <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
           <TicketDetail ticket={ticket} setTicket={setTicket} />
           <div className=' my-2 flex'>
-            <ButtonDefault title='Save' onClick={handleClick} />
             <ButtonDefault title='Cancel' />
+            <ButtonDefault title='Continuar' onClick={showModal} />
           </div>
         </div>
-      </div>
+      </Modal>
+      <TicketPayment isOpen={isModalOpen} onClose={showModal} saveData={saveData} totalPayment={ticket.totalPayment} />
     </>
   )
 }

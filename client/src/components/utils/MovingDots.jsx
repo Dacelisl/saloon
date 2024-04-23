@@ -1,14 +1,13 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 
-const MovingDots = ({ number = 10, speed = 1 }) => {
+const MovingDots = () => {
   const [dots, setDots] = useState([])
 
   useEffect(() => {
-    const numberOfDots = number
-    const vel = speed
-    const containerWidth = 800
-    const containerHeight = 600
+    const numberOfDots = 5
+    const speed = 1
+    const containerWidth = window.innerWidth
+    const containerHeight = window.innerHeight
 
     const createDots = () => {
       const newDots = Array.from({ length: numberOfDots }, (_, index) => ({
@@ -26,7 +25,7 @@ const MovingDots = ({ number = 10, speed = 1 }) => {
     const moveDots = () => {
       setDots((prevDots) =>
         prevDots.map((dot) => {
-          let newBottom = dot.bottom + dot.directionY * vel
+          let newBottom = dot.bottom + dot.directionY * speed
 
           if (newBottom < 0 || newBottom > containerHeight - dot.size) {
             dot.directionY *= -1
@@ -42,7 +41,7 @@ const MovingDots = ({ number = 10, speed = 1 }) => {
 
     const intervalId = setInterval(() => {
       moveDots()
-    }, 20) // Reducir el intervalo para un movimiento más fluido
+    }, 30) // Reducir el intervalo para un movimiento más fluido
 
     createDots()
 

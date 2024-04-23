@@ -2,6 +2,8 @@ import { useState } from 'react'
 import ButtonIcon from '../utils/ButtonIcon'
 import { passwordRecovery } from '../../firebase/firebase'
 import Toast from '../utils/Toast.jsx'
+import ModalAux from '../utils/ModalAux.jsx'
+import InputEdit from '../utils/InputEdit.jsx'
 
 // eslint-disable-next-line react/prop-types
 const ModalRecoveryPassword = ({ isOpen, onClose }) => {
@@ -37,39 +39,25 @@ const ModalRecoveryPassword = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <div className={`modal z-40  ${isOpen ? 'block' : 'hidden'}`}>
-        <div className='modal-overlay  fixed w-full h-full top-0 backdrop-blur-md bg-white/30 left-0 right-0 bottom-0 ' onClick={onClose}>
-          <div className='modal-container absolute top-1/3 left-1/3'>
-            <div className='modal-content items-center grid bg-[#193a4e] p-6 rounded-2xl shadow-slate-800'>
-              <h2 className='text-2xl text-slate-300 font-extralight mb-4'>Recuperación de Contraseña</h2>
-              <div className='mb-4'>
-                <input
-                  type='email'
-                  placeholder='Enter your Email'
-                  className='w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500'
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-              </div>
-              <span className=' flex mt-4 mb-4  justify-center '>
-                <ButtonIcon
-                  title='Send'
-                  nameIcon='send-outline'
-                  sizeIcon={'small'}
-                  style={{
-                    width: '100px',
-                    height: '40px',
-                    justifyContent: 'center',
-                    backgroundColor: '#4b7d30',
-                    fontSize: 'medium',
-                  }}
-                  onClick={handleButtonClick}
-                />
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ModalAux open={isOpen} close={onClose}>
+        <h2 className='text-2xl text-slate-300 font-extralight mb-4'>Recuperación de Contraseña</h2>
+        <InputEdit type='email' label={false} labelName={'Enter your Email'} value={email} edit={true} onChange={handleEmailChange} className='h-10' />
+        <span className=' flex mt-4 mb-4  justify-center '>
+          <ButtonIcon
+            title='Send'
+            nameIcon='send-outline'
+            sizeIcon={'small'}
+            style={{
+              width: '100px',
+              height: '40px',
+              justifyContent: 'center',
+              backgroundColor: '#4b7d30',
+              fontSize: 'medium',
+            }}
+            onClick={handleButtonClick}
+          />
+        </span>
+      </ModalAux>
       {toast.state ? (
         <>
           <Toast message={toast.message} type='success' time={19000} />

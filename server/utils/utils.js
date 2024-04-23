@@ -57,7 +57,7 @@ function isValid(id) {
 function totalPrice(tickets) {
   let total = 0
   tickets.items.forEach(async (item) => {
-    total += item.itemPrice
+    total += parseInt(item.itemPrice)
   })
   tickets.totalPayment = total
   return tickets

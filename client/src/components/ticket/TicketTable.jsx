@@ -24,7 +24,7 @@ const TicketTable = ({ data, onItemSelected, openModal }) => {
       id: 'more-details',
       header: () => <span></span>,
       cell: ({ row }) => (
-        <ButtonDefault
+        <ButtonDefault color={'sm:text-xs md:text-sm'}
           title='Agregar'
           onClick={() => {
             showModal(row.id)

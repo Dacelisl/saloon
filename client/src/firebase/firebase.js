@@ -242,6 +242,14 @@ export const updateTicket = async (ticket, data) => {
     throw new Error(`Error server updateTicket ${error.message}`)
   }
 }
+export const createTicket = async (dataTicket) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/tickets/', dataTicket)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
+}
 
 export const verifyUser = async (emailUser, userPassw) => {
   try {

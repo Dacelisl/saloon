@@ -3,9 +3,8 @@ import { useState, useEffect } from 'react'
 import ClientTable from './ClientTable'
 import ClientDetail from './ClientDetail'
 import SearchClient from '../utils/SearchClient'
+import Modal from '../utils/Modal'
 import { getClients, updateClients } from '../../firebase/firebase'
-import FloatingDots from '../utils/FloatingDots'
-import MovingDots from '../utils/MovingDots'
 
 const defaultClient = {
   firstName: '',
@@ -68,24 +67,20 @@ const ClientList = () => {
 
   return (
     <>
-      <div className=' fixed inset-0 flex items-center top-[-5%] md:top-0 justify-center bg-secondary-dark backdrop-blur-xl  bg-opacity-75'>
-        <MovingDots number={4} />
-        <FloatingDots number={3} />
-        <div className='z-10 bg-primary-light  p-4 max-w-md mx-auto rounded-lg shadow-sm shadow-slate-700'>
-          <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>Clients</h2>
-          <ClientDetail
-            selectedClient={selectedClient}
-            setSelectedClient={setSelectedClient}
-            imagenPreview={imagenPreview}
-            setImagenPreview={setImagenPreview}
-            editable={editable}
-            setEditable={setEditable}
-            saveChange={saveChange}
-          />
-          <SearchClient onSearch={handleSearch} />
-          <ClientTable onClientSelected={handleClientSelect} data={search !== '' ? search : clients} />
-        </div>
-      </div>
+      <Modal type={2}>
+        <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>Clients</h2>
+        <ClientDetail
+          selectedClient={selectedClient}
+          setSelectedClient={setSelectedClient}
+          imagenPreview={imagenPreview}
+          setImagenPreview={setImagenPreview}
+          editable={editable}
+          setEditable={setEditable}
+          saveChange={saveChange}
+        />
+        <SearchClient onSearch={handleSearch} />
+        <ClientTable onClientSelected={handleClientSelect} data={search !== '' ? search : clients} />
+      </Modal>
     </>
   )
 }

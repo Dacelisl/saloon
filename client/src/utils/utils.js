@@ -38,6 +38,15 @@ export const resizeAndCompress = async (file) => {
   })
 }
 
+export function totalPrice(tickets) {
+  let total = 0
+  tickets.items.forEach(async (item) => {
+    total += item.itemPrice * item.quantity
+  })
+  tickets.totalPayment = total
+  return tickets
+}
+
 export function formattUpdate(dataUser) {
   if (dataUser.phone) dataUser.phone = dataUser.phone.replace(/\+/, '').replace(/\s/g, '')
   const formattedData = {}

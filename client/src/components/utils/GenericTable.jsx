@@ -59,7 +59,7 @@ const GenericTable = ({ data, columns, selectedRowId, setRowSelected, groupBy = 
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id} onClick={() => setRowSelected(row.original)} style={RowStyle(row)} className= {row.id === selectedRowId ? 'bg-secondary-light' : ''}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className='py-2 px-2 border-b border-gray-300'>
+                    <td key={cell.id} className='py-2 px-2 text-left border-b border-gray-300'>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
