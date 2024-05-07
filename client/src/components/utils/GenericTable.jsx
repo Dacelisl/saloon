@@ -1,19 +1,39 @@
 /* eslint-disable react/prop-types */
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 
 const GenericTable = ({ data, columns, selectedRowId, setRowSelected, groupBy = 'ticketNumber' }) => {
   const [sorting, setSorting] = useState([])
-  const currentRef = useRef(null)
+
+  const hashCode = (str) => {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    return hash
+  }
+
+  const getLightColor = (hash) => {
+    const maxR = 220
+    const maxG = 230
+    const maxB = 240
+
+    const minR = 190
+    const minG = 200
+    const minB = 210
+    let r = (hash % (maxR - minR)) + minR
+    let g = (hash % (maxG - minG)) + minG
+    let b = (hash % (maxB - minB)) + minB
+    return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`
+  }
 
   const RowStyle = (row) => {
-    if (!row.original[groupBy]) return
-    const currentValue = currentRef.current
-    if (!currentValue || currentValue === row.original[groupBy]) {
-      currentRef.current = row.original[groupBy]
-      return { backgroundColor: '#dfdbcd' }
-    } else {
-      return {}
+    if (!row.original[groupBy]) return {}
+    const groupValue = row.original[groupBy]
+    const hash = hashCode(groupValue)
+    const backgroundColor = getLightColor(hash)
+    return {
+      backgroundColor: backgroundColor,
     }
   }
 
@@ -57,7 +77,7 @@ const GenericTable = ({ data, columns, selectedRowId, setRowSelected, groupBy = 
             </thead>
             <tbody>
               {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} onClick={() => setRowSelected(row.original)} style={RowStyle(row)} className= {row.id === selectedRowId ? 'bg-secondary-light' : ''}>
+                <tr key={row.id} onClick={() => setRowSelected(row.original)} style={RowStyle(row)} className={row.id === selectedRowId ? 'bg-secondary-light' : ''}>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className='py-2 px-2 text-left border-b border-gray-300'>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

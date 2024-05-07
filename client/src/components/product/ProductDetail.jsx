@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy } from 'react'
 import { getCategories, getProviders } from '../../firebase/firebase'
-import InputEdit from '../utils/InputEdit'
-import ButtonDefault from '../utils/ButtonDefault'
-import ImagePreview from '../utils/ImagePreview'
-import InputSelect from '../utils/InputSelect'
+const InputEdit = lazy(() => import('../utils/InputEdit'))
+const InputArea = lazy(() => import('../utils/InputArea'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault'))
+const ImagePreview = lazy(() => import('../utils/ImagePreview'))
+const InputSelect = lazy(() => import('../utils/InputSelect'))
 
 const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview }) => {
   const [categories, setCategories] = useState([])
@@ -45,8 +46,10 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
       <div className='w-[50%]'>
         <div className=' p-4 pt-3 rounded-md'>
           <InputEdit labelName={'Nombre'} value={selectedProduct.name} edit={editable} inputChange={handleFieldChange} type={'text'} name={'name'} />
-          <InputSelect label={'Proveedor'} name={'provider'} itemOption={providers} itemValue={selectedProduct.provider} handleFieldChange={handleFieldChange} editable={!editable} />
-          <InputSelect label={'Categoria'} name={'category'} itemOption={categories} itemValue={selectedProduct.category} handleFieldChange={handleFieldChange} editable={!editable} />
+          <InputSelect label={'Proveedor'} name={'provider'} itemOption={providers} itemValue={selectedProduct.provider} handleFieldChange={handleFieldChange} editable={editable} />
+
+          <InputSelect label={'Categoria'} name={'category'} itemOption={categories} itemValue={selectedProduct.category} handleFieldChange={handleFieldChange} editable={editable} />
+
           <InputEdit labelName={'Code'} value={selectedProduct.code} inputChange={handleFieldChange} type={'text'} name={'code'} />
           <InputEdit labelName={'Stock'} value={selectedProduct.stock} edit={editable} inputChange={handleFieldChange} type={'number'} name={'stock'} />
           <InputEdit labelName={'Precio'} value={selectedProduct.price} edit={editable} inputChange={handleFieldChange} type={'number'} name={'price'} />
@@ -63,22 +66,10 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
 
       {/* region de la imagen y la descripcion  */}
       <div className='w-[45%] ml-4  mt-6'>
-        <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={setSelectedProduct} />
+        <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} />
         <InputEdit labelName={'Ganancia Empleado %'} value={selectedProduct.profitEmployee} edit={editable} inputChange={handleFieldChange} type={'number'} name={'profitEmployee'} />
         <InputEdit labelName={'Ganancia Salon %'} value={selectedProduct.profitSaloon} edit={editable} inputChange={handleFieldChange} type={'number'} name={'profitSaloon'} />
-        <div className='mt-0 w-full '>
-          <label className='block text-xs font-semibold text-gray-600'>
-            Descripcion:
-            <textarea
-              value={selectedProduct?.description}
-              onChange={handleFieldChange}
-              disabled={!editable}
-              autoComplete='off'
-              name='description'
-              className='w-full px-3 h-[70px] py-2 border rounded-md'
-            ></textarea>
-          </label>
-        </div>
+        <InputArea labelName={'Descripcion'} name={'Description'} onChange={handleFieldChange} value={selectedProduct.description} edit={editable} />
       </div>
     </div>
   )

@@ -12,7 +12,6 @@ class UserDAO {
         .populate('serviceHistory.service', 'name description')
         .populate('shopping.employeeId', 'firstName lastName')
         .populate('shopping.products.product', 'name price')
-
       const formattedUsers = users.map((user) => (user ? new UserDTO(user) : null))
 
       return formattedUsers

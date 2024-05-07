@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import ButtonDefault from '../utils/ButtonDefault.jsx'
-import InputEdit from '../utils/InputEdit.jsx'
-import ModalAux from '../utils/ModalAux.jsx'
+import { useState, useEffect, lazy } from 'react'
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
 
 const ticketDefault = {
   quantity: 1,

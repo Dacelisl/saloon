@@ -2,7 +2,7 @@
 import { useState } from 'react'
 /* usar dentro de un div con flex absolute  */
 
-const Toast = ({ message, type = 'success', nameIcon, positionX = 'top', positionY = 'right', time = 5000 }) => {
+const Toast = ({ message, code, nameIcon, positionX = 'top', positionY = 'right', time = 5000 }) => {
   const [estado, setEstado] = useState(true)
   const closeToast = () => setEstado(false)
 
@@ -10,6 +10,7 @@ const Toast = ({ message, type = 'success', nameIcon, positionX = 'top', positio
   const toastType = `flex w-max h-auto rounded-md   p-1  flex-row-reverse bg-neutral-900 shadow shadow-slate-500`
 
   setTimeout(closeToast, time)
+  const type = code >= 200 && code < 400 ? 'success' : 'alert';
   return (
     <div className={toastContainer}>
       <div className={estado ? toastType : 'hidden'}>

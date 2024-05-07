@@ -1,6 +1,6 @@
 class ProviderDTO {
   constructor(provider) {
-    this.id = provider._id // Si estás usando el ID de MongoDB
+    this.id = provider._id 
     this.name = provider.name
     this.description = provider.description
     this.contact = {

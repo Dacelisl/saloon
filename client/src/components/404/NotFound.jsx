@@ -1,22 +1,23 @@
 /* eslint-disable react/prop-types */
+import { lazy } from 'react'
 import notfound_dark from '../../assets/img/notfound_dark.svg'
 import dark from '../../assets/img/dark.jpg'
 import { NavLink } from 'react-router-dom'
-import MovingDots from '../utils/MovingDots'
-import FloatingDots from '../utils/FloatingDots'
+const MovingDots = lazy(() => import('../utils/MovingDots'))
+const FloatingDots = lazy(() => import('../utils/FloatingDots'))
 
 const NotFound = () => {
   return (
     <>
       <div
-        className={`fixed inset-0 block text-center top-[-5%] md:top-0 justify-center backdrop-blur-3xl`}
+        className={`fixed inset-0 bg-black block text-center top-[-5%] md:top-0 justify-center backdrop-blur-3xl`}
         style={{
           backgroundImage: `url(${dark})`,
         }}
       >
         <MovingDots number={3} />
         <FloatingDots number={15} />
-        <div className='z-20 relative top-[30%] md:top-[32%] w-[80%] xl:w-[40%] xxl:w-[35%] m-auto'>
+        <div className='z-20 relative top-[30%] right-[4%] md:top-[32%] w-[80%] xl:w-[40%] xxl:w-[35%] xxxl:w-[25%] m-auto'>
           <img src={notfound_dark} alt='Astronauta flotando en el espacio' />
         </div>
         <h1
@@ -26,7 +27,7 @@ const NotFound = () => {
           404
         </h1>
         <span
-          className=' font-sans block relative sm:bottom-[13%] sm:text-2xl md:bottom-[19%] md:text-3xl lg:bottom-[25%] xl:bottom-[20%] xl:text-5xl xxl:bottom-[22%] xxxl:bottom-[30%] text-white uppercase m-auto'
+          className=' font-sans block relative sm:bottom-[13%] sm:text-2xl md:bottom-[19%] md:text-3xl lg:bottom-[25%] xl:bottom-[20%] xl:text-5xl xxl:bottom-[22%] xxxl:bottom-[25%] text-white uppercase m-auto'
           style={{ textShadow: '0 2px 0 #ff0ab2' }}
         >
           We have a problem

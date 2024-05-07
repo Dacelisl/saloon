@@ -9,6 +9,7 @@ class EmployeeDTO {
     this.phone = `+${employee.phone.toString().slice(0, 2)} ${employee.phone.toString().slice(2)}`
     this.address = employee.address
     this.email = employee.email
+    this.thumbnail = employee.thumbnail
     this.dateBirthday = formatDate(employee.dateBirthday)
     this.role = employee.role ? employee.role.name : null
     this.documents = employee.documents

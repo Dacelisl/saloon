@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState, lazy } from 'react'
 /* import { useNavigate } from 'react-router-dom' */
-import matrix from '../../assets/matrix.jpg'
+import dark from '../../assets/img/dark.jpg'
 import { singIn, logOut } from '../../firebase/firebase'
-import ButtonIcon from '../utils/ButtonIcon'
-import Toast from '../utils/Toast'
-import InputPassword from '../utils/InputPassword'
-import InputEdit from '../utils/InputEdit'
-import ModalRecoveryPassword from '../modals/ModalRecoveryPassword'
+
+const ButtonIcon = lazy(() => import( '../utils/ButtonIcon'))
+const Toast = lazy(() => import( '../utils/Toast'))
+const InputPassword = lazy(() => import( '../utils/InputPassword'))
+const InputEdit = lazy(() => import( '../utils/InputEdit'))
+const ModalRecoveryPassword = lazy(() => import( './RecoveryPassword'))
 
 const Login = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -78,13 +79,13 @@ const Login = () => {
     <div
       className='fixed w-full h-full top-0 block'
       style={{
-        backgroundImage: `url(${matrix})`,
+        backgroundImage: `url(${dark})`,
       }}
     >
       <div className='relative flex items-center justify-center h-full '>
         <form
           id='login'
-          className='absolute h-fit  bg-slate-500/20 top-[45%] left-1/2 rounded-xl -translate-x-1/2 -translate-y-1/2 backdrop-blur-md shadow-lg shadow-slate-400 text-slate-50 p-5 pt-4 mb-[10%] sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[45%] xl:p-10 2xl:w-[30%] 2xl:p-10  lg:top-[45%] lg:p-8'
+          className='absolute h-fit  bg-slate-500/20 top-[45%] left-1/2 rounded-xl -translate-x-1/2 -translate-y-1/2 backdrop-blur-md shadow-lg shadow-slate-400 text-slate-50 p-5 pt-4 mb-[10%] sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[45%] xl:p-10 xxl:w-[40%] xxxl:w-[30%] 2xl:p-10  lg:top-[45%] lg:p-8'
         >
           <h3 className='text-xl md:text-3xl mb-3 text-center font-semibold'>Sing In</h3>
 
@@ -116,15 +117,15 @@ const Login = () => {
         </form>
       </div>
       <ModalRecoveryPassword isOpen={isModalOpen} onClose={handleCloseModal} />
-      <span className=' flex mt-4 mb-4  justify-center'>
+      <span className=' flex mt-2 mb-2  justify-center'>
         <ButtonIcon
           id='btn-login'
           title='SingOut'
           nameIcon='log-in-outline'
           sizeIcon={'large'}
           style={{
-            width: '130px',
-            height: '50px',
+            width: 'auto',
+            padding: '5px',
             justifyContent: 'center',
             backgroundColor: '#c92626',
             fontSize: 'medium',

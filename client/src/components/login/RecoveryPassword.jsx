@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import ButtonIcon from '../utils/ButtonIcon'
-import { passwordRecovery } from '../../firebase/firebase'
-import Toast from '../utils/Toast.jsx'
-import ModalAux from '../utils/ModalAux.jsx'
-import InputEdit from '../utils/InputEdit.jsx'
+import { useState, lazy } from 'react'
+import { passwordRecovery } from '../../firebase/firebase.js'
+const ButtonIcon = lazy(() => import('../utils/ButtonIcon.jsx'))
+const Toast = lazy(() => import('../utils/Toast.jsx'))
+const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 
 // eslint-disable-next-line react/prop-types
-const ModalRecoveryPassword = ({ isOpen, onClose }) => {
+const RecoveryPassword = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('')
   const [toast, setToast] = useState({
     state: false,
@@ -69,4 +69,4 @@ const ModalRecoveryPassword = ({ isOpen, onClose }) => {
   )
 }
 
-export default ModalRecoveryPassword
+export default RecoveryPassword

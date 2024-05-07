@@ -2,7 +2,7 @@
 import { useState, lazy } from 'react'
 const GenericTable = lazy(() => import('../utils/GenericTable.jsx'))
 
-const ClientTable = ({ data, onClientSelected }) => {
+const EmployeeTable = ({ data, onEmployeeSelected }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)
 
   const columns = [
@@ -11,12 +11,12 @@ const ClientTable = ({ data, onClientSelected }) => {
       accessorFn: (row) => `${row.firstName} ${row.lastName}`,
     },
     {
-      header: 'Últ. Servicio',
-      accessorFn: (row) => (row.serviceHistory.length > 0 ? row.serviceHistory[row.serviceHistory.length - 1].service.name : 'N/A'),
+      header: 'Telefono',
+      accessorFn: (row) => `${row.phone}`,
     },
     {
-      header: 'Fecha',
-      accessorFn: (row) => (row.shopping.length > 0 ? row.shopping[row.shopping.length - 1]?.date : row.serviceHistory[row.serviceHistory.length - 1]?.date || 'N/A'),
+      header: 'Rol',
+      accessorFn: (row) => `${row.role}`,
     },
     {
       id: 'more-details',
@@ -34,8 +34,8 @@ const ClientTable = ({ data, onClientSelected }) => {
 
   return (
     <>
-      <GenericTable data={data} setRowSelected={onClientSelected} columns={columns} selectedRowId={selectedColumnId} />
+      <GenericTable data={data} setRowSelected={onEmployeeSelected} columns={columns} selectedRowId={selectedColumnId} />
     </>
   )
 }
-export default ClientTable
+export default EmployeeTable

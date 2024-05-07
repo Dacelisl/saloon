@@ -33,7 +33,7 @@ class UserServices {
       return {
         status: 'error',
         code: 500,
-        message: 'error getting all users : getAllUsers',
+        message: 'error getting all users in Services: getAllUsers',
         payload: {},
       }
     }

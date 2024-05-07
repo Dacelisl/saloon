@@ -40,6 +40,11 @@ const employeeSchema = new Schema({
     },
   },
   dateBirthday: { type: Date, required: true },
+  thumbnail: {
+    type: String,
+    required: false,
+    default: 'Not Photo',
+  },
   role: { type: Schema.Types.ObjectId, ref: 'role', required: true },
   documents: [
     {

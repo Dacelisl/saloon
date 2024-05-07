@@ -62,6 +62,52 @@ export function formattUpdate(dataUser) {
   return formattedData
 }
 
+const getMonday = (date) => {
+  const day = date.getDay() || 7
+  if (day !== 1) date.setHours(-24 * (day - 1))
+  return date
+}
+
+export const getStartOfWeek = () => {
+  const now = new Date()
+  const monday = getMonday(now)
+  const startOfWeek = monday.toISOString().split('T')[0]
+  const startOfWeekFormat = formatDate(startOfWeek)
+  return startOfWeekFormat
+}
+
+export const getEndOfWeek = () => {
+  const now = new Date()
+  const dayOfWeek = now.getDay()
+  const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 6)
+  const saturday = new Date(now.setDate(diff))
+  const endOfWeek = saturday.toISOString().split('T')[0]
+  return endOfWeek
+}
+
+export const getStartOfMonth = () => {
+  const now = new Date()
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+  const startOfMonth = firstDayOfMonth.toLocaleString('es-CO')
+  return startOfMonth
+}
+
+export const getEndOfMonth = () => {
+  const now = new Date()
+  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  const endOfMonth = lastDayOfMonth.toLocaleString('es-CO')
+  return endOfMonth
+}
+export function formatDate(date) {
+  if (!date) return null
+  const parsedDate = new Date(date)
+  const year = parsedDate.getFullYear()
+  const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+  const day = String(parsedDate.getDate()).padStart(2, '0')
+  const formattedDate = `${year}-${month}-${day}`
+  return formattedDate
+}
+
 export const countries = [
   {
     nombre: 'Estados Unidos',

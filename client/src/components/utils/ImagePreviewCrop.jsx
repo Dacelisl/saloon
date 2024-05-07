@@ -1,9 +1,20 @@
 /* eslint-disable react/prop-types */
 
 import { resizeAndCompress } from '../../utils/utils.js'
+import { useEffect, useRef } from 'react'
+import Cropper from 'react-cropper'
+import 'cropperjs/dist/cropper.css'
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
 const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelName = 'Subir imagen', editable = false, showInputOnly = false, style = 'h-[130px]' }) => {
+  const cropperRef = useRef(null)
+
+  useEffect(() => {
+    if (cropperRef.current && imagenPreview) {
+      cropperRef.current.replace(imagenPreview)
+    }
+  }, [imagenPreview])
+
   const handleImagenChange = async (event) => {
     const file = event.target.files[0]
     if (file) {
@@ -17,6 +28,9 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
         return
       }
       const resizedImageBlob = await resizeAndCompress(file)
+      console.log('img ', imagenPreview)
+      console.log('img prev', setImagenPreview)
+
       if (setImagenPreview !== undefined) {
         setImagenPreview(URL.createObjectURL(resizedImageBlob))
       }
@@ -56,7 +70,7 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
       {imagenPreview ? (
         <img className='text-center m-auto rounded-md ' style={{ objectFit: 'contain' }} src={imagenPreview} alt='Imagen del producto' />
       ) : (
-        <div className='cursor-pointer flex w-fit m-auto p-3 border-2 border-gray-300 border-dashed rounded-md'>{labelName}</div>
+        <div className='cursor-pointer flex text-center p-3 m-3 border-2 border-gray-300 border-dashed rounded-md'>{labelName}</div>
       )}
       <input type='file' name='thumbnail' id='uploadImage' className='hidden' onChange={handleImagenChange} disabled={!editable} />
     </div>

@@ -1,74 +1,46 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import ClientTable from './ClientTable'
-import ClientDetail from './ClientDetail'
-import SearchClient from '../utils/SearchClient'
-import Modal from '../utils/Modal'
+import { useState, useEffect, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext'
 import { getClients, updateClients } from '../../firebase/firebase'
-
-const defaultClient = {
-  firstName: '',
-  lastName: '',
-  dni: '',
-  phone: '',
-  address: '',
-  email: '',
-  dateBirthday: '',
-  firstDate: '',
-  lastDate: '',
-  thumbnail: '',
-  code: '',
-}
+const ClientTable = lazy(() => import('./ClientTable'))
+const ClientDetail = lazy(() => import('./ClientDetail'))
+const InputSearch = lazy(() => import('../utils/InputSearch'))
+const Modal = lazy(() => import('../utils/Modal'))
 
 const ClientList = () => {
-  const [clients, setClients] = useState([])
-  const [selectedClient, setSelectedClient] = useState(defaultClient)
-  const [selectedClientId, setSelectedClientId] = useState('')
+  const { defaultClientList, clients, setClients, selectedClient, setSelectedClient, handleSearch, showToast } = useContext(customContext)
+
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
 
   useEffect(() => {
-    const fetchFromDatabase = async () => {
-      try {
-        const allClients = await getClients()
-        setClients(allClients)
-      } catch (error) {
-        throw new Error(`error getting data`, error)
-      }
-    }
-    fetchFromDatabase()
-  }, [])
-
-  useEffect(() => {
-    const selected = clients.find((client) => client.id === selectedClientId)
-    setSelectedClient(selected || defaultClient)
+    const selected = clients.find((client) => client.id === selectedClient.id)
     setImagenPreview(selected?.thumbnail || '')
-  }, [clients, selectedClientId])
+  }, [clients, selectedClient])
 
   const handleClientSelect = (clientId) => {
-    setSelectedClientId(clientId.id)
+    setSelectedClient(clientId)
   }
 
   const saveChange = async () => {
-    await updateClients(selectedClient)
+    const res = await updateClients(selectedClient)
     setEditable(false)
     const clientsUpdate = await getClients()
     setClients(clientsUpdate)
+    setSelectedClient(defaultClientList)
+    if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)
+    showToast('Se guardaron los cambios ', res.code)
   }
 
-  const handleSearch = (searchTerm) => {
-    if (searchTerm === '') return setSearch('')
-    const filtered = clients.filter((client) =>
-      Object.entries(client).some(([key, value]) => typeof value === 'string' && key !== 'thumbnail' && value.toLowerCase().includes(searchTerm.toLowerCase()))
-    )
-    setSearch(filtered)
+  const handleSearchInClients = (searchTerm) => {
+    setSearch(handleSearch(searchTerm, clients))
   }
 
   return (
     <>
-      <Modal type={2}>
-        <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>Clients</h2>
+      <Modal type={2} className={'h-3/4 md:h-[90%] lg:h-auto  xxl:h-fit xxxl:h-[90%] xl:w-[70%] xxl:w-auto xxxl:w-[60%] mb-5 overflow-auto'}>
+        <h2 className='text-xl pl-4 text-gray-500 font-bold mb-3'>Clients</h2>
         <ClientDetail
           selectedClient={selectedClient}
           setSelectedClient={setSelectedClient}
@@ -78,7 +50,7 @@ const ClientList = () => {
           setEditable={setEditable}
           saveChange={saveChange}
         />
-        <SearchClient onSearch={handleSearch} />
+        <InputSearch onSearch={handleSearchInClients} />
         <ClientTable onClientSelected={handleClientSelect} data={search !== '' ? search : clients} />
       </Modal>
     </>

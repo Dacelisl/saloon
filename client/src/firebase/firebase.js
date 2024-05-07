@@ -55,9 +55,42 @@ export const getServices = async () => {
     throw new Error(`Error server getServices ${error.message}`)
   }
 }
+
+/* EMPLOYEES */
 export const getEmployee = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/employee/')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getEmployee ${error.message}`)
+  }
+}
+export const updateEmployee = async (dataUser) => {
+  try {
+    if (typeof dataUser.thumbnail === 'object') {
+      const url = await uploadFire(dataUser.thumbnail, `clients/${dataUser.dni}`)
+      dataUser.thumbnail = url
+    } else {
+      dataUser.thumbnail = ''
+    }
+    const userFormatted = formattUpdate(dataUser)
+    const response = await axios.put(`http://localhost:3000/api/employee/${dataUser.id}`, userFormatted)
+    return response.status
+  } catch (error) {
+    throw new Error(`Error server updateEmployee ${error}`)
+  }
+}
+export const getEarningsEmployees = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/performance/`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getEmployee ${error.message}`)
+  }
+}
+export const getEarningsEmployeeById = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/performance/employee/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -101,6 +134,8 @@ export const passwordRecovery = async (email) => {
 }
 export const registerEmployeeMongo = async (dataUser) => {
   try {
+    const url = await uploadFire(dataUser.thumbnail, `employee/${dataUser.dni}`)
+    dataUser.thumbnail = url
     const response = await axios.post('http://localhost:3000/api/employee/', dataUser)
     return response.data
   } catch (error) {
@@ -182,6 +217,8 @@ export const getClients = async () => {
 }
 export const registerClient = async (dataUser) => {
   try {
+    const url = await uploadFire(dataUser.thumbnail, `client/${dataUser.dni}`)
+    dataUser.thumbnail = url
     const response = await axios.post('http://localhost:3000/api/users/', dataUser)
     return response.data
   } catch (error) {
@@ -214,7 +251,7 @@ export const updateClients = async (dataClient) => {
     }
     const userFormatted = formattUpdate(dataClient)
     const response = await axios.put(`http://localhost:3000/api/users/${dataClient.id}`, userFormatted)
-    return response.status
+    return response.data
   } catch (error) {
     throw new Error(`Error server updateUser ${error}`)
   }
@@ -237,7 +274,7 @@ export const updateTicket = async (ticket, data) => {
       partialPayments: data,
     }
     const response = await axios.put(`http://localhost:3000/api/tickets/${ticket.ticketNumber}`, dataChange)
-    return response.data.payload
+    return response.data
   } catch (error) {
     throw new Error(`Error server updateTicket ${error.message}`)
   }

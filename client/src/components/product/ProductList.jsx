@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import ProductTable from './ProductTable'
-import ProductDetail from './ProductDetail'
-import SearchClient from '../utils/SearchClient'
+import { useState, useEffect, lazy } from 'react'
 import { updateProduct, getProducts } from '../../firebase/firebase'
-import Modal from '../utils/Modal'
+const ProductTable = lazy(() => import('./ProductTable'))
+const ProductDetail = lazy(() => import('./ProductDetail'))
+const InputSearch = lazy(() => import('../utils/InputSearch'))
+const Modal = lazy(() => import('../utils/Modal'))
 
 const defaultProduct = {
   name: '',
@@ -76,7 +76,7 @@ const ProductList = () => {
           setEditable={setEditable}
           saveChange={saveChange}
         />
-        <SearchClient onSearch={handleSearch} />
+        <InputSearch onSearch={handleSearch} />
         <ProductTable onProductSelected={handleProductSelect} data={search !== '' ? search : products} />
       </Modal>
     </>

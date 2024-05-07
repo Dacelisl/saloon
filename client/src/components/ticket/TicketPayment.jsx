@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import ButtonDefault from '../utils/ButtonDefault.jsx'
-import InputEdit from '../utils/InputEdit.jsx'
-import InputSelect from '../utils/InputSelect.jsx'
-import { getPaymentsMethod } from '../../firebase/firebase.js'
+import { useState, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext.jsx'
 import { now } from 'mongoose'
-import ModalAux from '../utils/ModalAux.jsx'
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
+const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
 
 const ticketDefault = {
   paymentDate: Date(now),
@@ -13,40 +13,29 @@ const ticketDefault = {
   amount: '',
 }
 const TicketPayment = ({ isOpen, onClose, saveData, totalPayment }) => {
+  const { paymentMethods, showToast } = useContext(customContext)
   const [dataChange, setDataChange] = useState(ticketDefault)
-  const [paymentMethod, setPaymentMethod] = useState([])
   const [changeValue, setChangeValue] = useState(false)
-
-  useEffect(() => {
-    const fetchFromDatabase = async () => {
-      try {
-        const methods = await getPaymentsMethod()
-        setPaymentMethod(methods)
-      } catch (error) {
-        throw new Error(`error getting data`, error)
-      }
-    }
-    fetchFromDatabase()
-  }, [])
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
     setDataChange({ ...dataChange, [name]: value })
   }
-  const handleClick = () => {
-    if (dataChange.paymentMethod != '') {
-      saveData(dataChange)
-      setDataChange(ticketDefault)
-      onClose()
-    }
+  const handleClick = async () => {
+    if (dataChange.paymentMethod === '') return showToast('Seleccione metodo de pago', 500)
+    await saveData(dataChange)
+    setDataChange(ticketDefault)
+    onClose()
   }
 
   return (
     <>
       <ModalAux open={isOpen} close={onClose}>
         <h2 className='text-2xl text-slate-500 font-light mb-4'>Pago</h2>
-        <InputSelect label={'Metodo de Pago'} name={'paymentMethod'} editable itemOption={paymentMethod} handleFieldChange={handleFieldChange} />
+        <InputSelect label={'Metodo de Pago'} name={'paymentMethod'} editable itemOption={paymentMethods} handleFieldChange={handleFieldChange} />
+
         <InputEdit type='number' labelName={'Total a Pagar'} value={totalPayment} onChange={handleFieldChange} name={'amount'} className='h-10' />
+
         <span className='cursor-pointer hover:text-stone-400 text-sm' onClick={() => setChangeValue(!changeValue)}>
           Pagar Otro Valor:{' '}
         </span>

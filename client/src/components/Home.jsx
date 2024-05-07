@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 
-import Modal from './utils/Modal'
-import IconContainer from './utils/IconContainer'
-import wallet_icon from '../assets/Icons/wallet.svg'
-import add_user from '../assets/Icons/add_user.svg'
-import bills from '../assets/Icons/bills.svg'
+import { lazy } from 'react'
 import { Link } from 'react-router-dom'
+import addUser from '../assets/Icons/addUser.svg'
+import users from '../assets/Icons/users.svg'
+import bills from '../assets/Icons/bills.svg'
+const Modal = lazy(() => import('./utils/Modal'))
+const IconContainer = lazy(() => import('./utils/IconContainer'))
 
 const Home = () => {
   return (
@@ -19,14 +20,14 @@ const Home = () => {
             <span>cuerpo</span>
           </div>
           <div id='footer' className='flex justify-around items-center'>
+            <Link to={'/registerCliente'}>
+              <IconContainer icon={addUser} alt={'registerCliente'} />
+            </Link>
             <Link to={'/users'}>
-            <IconContainer icon={add_user} alt={'clients'} />
+              <IconContainer icon={users} alt={'users'} />
             </Link>
-            <Link>
-              <IconContainer icon={wallet_icon} alt={'tickets'} />
-            </Link>
-            <Link to={'/ticket'}>
-              <IconContainer icon={bills} alt={'tickets'} />
+            <Link to={'/EmployeeList'}>
+              <IconContainer icon={bills} alt={'EmployeeList'} />
             </Link>
           </div>
         </div>

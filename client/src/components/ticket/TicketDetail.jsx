@@ -1,42 +1,25 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import TicketTable from './TicketTable.jsx'
-import { getEmployee, getProducts, getServices } from '../../firebase/firebase.js'
-import ItemPayment from './ItemPayment.jsx'
-import ToggleSwitch from '../utils/ToggleSwitch.jsx'
+import { useState, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext'
 import { totalPrice } from '../../utils/utils.js'
+const TicketTable = lazy(() => import('./TicketTable.jsx'))
+const ItemPayment = lazy(() => import('./ItemPayment.jsx'))
+const ToggleSwitch = lazy(() => import('../utils/ToggleSwitch.jsx'))
+const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
 
 const TicketDetail = ({ ticket, setTicket }) => {
-  const [employees, setEmployees] = useState([])
-  const [allServices, setAllServices] = useState([])
-  const [allProducts, setAllProducts] = useState([])
-  const [dataTable, setDataTable] = useState([])
+  const { employees, allProducts, allServices, handleSearch } = useContext(customContext)
+
+  const [dataTable, setDataTable] = useState(allServices)
   const [itemSelected, setItemSelected] = useState('')
+  const [search, setSearch] = useState('')
   const [toggleState, setToggleState] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  useEffect(() => {
-    const fetchFromDatabase = async () => {
-      try {
-        const allEmployee = await getEmployee()
-        setEmployees(allEmployee)
-        const services = await getServices()
-        setAllServices(services)
-        const products = await getProducts()
-        setAllProducts(products)
-        setDataTable(services)
-      } catch (error) {
-        throw new Error(`error getting data`, error)
-      }
-    }
-    fetchFromDatabase()
-  }, [])
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
     setTicket({ ...ticket, [name]: value })
   }
-
   const handleToggleChange = (e) => {
     setToggleState(e.target.checked)
     const newData = e.target.checked ? allProducts : allServices
@@ -65,6 +48,11 @@ const TicketDetail = ({ ticket, setTicket }) => {
     })
     return total
   }
+  const handleSearchInClients = (searchTerm) => {
+    const data = toggleState ? allProducts : allServices
+    setSearch(searchTerm != '' ? handleSearch(searchTerm, data) : '')
+  }
+
   const showModal = async () => {
     setIsModalOpen(!isModalOpen)
   }
@@ -117,7 +105,8 @@ const TicketDetail = ({ ticket, setTicket }) => {
                 <ToggleSwitch label={'Productos / Servicios'} toggleState={toggleState} handleToggleChange={handleToggleChange} />
               </div>
             </div>
-            {dataTable.length > 0 && <TicketTable data={dataTable} onItemSelected={setItemSelected} openModal={showModal} />}
+            <InputSearch onSearch={handleSearchInClients} />
+            {dataTable.length > 0 && <TicketTable data={search !== '' ? search : dataTable} onItemSelected={setItemSelected} openModal={showModal} />}
           </div>
         </div>
       </div>

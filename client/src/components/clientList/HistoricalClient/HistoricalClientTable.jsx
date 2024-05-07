@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import GenericTable from '../../utils/GenericTable.jsx'
+import { useState, useEffect, lazy } from 'react'
+const GenericTable = lazy(() => import('../../utils/GenericTable.jsx'))
 
 const HistoricalClientTable = ({ data, onClientSelected }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)
@@ -8,10 +8,11 @@ const HistoricalClientTable = ({ data, onClientSelected }) => {
 
   useEffect(() => {
     function transform() {
-      const newData = data.flatMap((ticket) => {
-        return ticket.items?.map((item) => ({
+      const newData = (data || []).flatMap((ticket) => {
+        return ticket.items?.map((item, index, array) => ({
           ...ticket,
           item: item,
+          isLastItem: index === array.length - 1,
         }))
       })
       setTransformedData(newData)
@@ -20,6 +21,7 @@ const HistoricalClientTable = ({ data, onClientSelected }) => {
   }, [data])
 
   function changeClientSelected(rowSelected) {
+    console.log('table', rowSelected)
     onClientSelected(rowSelected.original)
     setSelectedColumnId(rowSelected.id)
   }
@@ -47,18 +49,19 @@ const HistoricalClientTable = ({ data, onClientSelected }) => {
     },
     {
       header: 'Debe',
-      cell: ({ row }) => (
-        <button
-          className={
-            row.original.balanceDue > 0
-              ? ' px-2 py-1 text-sm font-medium bg-button-alert text-button-text_primary hover:text-button-text_hover focus:bg-button-hover_alert rounded-md focus:outline-1 focus:ring-1 focus:ring-gray-500'
-              : ''
-          }
-          onClick={() => changeClientSelected(row)}
-        >
-          {row.original.balanceDue > 0 ? `$ ${row.original.balanceDue}` : ''}
-        </button>
-      ),
+      cell: ({ row }) =>
+        row.original.isLastItem && (
+          <button
+            className={
+              row.original.balanceDue > 0
+                ? ' px-2 py-1 text-sm font-medium bg-button-alert text-button-text_primary hover:text-button-text_hover focus:bg-button-hover_alert rounded-md focus:outline-1 focus:ring-1 focus:ring-gray-500'
+                : ''
+            }
+            onClick={() => changeClientSelected(row)}
+          >
+            {row.original.balanceDue > 0 ? `$ ${row.original.balanceDue}` : ''}
+          </button>
+        ),
     },
   ]
 
