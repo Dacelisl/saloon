@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, lazy } from 'react'
+import { lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
@@ -9,11 +9,10 @@ const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const Register = ({ labelName, userData, setUserData, handleAddUser, employee = false, roles, toast }) => {
-  const [localUserData, setLocalUserData] = useState(userData)
   const navigate = useNavigate()
 
   const sendAction = () => {
-    const isFormValid = Object.values(localUserData).every((value) => {
+    const isFormValid = Object.values(userData).every((value) => {
       if (typeof value === 'string') {
         return value.trim() !== ''
       }
@@ -27,14 +26,10 @@ const Register = ({ labelName, userData, setUserData, handleAddUser, employee = 
   }
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setLocalUserData({
+    setUserData({
       ...userData,
       [name]: value,
     })
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      [name]: value,
-    }))
   }
 
   return (

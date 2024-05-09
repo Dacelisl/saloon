@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useContext, lazy } from 'react'
 import { customContext } from '../../context/CustomContext.jsx'
-import { getTickets, updateTicket } from '../../../firebase/firebase.js'
+import { updateTicket } from '../../../firebase/firebase.js'
 const HistoricalClientTable = lazy(() => import('./HistoricalClientTable'))
 const HistoricalClientDetail = lazy(() => import('./HistoricalClientDetail'))
 const ButtonDefault = lazy(() => import('../../utils/ButtonDefault.jsx'))
@@ -9,7 +9,7 @@ const Modal = lazy(() => import('../../utils/Modal.jsx'))
 const HistoricalClientCredit = lazy(() => import('./HistoricalClientCredit.jsx'))
 
 const HistoricalClientList = () => {
-  const { tickets, setTickets, selectedClient, showToast } = useContext(customContext)
+  const { tickets, selectedClient, fetchFromDatabase, showToast } = useContext(customContext)
 
   const [selectedTicket, setSelectedTicket] = useState('')
   const [ticketsClient, setTicketsClient] = useState('')
@@ -26,9 +26,8 @@ const HistoricalClientList = () => {
 
   const saveData = async (data) => {
     const res = await updateTicket(selectedTicket, data)
-    const allTickets = await getTickets()
-    setTickets(allTickets)
-    if (res.code !== 200) return showToast('Problemas con el pago', res.code)
+    await fetchFromDatabase()
+    if (res.code > 200) return showToast('Problemas con el pago', res.code)
     showToast('Pago realizado', res.code)
   }
   const openModal = async () => {

@@ -8,7 +8,7 @@ const InputSearch = lazy(() => import('../utils/InputSearch'))
 const Modal = lazy(() => import('../utils/Modal'))
 
 const ClientList = () => {
-  const { defaultClientList, clients, setClients, selectedClient, setSelectedClient, handleSearch, showToast } = useContext(customContext)
+  const { defaultClientList, clients, setClients, selectedClient, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
@@ -28,6 +28,7 @@ const ClientList = () => {
     setEditable(false)
     const clientsUpdate = await getClients()
     setClients(clientsUpdate)
+    await fetchFromDatabase()
     setSelectedClient(defaultClientList)
     if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)

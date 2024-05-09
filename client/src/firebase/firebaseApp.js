@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APIKEY,
@@ -9,5 +9,18 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
   appId: import.meta.env.VITE_APPID,
 }
+
 const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
+const auth = getAuth(app)
+
+// Configura la persistencia en el almacenamiento de sesión del navegador
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    // La persistencia de la autenticación se configuró correctamente
+  })
+  .catch((error) => {
+    // Error al configurar la persistencia de la autenticación
+    console.error('Error al configurar la persistencia:', error)
+  })
+
+export { auth }

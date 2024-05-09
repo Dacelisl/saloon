@@ -6,7 +6,7 @@ const Register = lazy(() => import('../utils/Register.jsx'))
 const Modal = lazy(() => import('../utils/Modal.jsx'))
 
 const RegisterClient = () => {
-  const { defaultClientRegister, showToast } = useContext(customContext)
+  const { defaultClientRegister, fetchFromDatabase, showToast } = useContext(customContext)
 
   const [userData, setUserData] = useState(defaultClientRegister)
 
@@ -17,6 +17,7 @@ const RegisterClient = () => {
         case 201:
           showToast('Successfully registered user', resMongo.code)
           setUserData(defaultClientRegister)
+          await fetchFromDatabase()
           break
         case 400:
           showToast('Some properties are missing or undefined', resMongo.code)
@@ -45,7 +46,7 @@ const RegisterClient = () => {
   return (
     <>
       <Modal type={2} className={'h-3/4 py-5 md:h-[90%] lg:h-auto xxl:h-fit xxl:w-[40%]  overflow-auto'}>
-        <Register labelName={'Registro Cliente'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} toast={showToast}/>
+        <Register labelName={'Registro Cliente'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} toast={showToast} />
       </Modal>
     </>
   )

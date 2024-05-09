@@ -7,7 +7,7 @@ const BackArrow = () => {
   const handleClick = () => {
     navigate(-1)
   }
-  const isHomePage = location.pathname === '/' || location.key === 'default'
+  const isHomePage = location.pathname === '/' || location.pathname === '/404' || location.pathname === '/login'
 
   return (
     <>

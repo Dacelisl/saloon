@@ -1,10 +1,9 @@
 // eslint-disable-next-line react/prop-types
-const ButtonIcon = ({ title, nameIcon, sizeIcon, color, ...others }) => {
+const ButtonIcon = ({ title, nameIcon, sizeIcon, className, ...others }) => {
   return (
     <>
       <button
-        style={{ backgroundColor: color }}
-        className=' bg-sky-500 flex w-auto text-center items-center px-2 py-0 rounded-md font-normal text-sm xxl:text-base  xxl:font-semibold text-cyan-50 enabled:hover:bg-sky-600 enabled:active:transform enabled:active:translate-y-px disabled:opacity-75'
+        className={`bg-sky-500 flex w-auto text-center items-center px-2 py-0 rounded-md font-normal text-sm xxl:text-base  xxl:font-semibold text-cyan-50 enabled:hover:bg-sky-600 enabled:active:transform enabled:active:translate-y-px disabled:opacity-75 ${className}`}
         {...others}
       >
         {nameIcon ? (
@@ -14,7 +13,7 @@ const ButtonIcon = ({ title, nameIcon, sizeIcon, color, ...others }) => {
         ) : (
           <></>
         )}
-        <span className="p-1">{title}</span>
+        <span className='p-1'>{title}</span>
       </button>
     </>
   )

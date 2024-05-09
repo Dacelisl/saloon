@@ -96,17 +96,26 @@ export const getEarningsEmployeeById = async (id) => {
     throw new Error(`Error server getEmployee ${error.message}`)
   }
 }
+export const getEmployeeByEmail = async (mail) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/employee/email/${mail}`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getEmployee ${error.message}`)
+  }
+}
 
 /* LOGIN */
 export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
+    console.log('response fire ', response);
     if (!response) return false
     await axios.post('http://localhost:3000/api/employee/login', { accessToken: response.user.accessToken })
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
-  }
+  } 
 }
 export const logOut = async () => {
   await signOut(auth)
