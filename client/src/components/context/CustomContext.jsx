@@ -136,24 +136,13 @@ const CustomContext = ({ children }) => {
         if (!userLogin) return
         const employee = await getEmployeeByEmail(userLogin)
         setSelectedEmployee(employee)
+        await fetchFromDatabase()
       } catch (error) {
         throw new Error(`Error getting data: ${error}`)
       }
     }
     fetchData()
   }, [userLogin])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetchFromDatabase()
-      } catch (error) {
-        throw new Error(`Error getting data: ${error}`)
-      }
-    }
-
-    fetchData()
-  }, [])
 
   useEffect(() => {
     const birthday = getUpcomingBirthdays(clients)
@@ -176,6 +165,7 @@ const CustomContext = ({ children }) => {
   return (
     <customContext.Provider
       value={{
+        setUserLogin,
         fetchFromDatabase,
         defaultClientList,
         defaultClientRegister,

@@ -33,11 +33,3 @@ export function adminAccess(req, res, next) {
     })
   }
 }
-
-export function isUser(req, res, next) {
-  if (req.user?.rol !== 'admin') {
-    return next()
-  }
-  req.logger.warning(`authorization error  ${req.method} ${ruta} from ${funcion}`)
-  return res.status(403).render('error', { error: 'authorization error!', code: 403 })
-}

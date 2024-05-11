@@ -1,4 +1,4 @@
-import { formatDate, formatCurrency } from '../../utils/utils.js'
+import { formatDate } from '../../utils/utils.js'
 class TicketDTO {
   constructor(ticket) {
     this.ticketNumber = ticket.ticketNumber

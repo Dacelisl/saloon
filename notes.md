@@ -29,3 +29,5 @@ renderizado condicional segun el rol
 --limitar a un solo rol de admin
 
 --evitar colocar un monto mayor del adeudado en los abonos del ticket
+
+--problemas con la carga de los datos, posiblemente tenga que ver con middleware, o login muy rapido y no registra el usuario

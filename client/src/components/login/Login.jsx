@@ -12,7 +12,7 @@ const ModalRecoveryPassword = lazy(() => import('./RecoveryPassword'))
 import { customContext } from '../context/CustomContext'
 
 const Login = () => {
-  const { navigate } = useContext(customContext)
+  const { navigate, setUserLogin } = useContext(customContext)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState(null)
@@ -42,7 +42,8 @@ const Login = () => {
     e.preventDefault()
     try {
       if (user.userName || user.password != '') {
-        await singIn(user.userName, user.password)
+        const res = await singIn(user.userName, user.password)
+        setUserLogin(res.user.email)
         setUser({
           userName: '',
           password: '',

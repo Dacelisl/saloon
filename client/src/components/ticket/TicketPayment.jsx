@@ -1,14 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
-import { now } from 'mongoose'
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
 const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
 
 const ticketDefault = {
-  paymentDate: Date(now),
+  paymentDate: new Date(),
   paymentMethod: '',
   amount: '',
 }
