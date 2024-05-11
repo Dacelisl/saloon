@@ -3,7 +3,7 @@ const ButtonIcon = ({ title, nameIcon, sizeIcon, className, ...others }) => {
   return (
     <>
       <button
-        className={`bg-sky-500 flex w-auto text-center items-center px-2 py-0 rounded-md font-normal text-sm xxl:text-base  xxl:font-semibold text-cyan-50 enabled:hover:bg-sky-600 enabled:active:transform enabled:active:translate-y-px disabled:opacity-75 ${className}`}
+        className={`bg-button-primary flex w-auto text-center items-center px-2 py-0 rounded-md font-normal text-sm xxl:text-base  xxl:font-semibold text-button-text_primary  hover:bg-button-hover hover:text-button-text_hover focus:outline-none focus:ring-1 enabled:active:transform enabled:active:translate-y-px disabled:opacity-75 ${className}`}
         {...others}
       >
         {nameIcon ? (

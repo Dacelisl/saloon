@@ -1,68 +1,46 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, lazy } from 'react'
+import { useState, useEffect, useContext, lazy } from 'react'
 import { updateProduct, getProducts } from '../../firebase/firebase'
+import { customContext } from '../context/CustomContext'
 const ProductTable = lazy(() => import('./ProductTable'))
 const ProductDetail = lazy(() => import('./ProductDetail'))
 const InputSearch = lazy(() => import('../utils/InputSearch'))
 const Modal = lazy(() => import('../utils/Modal'))
 
-const defaultProduct = {
-  name: '',
-  provider: '',
-  category: '',
-  code: '',
-  stock: '',
-  price: '',
-  thumbnail: '',
-  profitEmployee: '',
-  profitSaloon: '',
-  description: '',
-}
 const ProductList = () => {
-  const [products, setProducts] = useState([])
-  const [selectedProduct, setSelectedProduct] = useState(defaultProduct)
-  const [selectedProductId, setSelectedProductId] = useState('')
+  const { defaultProduct, allProducts, setAllProducts, selectedProduct, setSelectedProduct,handleSearch, fetchFromDatabase, showToast } = useContext(customContext)
+
+
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
 
-  useEffect(() => {
-    const fetchFromDatabase = async () => {
-      try {
-        const allProducts = await getProducts()
-        setProducts(allProducts)
-      } catch (error) {
-        console.error('Error fetching products:', error)
-      }
-    }
-    fetchFromDatabase()
-  }, [])
 
   useEffect(() => {
-    const selected = products.find((product) => product.id === selectedProductId)
-    setSelectedProduct(selected || defaultProduct)
+    const selected = allProducts.find((product) => product.id === selectedProduct.id)
     setImagenPreview(selected?.thumbnail || '')
-  }, [products, selectedProductId])
+  }, [allProducts, selectedProduct])
 
   const handleProductSelect = (productId) => {
-    setSelectedProductId(productId.id)
+    setSelectedProduct(productId)
   }
 
   const saveChange = async () => {
-    await updateProduct(selectedProduct)
+    const res = await updateProduct(selectedProduct)
     setEditable(false)
-    const updatedProducts = await getProducts()
-    setProducts(updatedProducts)
+    /* const productUpdate = await getProducts()
+    setAllProducts(productUpdate) */
+    await fetchFromDatabase()
+    setSelectedProduct(defaultProduct)
+    if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)
+    showToast('Se guardaron los cambios ', res.code)
+
+    
   }
 
-  const handleSearch = (searchTerm) => {
-    if (searchTerm === '') return setSearch('')
-    const filtered = products.filter((product) =>
-      Object.entries(product).some(([key, value]) => typeof value === 'string' && key !== 'thumbnail' && value.toLowerCase().includes(searchTerm.toLowerCase()))
-    )
-    setSearch(filtered)
+  const handleSearchInProducts = (searchTerm) => {
+    setSearch(handleSearch(searchTerm, allProducts))
   }
-
   return (
     <>
       <Modal type={2}>
@@ -76,8 +54,8 @@ const ProductList = () => {
           setEditable={setEditable}
           saveChange={saveChange}
         />
-        <InputSearch onSearch={handleSearch} />
-        <ProductTable onProductSelected={handleProductSelect} data={search !== '' ? search : products} />
+        <InputSearch onSearch={handleSearchInProducts} />
+        <ProductTable onProductSelected={handleProductSelect} data={search !== '' ? search : allProducts} />
       </Modal>
     </>
   )

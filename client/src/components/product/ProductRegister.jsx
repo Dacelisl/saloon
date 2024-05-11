@@ -1,5 +1,7 @@
-import { useState, useEffect, lazy } from 'react'
-import { registerProduct, getCategories, getProviders } from '../../firebase/firebase'
+import { useState, useContext, lazy } from 'react'
+import { registerProduct } from '../../firebase/firebase'
+import { customContext } from '../context/CustomContext'
+
 const InputEdit = lazy(() => import('../utils/InputEdit'))
 const InputSelect = lazy(() => import('../utils/InputSelect'))
 const InputArea = lazy(() => import('../utils/InputArea'))
@@ -7,37 +9,11 @@ const ImagePreview = lazy(() => import('../utils/ImagePreview'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault'))
 const Modal = lazy(() => import('../utils/Modal'))
 
-const defaultProduct = {
-  name: '',
-  provider: '',
-  category: '',
-  code: '',
-  stock: '',
-  price: '',
-  thumbnail: '',
-  profitEmployee: '',
-  profitSaloon: '',
-  description: '',
-}
 const ProductRegister = () => {
+  const { defaultProduct, categories, providers, showToast } = useContext(customContext)
+
   const [productData, setProductData] = useState(defaultProduct)
   const [imagenPreview, setImagenPreview] = useState('')
-  const [categories, setCategories] = useState([])
-  const [providers, setProviders] = useState([])
-
-  useEffect(() => {
-    const fetchCategoriesFromDatabase = async () => {
-      try {
-        const categ = await getCategories()
-        setCategories(categ)
-        const prov = await getProviders()
-        setProviders(prov)
-      } catch (error) {
-        throw new Error(`error getting data`)
-      }
-    }
-    fetchCategoriesFromDatabase()
-  }, [])
 
   const handleInputChange = (e) => {
     let { name, value } = e.target
@@ -53,12 +29,12 @@ const ProductRegister = () => {
     e.preventDefault()
     try {
       const res = await registerProduct(productData)
-      if (res === 201) {
+      if (res >= 200) {
+        showToast('Successfully registered product', 200)
         setProductData(defaultProduct)
         setImagenPreview('')
-        console.log('se almaceno correctamente ')
       } else {
-        console.log('error en la carga')
+        showToast('Error in the registration process', 500)
       }
     } catch (error) {
       throw new Error('Unhandled Error:', error)

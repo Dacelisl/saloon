@@ -1,13 +1,15 @@
 import express from 'express'
 import { productController } from '../controllers/product.controller.js'
+import { adminAccess, registeredUser } from '../middleware/auth.js'
+
 export const ProductRoutes = express.Router()
 
-ProductRoutes.get('/', productController.getAllProducts)
-ProductRoutes.get('/categories/', productController.getCategories)
-ProductRoutes.get('/filter/', productController.getProductsFilter)
-ProductRoutes.get('/:pid', productController.getProductId)
-ProductRoutes.get('/code/:code', productController.getProductCode)
-ProductRoutes.get('/name/:name', productController.getProductsByName)
-ProductRoutes.post('/', productController.createProduct)
-ProductRoutes.put('/:pid', productController.updateProduct)
-ProductRoutes.delete('/:pid', productController.deleteProduct)
+ProductRoutes.get('/', registeredUser, productController.getAllProducts)
+ProductRoutes.get('/categories/', registeredUser, productController.getCategories)
+ProductRoutes.get('/filter/', registeredUser, productController.getProductsFilter)
+ProductRoutes.get('/:pid', registeredUser, productController.getProductId)
+ProductRoutes.get('/code/:code', registeredUser, productController.getProductCode)
+ProductRoutes.get('/name/:name', registeredUser, productController.getProductsByName)
+ProductRoutes.post('/', adminAccess, productController.createProduct)
+ProductRoutes.put('/:pid', adminAccess, productController.updateProduct)
+ProductRoutes.delete('/:pid', adminAccess, productController.deleteProduct)

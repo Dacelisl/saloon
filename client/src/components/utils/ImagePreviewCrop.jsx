@@ -2,8 +2,6 @@
 
 import { resizeAndCompress } from '../../utils/utils.js'
 import { useEffect, useRef } from 'react'
-import Cropper from 'react-cropper'
-import 'cropperjs/dist/cropper.css'
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
 const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelName = 'Subir imagen', editable = false, showInputOnly = false, style = 'h-[130px]' }) => {
@@ -28,9 +26,6 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
         return
       }
       const resizedImageBlob = await resizeAndCompress(file)
-      console.log('img ', imagenPreview)
-      console.log('img prev', setImagenPreview)
-
       if (setImagenPreview !== undefined) {
         setImagenPreview(URL.createObjectURL(resizedImageBlob))
       }

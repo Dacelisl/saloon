@@ -91,9 +91,9 @@ const EarningsEmployee = () => {
       <div>
         <div className='inline-flex mb-3 '>
           <ButtonDefault title='Todo' onClick={handleClickAll} color={'!w-fit !py-0 !px-1 !ml-5 !mr-3'} />
-          <ButtonDefault title='Semana' onClick={handleClickWeek} color={'!w-fit !py-0 !px-1 mx-2'} />
-          <ButtonDefault title='Mes' onClick={handleClickMount} color={'!w-fit !py-0 !px-1 mx-2'} />
-          <ButtonDefault title='Hoy' onClick={handleClickToday} color={'!w-fit !py-0 !px-1 mx-2'} />
+          <ButtonDefault title='Semana' onClick={handleClickWeek} color={'!w-fit !py-0 !px-1 !mx-2'} />
+          <ButtonDefault title='Mes' onClick={handleClickMount} color={'!w-fit !py-0 !px-1 !mx-2'} />
+          <ButtonDefault title='Hoy' onClick={handleClickToday} color={'!w-fit !py-0 !px-1 !mx-2'} />
         </div>
         <div className='flex'>
           <div className='inline-flex ml-5 mt-1 '>

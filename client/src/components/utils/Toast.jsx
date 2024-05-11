@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-/* usar dentro de un div con flex absolute  */
 
 const Toast = ({ message, code, nameIcon, positionX = 'top', positionY = 'right', time = 5000 }) => {
   const [estado, setEstado] = useState(true)
   const closeToast = () => setEstado(false)
 
-  const toastContainer = `flex fixed z-50 items-end m-3 flex-col ${positionY == 'right' ? 'right-0 md:right-[1%]' : 'left-0 md:left-[1%]'} ${positionX == 'top' ? 'top-[2%]' : 'bottom-[2%]'}`
-  const toastType = `flex w-max h-auto rounded-md   p-1  flex-row-reverse bg-neutral-900 shadow shadow-slate-500`
+  const toastContainer = `flex fixed z-50 items-end m-2 flex-col ${positionY == 'right' ? 'right-0 md:right-[1%]' : 'left-0 md:left-[1%]'} ${positionX == 'top' ? 'top-[2%]' : 'bottom-[2%]'}`
+  const toastType = `flex w-max h-auto rounded-md p-1 flex-row-reverse bg-neutral-900 shadow shadow-slate-500`
 
   setTimeout(closeToast, time)
   const type = code >= 200 && code < 400 ? 'success' : 'alert';
@@ -21,11 +20,11 @@ const Toast = ({ message, code, nameIcon, positionX = 'top', positionY = 'right'
             </svg>
           </span>
         </div>
-        <div className='flex m-auto  items-center text-base text-slate-50 font-semibold '>
-          <span className='pl-1 pr-2 pt-2 right-2 text-sm'>
+        <div className='flex p-1 items-center text-sm text-slate-50'>
+          <span className='pl-1 pr-2 pt-1 right-2 text-sm'>
             <ion-icon
               name={nameIcon || (type === 'alert' ? 'alert-circle-sharp' : 'checkmark-circle-sharp')}
-              size='large'
+              size='small'
               style={{
                 color: `${type === 'alert' ? '#dc2626' : '#059669'}`,
               }}

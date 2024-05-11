@@ -1,3 +1,4 @@
+
 import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
 import { employeeService } from '../services/employee.services.js'
 import admin from '../../firebase.js'
@@ -32,6 +33,7 @@ class EmployeeController {
     const accessToken = req.body.accessToken
     try {
       const decodedToken = await admin.auth().verifyIdToken(accessToken)
+      console.log('token user en controller', req.session);
       req.session.user = decodedToken
       res.json({ message: 'Login successful' })
     } catch (error) {

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect, lazy } from 'react'
-import { getClients, getTickets, getEmployee, getProducts, getServices, getPaymentsMethod, getRoles, getEmployeeByEmail } from '../../firebase/firebase'
+import { getClients, getTickets, getEmployee, getProducts, getServices, getPaymentsMethod, getRoles, getCategories, getProviders, getEmployeeByEmail } from '../../firebase/firebase'
 import { getUpcomingBirthdays } from '../../utils/utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 const Toast = lazy(() => import('../utils/Toast'))
@@ -63,16 +63,31 @@ const CustomContext = ({ children }) => {
     role: '',
     lastConnection: '',
   }
+  const defaultProduct = {
+    name: '',
+    provider: '',
+    category: '',
+    code: '',
+    stock: '',
+    price: '',
+    thumbnail: '',
+    profitEmployee: '',
+    profitSaloon: '',
+    description: '',
+  }
 
   const [clients, setClients] = useState([])
   const [tickets, setTickets] = useState([])
   const [employees, setEmployees] = useState([])
   const [allServices, setAllServices] = useState([])
   const [allProducts, setAllProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [providers, setProviders] = useState([])
   const [roles, setRoles] = useState([])
 
   const [paymentMethods, setPaymentMethods] = useState([])
   const [selectedClient, setSelectedClient] = useState(defaultClientList)
+  const [selectedProduct, setSelectedProduct] = useState(defaultProduct)
   const [selectedEmployee, setSelectedEmployee] = useState(employeeDefaultList)
   const [userLogin, setUserLogin] = useState('')
   const [ticket, setTicket] = useState(ticketDefault)
@@ -83,7 +98,6 @@ const CustomContext = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log('usuario registrado', user)
       if (user) {
         setUserLogin(user.email)
       }
@@ -99,17 +113,20 @@ const CustomContext = ({ children }) => {
       const method = await getPaymentsMethod()
       const services = await getServices()
       const products = await getProducts()
+      const categ = await getCategories()
+      const prov = await getProviders()
       const rols = await getRoles()
 
       setEmployees(allEmployee)
       setRoles(rols)
+      setCategories(categ)
+      setProviders(prov)
       setAllServices(services)
       setAllProducts(products)
       setClients(allClients)
       setTickets(allTickets)
       setPaymentMethods(method)
     } catch (error) {
-      console.log('error en el efect 1', error)
       throw new Error(`Error getting data: ${error}`)
     }
   }
@@ -118,10 +135,8 @@ const CustomContext = ({ children }) => {
       try {
         if (!userLogin) return
         const employee = await getEmployeeByEmail(userLogin)
-        console.log('employee login', employee)
         setSelectedEmployee(employee)
       } catch (error) {
-        console.log('error en el efect 2', error)
         throw new Error(`Error getting data: ${error}`)
       }
     }
@@ -166,9 +181,12 @@ const CustomContext = ({ children }) => {
         defaultClientRegister,
         employeeDefault,
         employeeDefaultList,
+        defaultProduct,
         ticketDefault,
         clients,
         roles,
+        categories,
+        providers,
         setClients,
         tickets,
         setTickets,
@@ -176,9 +194,12 @@ const CustomContext = ({ children }) => {
         setSelectedClient,
         selectedEmployee,
         setSelectedEmployee,
+        selectedProduct,
+        setSelectedProduct,
         employees,
         setEmployees,
         allProducts,
+        setAllProducts,
         allServices,
         handleSearch,
         paymentMethods,

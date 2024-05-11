@@ -13,14 +13,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
-// Configura la persistencia en el almacenamiento de sesión del navegador
 setPersistence(auth, browserSessionPersistence)
-  .then(() => {
-    // La persistencia de la autenticación se configuró correctamente
-  })
+  .then(() => {})
   .catch((error) => {
-    // Error al configurar la persistencia de la autenticación
-    console.error('Error al configurar la persistencia:', error)
+    throw new Error(`Error server setPersistence ${error}`)
   })
 
 export { auth }

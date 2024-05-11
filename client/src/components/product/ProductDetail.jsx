@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, lazy } from 'react'
-import { getCategories, getProviders } from '../../firebase/firebase'
+import { useState, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext'
 const InputEdit = lazy(() => import('../utils/InputEdit'))
 const InputArea = lazy(() => import('../utils/InputArea'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault'))
@@ -8,29 +8,13 @@ const ImagePreview = lazy(() => import('../utils/ImagePreview'))
 const InputSelect = lazy(() => import('../utils/InputSelect'))
 
 const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview }) => {
-  const [categories, setCategories] = useState([])
-  const [providers, setProviders] = useState([])
+  const { categories, providers } = useContext(customContext)
   const [prevData, setPrevData] = useState('')
-
-  useEffect(() => {
-    const fetchFromDatabase = async () => {
-      try {
-        const categ = await getCategories()
-        setCategories(categ)
-        const prov = await getProviders()
-        setProviders(prov)
-      } catch (error) {
-        throw new Error(`error getting data`)
-      }
-    }
-    fetchFromDatabase()
-  }, [])
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
     setSelectedProduct({ ...selectedProduct, [name]: value })
   }
-
   const handleEdit = () => {
     setPrevData(selectedProduct)
     setEditable(!editable)
@@ -40,7 +24,6 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
     setImagenPreview(prevData.thumbnail)
     setEditable(!editable)
   }
-
   return (
     <div className='flex mb-1 border-solid border-2 border-gray-200'>
       <div className='w-[50%]'>

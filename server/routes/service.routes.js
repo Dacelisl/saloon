@@ -1,10 +1,11 @@
 import express from 'express'
 import { serviceController } from '../controllers/service.controller.js'
+import { adminAccess, registeredUser } from '../middleware/auth.js'
 
 export const ServiceRoutes = express.Router()
 
-ServiceRoutes.get('/', serviceController.getAllServices)
-ServiceRoutes.get('/:sid', serviceController.getServiceId)
-ServiceRoutes.post('/', serviceController.createService)
-ServiceRoutes.put('/:sid', serviceController.updateService)
-ServiceRoutes.delete('/:sid', serviceController.deleteService)
+ServiceRoutes.get('/', registeredUser, serviceController.getAllServices)
+ServiceRoutes.get('/:sid', registeredUser, serviceController.getServiceId)
+ServiceRoutes.post('/', adminAccess, serviceController.createService)
+ServiceRoutes.put('/:sid', adminAccess, serviceController.updateService)
+ServiceRoutes.delete('/:sid', adminAccess, serviceController.deleteService)

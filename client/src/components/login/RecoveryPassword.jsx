@@ -1,42 +1,27 @@
-import { useState, lazy } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { passwordRecovery } from '../../firebase/firebase.js'
+import { customContext } from '../context/CustomContext'
+
 const ButtonIcon = lazy(() => import('../utils/ButtonIcon.jsx'))
-const Toast = lazy(() => import('../utils/Toast.jsx'))
 const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 
 // eslint-disable-next-line react/prop-types
 const RecoveryPassword = ({ isOpen, onClose }) => {
+  const { showToast } = useContext(customContext)
   const [email, setEmail] = useState('')
-  const [toast, setToast] = useState({
-    state: false,
-    message: '',
-  })
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
   }
 
-  const handleButtonClick = () => {
-    passwordRecovery(email)
+  const handleButtonClick = async () => {
+    const res  = await passwordRecovery(email)
+    console.log(' res ', res);
     setEmail('')
-    msgToast('Check your mailbox')
-    console.log(`Recuperar contraseña para el correo: ${email}`)
+    showToast('Check your mailbox', 200)
     onClose()
   }
-  const msgToast = (msg) => {
-    setToast({
-      state: true,
-      message: msg,
-    })
-    resetToast()
-  }
-  const resetToast = () => {
-    setTimeout(() => {
-      setToast(false)
-    }, 19000)
-  }
-
   return (
     <>
       <ModalAux open={isOpen} close={onClose}>
@@ -46,13 +31,6 @@ const RecoveryPassword = ({ isOpen, onClose }) => {
           <ButtonIcon title='Send' nameIcon='send-outline' sizeIcon={'small'} className={'w-24 h-10 justify-center bg-[#4b7d30] text-base'} onClick={handleButtonClick} />
         </span>
       </ModalAux>
-      {toast.state ? (
-        <>
-          <Toast message={toast.message} type='success' time={19000} />
-        </>
-      ) : (
-        <></>
-      )}
     </>
   )
 }

@@ -21,7 +21,6 @@ const HistoricalClientTable = ({ data, onClientSelected }) => {
   }, [data])
 
   function changeClientSelected(rowSelected) {
-    console.log('table', rowSelected)
     onClientSelected(rowSelected.original)
     setSelectedColumnId(rowSelected.id)
   }

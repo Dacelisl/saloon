@@ -26,8 +26,8 @@ const ClientList = () => {
   const saveChange = async () => {
     const res = await updateClients(selectedClient)
     setEditable(false)
-    const clientsUpdate = await getClients()
-    setClients(clientsUpdate)
+    /* const clientsUpdate = await getClients()
+    setClients(clientsUpdate) */
     await fetchFromDatabase()
     setSelectedClient(defaultClientList)
     if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)

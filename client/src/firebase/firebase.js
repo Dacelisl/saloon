@@ -109,13 +109,12 @@ export const getEmployeeByEmail = async (mail) => {
 export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
-    console.log('response fire ', response);
     if (!response) return false
     await axios.post('http://localhost:3000/api/employee/login', { accessToken: response.user.accessToken })
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
-  } 
+  }
 }
 export const logOut = async () => {
   await signOut(auth)
@@ -129,16 +128,9 @@ export const logOut = async () => {
 }
 export const passwordRecovery = async (email) => {
   try {
-    sendPasswordResetEmail(auth, email)
-      .then((e) => {
-        console.log('se envio el email de recover', e)
-      })
-      .catch((error) => {
-        console.log('error en el recovery 1', error)
-      })
+    await sendPasswordResetEmail(auth, email)
   } catch (error) {
-    console.log('error en el recovery', error)
-    return error.response.data
+    throw new Error(`Error server passwordRecovery ${error}`)
   }
 }
 export const registerEmployeeMongo = async (dataUser) => {
@@ -307,6 +299,6 @@ export const verifyUser = async (emailUser, userPassw) => {
     await axios.put(`http://localhost:3000/api/employee/${res.payload.id}`, { lastConnection: formattedDate })
     return true
   } catch (error) {
-    console.error('Error en la solicitud de registro:', error.message)
+    throw new Error(`Error server verifyUser ${error}`)
   }
 }
