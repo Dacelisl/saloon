@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-import GenericTable from '../utils/GenericTable.jsx'
+import { GenericTable } from '../imports.js'
 
 const ProductTable = ({ data, onProductSelected }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)

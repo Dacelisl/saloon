@@ -18,7 +18,7 @@ const InputPassword = ({ label = true, labelName, value, edit = false, onChange,
       <div className='relative'>
         <input
           id={name}
-          value={value}
+          value={value || ''}
           disabled={!edit}
           onChange={onChange}
           type={showPassword ? 'text' : 'password'}

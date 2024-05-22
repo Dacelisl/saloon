@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState, lazy } from 'react'
-const GenericTable = lazy(() => import('../utils/GenericTable.jsx'))
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+import { useState } from 'react'
+import { GenericTable, ButtonDefault } from '../imports.js'
 
 const TicketTable = ({ data, onItemSelected, openModal }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)

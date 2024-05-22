@@ -1,14 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useContext, lazy } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { customContext } from '../context/CustomContext'
-import { getClients, updateClients } from '../../firebase/firebase'
-const ClientTable = lazy(() => import('./ClientTable'))
-const ClientDetail = lazy(() => import('./ClientDetail'))
-const InputSearch = lazy(() => import('../utils/InputSearch'))
-const Modal = lazy(() => import('../utils/Modal'))
+import { updateClients } from '../../firebase/firebase'
+import { WithAuthentication, ClientTable, ClientDetail, InputSearch, Modal } from '../imports'
 
 const ClientList = () => {
-  const { defaultClientList, clients, setClients, selectedClient, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)
+  const { clients, selectedClient, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
@@ -26,11 +24,9 @@ const ClientList = () => {
   const saveChange = async () => {
     const res = await updateClients(selectedClient)
     setEditable(false)
-    /* const clientsUpdate = await getClients()
-    setClients(clientsUpdate) */
     await fetchFromDatabase()
-    setSelectedClient(defaultClientList)
-    if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)
+    setSelectedClient('')
+    if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }
 
@@ -40,7 +36,7 @@ const ClientList = () => {
 
   return (
     <>
-      <Modal type={2} className={'h-3/4 md:h-[90%] lg:h-auto  xxl:h-fit xxxl:h-[90%] xl:w-[70%] xxl:w-auto xxxl:w-[60%] mb-5 overflow-auto'}>
+      <Modal type={2} className={'!py-6 xl:!top-[3%] xl:!h-[80%]'}>
         <h2 className='text-xl pl-4 text-gray-500 font-bold mb-3'>Clients</h2>
         <ClientDetail
           selectedClient={selectedClient}
@@ -50,6 +46,7 @@ const ClientList = () => {
           editable={editable}
           setEditable={setEditable}
           saveChange={saveChange}
+          toast={showToast}
         />
         <InputSearch onSearch={handleSearchInClients} />
         <ClientTable onClientSelected={handleClientSelect} data={search !== '' ? search : clients} />
@@ -58,4 +55,4 @@ const ClientList = () => {
   )
 }
 
-export default ClientList
+export default WithAuthentication(['stylist', 'admin'])(ClientList)

@@ -1,14 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState, lazy, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { registerClient } from '../../firebase/firebase.js'
 import { customContext } from '../context/CustomContext'
-const Register = lazy(() => import('../utils/Register.jsx'))
-const Modal = lazy(() => import('../utils/Modal.jsx'))
+import { Register, Modal } from '../imports.js'
 
 const RegisterClient = () => {
-  const { defaultClientRegister, fetchFromDatabase, showToast } = useContext(customContext)
+  const { fetchFromDatabase, showToast } = useContext(customContext)
 
-  const [userData, setUserData] = useState(defaultClientRegister)
+  const [userData, setUserData] = useState('')
 
   const handleAddUser = async () => {
     try {
@@ -16,7 +15,7 @@ const RegisterClient = () => {
       switch (resMongo.code) {
         case 201:
           showToast('Successfully registered user', resMongo.code)
-          setUserData(defaultClientRegister)
+          setUserData('')
           await fetchFromDatabase()
           break
         case 400:
@@ -45,7 +44,7 @@ const RegisterClient = () => {
   }
   return (
     <>
-      <Modal type={2} className={'h-3/4 py-5 md:h-[90%] lg:h-auto xxl:h-fit xxl:w-[40%]  overflow-auto'}>
+      <Modal type={2} className={'!py-5 md:h-[90%] lg:h-auto '}>
         <Register labelName={'Registro Cliente'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} toast={showToast} />
       </Modal>
     </>

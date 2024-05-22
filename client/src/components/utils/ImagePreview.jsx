@@ -3,17 +3,17 @@
 import { resizeAndCompress } from '../../utils/utils.js'
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
-const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelName = 'Subir imagen', editable = false, showInputOnly = false, style = 'h-[130px]' }) => {
+const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, toast, labelName = 'Subir imagen', editable = false, showInputOnly = false, className }) => {
   const handleImagenChange = async (event) => {
     const file = event.target.files[0]
     if (file) {
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
       if (!allowedTypes.includes(file.type)) {
-        alert('Solo se permiten archivos de imagen (JPEG, PNG, GIF).')
+        toast('Archivos permitidos (JPEG, PNG, GIF).', 500)
         return
       }
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
-        alert('La imagen es demasiado grande. Por favor, selecciona una imagen más pequeña.')
+        toast('Imagen muy grande. selecciona una más pequeña.', 500)
         return
       }
       const resizedImageBlob = await resizeAndCompress(file)
@@ -44,7 +44,7 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
             type={'file'}
             autoComplete='off'
             name={'thumbnail'}
-            className={`w-full px-2 py-0 border rounded-md focus:outline-red-200 ${style}`}
+            className={`w-full px-2 py-0 border rounded-md focus:outline-red-200 ${className}`}
           />
         </div>
       </>
@@ -52,13 +52,17 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
   }
 
   return (
-    <div className={`flow relative content-center p-0 pt-1 mx-auto mb-5 w-[80%] ${imagenPreview ? 'mt-2' : 'rounded-md border bg-white '} ${style}`}>
-      {imagenPreview ? (
-        <img className='text-center m-auto rounded-md ' style={{ objectFit: 'contain' }} src={imagenPreview} alt='Imagen del producto' />
-      ) : (
-        <div className='cursor-pointer flex w-fit m-auto p-3 border-2 border-gray-300 border-dashed rounded-md'>{labelName}</div>
-      )}
-      <input type='file' name='thumbnail' id='uploadImage' className='hidden' onChange={handleImagenChange} disabled={!editable} />
+    <div
+      id='containerImage'
+      className={` ${
+        imagenPreview ? `flow relative items-end content-center mx-auto sm:w-fit sm:h-fit sm:p-0 sm:mb-1 sm:mt-3 lg:p-0 lg:mt-0 lg:mb-4 lg:w-auto border rounded-md bg-white ${className}` : 'flow relative items-end content-center mx-auto sm:mb-1 sm:mt-3 lg:p-0 lg:mt-0 lg:mb-4 h-[25vh] border rounded-md bg-white '
+      }  `}
+    >
+      <label htmlFor='uploadImage' className='block p-2 m-auto text-gray-300 text-sm font-bold cursor-pointer'>
+        {imagenPreview ? <img className={`h-[85%] -mt-1 mx-auto object-contain `} src={imagenPreview} alt='Imagen del producto' /> : ''}
+        <input type='file' name='thumbnail' id='uploadImage' className='hidden' onChange={handleImagenChange} disabled={!editable} />
+        {!imagenPreview && <div className='cursor-pointer m-auto flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>Subir imagen</div>}
+      </label>
     </div>
   )
 }

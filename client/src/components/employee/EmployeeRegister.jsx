@@ -1,13 +1,26 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { registerEmployeeMongo, registerEmployeeFire } from '../../firebase/firebase.js'
-const Register = lazy(() => import('../utils/Register.jsx'))
-const { PasswordValid } = lazy(() => import('../../utils/utils.js'))
-const Modal = lazy(() => import('../utils/Modal.jsx'))
+import { WithAuthentication, Register, Modal } from '../imports.js'
+import { PasswordValid } from '../../utils/utils.js'
+
+const employeeDefault = {
+  firstName: '',
+  lastName: '',
+  dni: '',
+  phone: '',
+  address: '',
+  email: '',
+  dateBirthday: '',
+  thumbnail: '',
+  role: '',
+  password: '',
+}
 
 const EmployeeRegister = () => {
-  const { employeeDefault, roles, showToast } = useContext(customContext)
+  const { roles, showToast } = useContext(customContext)
 
   const [userData, setUserData] = useState(employeeDefault)
 
@@ -24,6 +37,7 @@ const EmployeeRegister = () => {
       switch (resMongo.code) {
         case 201:
           await registerEmployeeFire(userData.email, userData.password, userData.role)
+          showToast('Empleado Creado', resMongo.code)
           setUserData(employeeDefault)
           break
         case 400:
@@ -54,11 +68,10 @@ const EmployeeRegister = () => {
   }
   return (
     <>
-      <Modal type={2} className={' h-3/4 md:h-[90%] lg:h-auto xl:h-[80%] xl:w-[70%] xxl:h-[90%] xxxl:h-[80%] xxl:w-[45%] overflow-auto'}>
-        <Register labelName={'Registro Empleados'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} roles={roles} employee />
+      <Modal type={2} className={'pb-3 xl:h-[80%] xl:top-[3%] xxl:h-[90%] xxl:top-[1%] xxxl:h-[90%]'}>
+        <Register labelName={'Registro Empleados'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} roles={roles} employee toast={showToast} />
       </Modal>
     </>
   )
 }
-
-export default EmployeeRegister
+export default WithAuthentication(['admin'])(EmployeeRegister)

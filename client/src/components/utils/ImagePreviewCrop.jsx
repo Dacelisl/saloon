@@ -4,7 +4,7 @@ import { resizeAndCompress } from '../../utils/utils.js'
 import { useEffect, useRef } from 'react'
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
-const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelName = 'Subir imagen', editable = false, showInputOnly = false, style = 'h-[130px]' }) => {
+const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelName = 'Subir imagen', editable = false, showInputOnly = false, className = 'h-[130px]' }) => {
   const cropperRef = useRef(null)
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
             type={'file'}
             autoComplete='off'
             name={'thumbnail'}
-            className={`w-full px-2 py-0 border rounded-md focus:outline-red-200 ${style}`}
+            className={`w-full px-2 py-0 border rounded-md focus:outline-red-200 ${className}`}
           />
         </div>
       </>
@@ -61,7 +61,7 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, labelN
   }
 
   return (
-    <div className={`flow relative content-center p-0 pt-1 mx-auto mb-5 w-[80%] ${imagenPreview ? 'mt-2' : 'rounded-md border bg-white '} ${style}`}>
+    <div className={`flow relative content-center p-0 pt-1 mx-auto mb-5 w-[80%] ${imagenPreview ? 'mt-2' : 'rounded-md border bg-white '} ${className}`}>
       {imagenPreview ? (
         <img className='text-center m-auto rounded-md ' style={{ objectFit: 'contain' }} src={imagenPreview} alt='Imagen del producto' />
       ) : (

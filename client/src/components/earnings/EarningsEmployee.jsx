@@ -1,16 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useContext, lazy } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { getEarningsEmployeeById } from '../../firebase/firebase.js'
 import { getStartOfWeek, getEndOfWeek, getStartOfMonth, getEndOfMonth, formatDate } from '../../utils/utils.js'
-
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
-const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
-const Modal = lazy(() => import('../utils/Modal.jsx'))
+import { WithAuthentication, ButtonDefault, InputEdit, Modal } from '../imports.js'
 
 const EarningsEmployee = () => {
-  const { selectedEmployee, showToast } = useContext(customContext)
+  const { loggedEmployee, showToast } = useContext(customContext)
 
   const [data, setData] = useState([])
   const [minData, setMinData] = useState('')
@@ -26,7 +24,7 @@ const EarningsEmployee = () => {
 
   useEffect(() => {
     async function loadData() {
-      const selected = await getEarningsEmployeeById(selectedEmployee.id)
+      const selected = await getEarningsEmployeeById(loggedEmployee.id)
       const sortedData = selected.sort((a, b) => new Date(a.date) - new Date(b.date))
       const minDate = sortedData.length > 0 ? sortedData[0].date : null
       const maxDate = sortedData.length > 0 ? sortedData[sortedData.length - 1].date : null
@@ -87,7 +85,7 @@ const EarningsEmployee = () => {
   }
 
   return (
-    <Modal type={2} className={'h-3/4 !pb-2  md:h-[90%] xl:w-[80%] xl:h-fit xxl:w-[90%] xxxl:w-[70%] overflow-auto'}>
+    <Modal type={2} className={'!py-6 xl:!top-[3%] xl:!h-[85%] xxxl:!h-auto '}>
       <div>
         <div className='inline-flex mb-3 '>
           <ButtonDefault title='Todo' onClick={handleClickAll} color={'!w-fit !py-0 !px-1 !ml-5 !mr-3'} />
@@ -95,11 +93,13 @@ const EarningsEmployee = () => {
           <ButtonDefault title='Mes' onClick={handleClickMount} color={'!w-fit !py-0 !px-1 !mx-2'} />
           <ButtonDefault title='Hoy' onClick={handleClickToday} color={'!w-fit !py-0 !px-1 !mx-2'} />
         </div>
-        <div className='flex'>
-          <div className='inline-flex ml-5 mt-1 '>
-            <InputEdit labelName={'Fecha Inicio'} edit value={minDate} onChange={handleDateChange} type={'date'} name={'minDate'} className='' />
-            <InputEdit labelName={'Fecha Fin'} edit value={maxDate} onChange={handleDateChange} type={'date'} name={'maxDate'} className=' ml-3' />
-            <ButtonDefault title='Filtrar' onClick={handleClick} color={'h-fit self-center mt-3 ml-5'} />
+        <div className='block'>
+          <div className='block ml-5 my-1 xl:flex xl:w-[70%]'>
+            <InputEdit labelName={'Fecha Inicio'} edit value={minDate} onChange={handleDateChange} type={'date'} name={'minDate'} className='flex' />
+            <span className='xl:ml-3'>
+              <InputEdit labelName={'Fecha Fin'} edit value={maxDate} onChange={handleDateChange} type={'date'} name={'maxDate'} />
+            </span>
+            <ButtonDefault title='Filtrar' onClick={handleClick} color={'h-fit self-center mx-auto mt-3 xl:ml-3'} />
           </div>
         </div>
       </div>
@@ -143,5 +143,4 @@ const EarningsEmployee = () => {
     </Modal>
   )
 }
-
-export default EarningsEmployee
+export default WithAuthentication(['stylist', 'admin'])(EarningsEmployee)

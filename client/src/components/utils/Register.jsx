@@ -1,22 +1,13 @@
 /* eslint-disable react/prop-types */
-import { lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
-const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
-const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
-const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
-const InputPassword = lazy(() => import('../utils/InputPassword.jsx'))
-const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+import { InputEdit, InputPhone, InputSelect, InputPassword, ImagePreview, ButtonDefault } from '../imports.js'
 
 const Register = ({ labelName, userData, setUserData, handleAddUser, employee = false, roles, toast }) => {
   const navigate = useNavigate()
 
   const sendAction = () => {
     const isFormValid = Object.values(userData).every((value) => {
-      if (typeof value === 'string') {
-        return value.trim() !== ''
-      }
-      return value !== undefined && value !== null
+      return value !== undefined && value !== null && value !== ''
     })
     if (isFormValid) {
       handleAddUser()
@@ -41,9 +32,9 @@ const Register = ({ labelName, userData, setUserData, handleAddUser, employee = 
         <InputEdit type='number' labelName={'DNI'} value={userData.dni} onChange={handleInputChange} edit name={'dni'} className='h-9' />
         <InputEdit labelName={'Direccion'} value={userData.address} onChange={handleInputChange} edit name={'address'} className='h-9' />
         <InputEdit type='email' labelName={'Email'} value={userData.email} onChange={handleInputChange} edit name={'email'} className='h-9' />
-        <InputPhone phoneNumber={userData.phone} setPhoneNumber={handleInputChange} value={userData.phone} className={'h-9'} />
+        <InputPhone phoneNumber={userData.phone} setPhoneNumber={handleInputChange} value={userData.phone || ''} className={'h-9'} />
         <InputEdit type='date' labelName={'Fecha Cumpleaños'} value={userData.dateBirthday} onChange={handleInputChange} edit name={'dateBirthday'} className='h-9' />
-        <ImagePreview setSelectedItem={handleInputChange} showInputOnly style='h-9' labelName='Foto de perfil' />
+        <ImagePreview setSelectedItem={handleInputChange} showInputOnly className='h-9' labelName='Foto de perfil' toast={toast} />
       </form>
       {employee && (
         <>
@@ -55,7 +46,7 @@ const Register = ({ labelName, userData, setUserData, handleAddUser, employee = 
           </div>
         </>
       )}
-      <div className='flex flex-wrap justify-end mt-4'>
+      <div className='flex flex-wrap justify-end mt-4 mb-2'>
         <ButtonDefault title='Cancelar' onClick={() => navigate(-1)} />
         <ButtonDefault title='Guardar' onClick={sendAction} />
       </div>

@@ -1,20 +1,16 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useContext, lazy } from 'react'
-import { updateProduct, getProducts } from '../../firebase/firebase'
+import { useState, useEffect, useContext } from 'react'
+import { updateProduct } from '../../firebase/firebase'
 import { customContext } from '../context/CustomContext'
-const ProductTable = lazy(() => import('./ProductTable'))
-const ProductDetail = lazy(() => import('./ProductDetail'))
-const InputSearch = lazy(() => import('../utils/InputSearch'))
-const Modal = lazy(() => import('../utils/Modal'))
+import { WithAuthentication, ProductTable, ProductDetail, InputSearch, Modal } from '../imports.js'
 
 const ProductList = () => {
-  const { defaultProduct, allProducts, setAllProducts, selectedProduct, setSelectedProduct,handleSearch, fetchFromDatabase, showToast } = useContext(customContext)
-
+  const { allProducts, selectedProduct, setSelectedProduct, handleSearch, fetchFromDatabase, role, showToast } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
-
 
   useEffect(() => {
     const selected = allProducts.find((product) => product.id === selectedProduct.id)
@@ -26,16 +22,13 @@ const ProductList = () => {
   }
 
   const saveChange = async () => {
+    if (role !== 'admin') return
     const res = await updateProduct(selectedProduct)
     setEditable(false)
-    /* const productUpdate = await getProducts()
-    setAllProducts(productUpdate) */
     await fetchFromDatabase()
-    setSelectedProduct(defaultProduct)
-    if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)
+    setSelectedProduct('')
+    if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
-
-    
   }
 
   const handleSearchInProducts = (searchTerm) => {
@@ -43,7 +36,7 @@ const ProductList = () => {
   }
   return (
     <>
-      <Modal type={2}>
+      <Modal type={2} className={'xl:h-[85%] xl:top-[2%] xxl:h-[94%] xxl:top-[1%] xxxl:h-[90%]'}>
         <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>Products</h2>
         <ProductDetail
           selectedProduct={selectedProduct}
@@ -53,6 +46,8 @@ const ProductList = () => {
           editable={editable}
           setEditable={setEditable}
           saveChange={saveChange}
+          toast={showToast}
+          role={role}
         />
         <InputSearch onSearch={handleSearchInProducts} />
         <ProductTable onProductSelected={handleProductSelect} data={search !== '' ? search : allProducts} />
@@ -60,5 +55,4 @@ const ProductList = () => {
     </>
   )
 }
-
-export default ProductList
+export default WithAuthentication(['stylist', 'admin'])(ProductList)

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, lazy } from 'react'
-const GenericTable = lazy(() => import('../../utils/GenericTable.jsx'))
+import { useState, useEffect } from 'react'
+import { GenericTable } from '../../imports.js'
 
 const HistoricalClientTable = ({ data, onClientSelected }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)

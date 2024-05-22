@@ -39,14 +39,6 @@ export const getPaymentsMethod = async () => {
     throw new Error(`Error server getPaymentsMethod ${error.message}`)
   }
 }
-export const getProviders = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/api/provider/')
-    return response.data.payload
-  } catch (error) {
-    throw new Error(`Error server getCategories ${error.message}`)
-  }
-}
 export const getServices = async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/service/')
@@ -117,7 +109,7 @@ export const singIn = async (email, password) => {
   }
 }
 export const logOut = async () => {
-  await signOut(auth)
+  const res = await signOut(auth)
     .then(async () => {
       await axios.post('http://localhost:3000/api/employee/logOut')
       return true
@@ -125,6 +117,7 @@ export const logOut = async () => {
     .catch(() => {
       return false
     })
+  return res
 }
 export const passwordRecovery = async (email) => {
   try {
@@ -167,10 +160,12 @@ export const uploadFire = async (data, url) => {
 /* PRODUCTS */
 export const registerProduct = async (dataProduct) => {
   try {
+    console.log('product img', dataProduct);
     const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
     dataProduct.thumbnail = url
     const response = await axios.post('http://localhost:3000/api/products', dataProduct)
-    return response.status
+    console.log('res fire', response);
+    return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
   }
@@ -201,7 +196,7 @@ export const updateProduct = async (dataProduct) => {
     }
     const productFormatted = formattUpdate(dataProduct)
     const response = await axios.put(`http://localhost:3000/api/products/${dataProduct.id}`, productFormatted)
-    return response.status
+    return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
   }
@@ -213,7 +208,7 @@ export const getClients = async () => {
     const response = await axios.get('http://localhost:3000/api/users/')
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getRoles ${error.message}`)
+    throw new Error(`Error server getClients ${error.message}`)
   }
 }
 export const registerClient = async (dataUser) => {
@@ -255,6 +250,43 @@ export const updateClients = async (dataClient) => {
     return response.data
   } catch (error) {
     throw new Error(`Error server updateUser ${error}`)
+  }
+}
+/* PROVIDERS */
+export const getProviders = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/provider')
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getProviders ${error.message}`)
+  }
+}
+export const registerProvider = async (dataUser) => {
+  try {
+    const url = await uploadFire(dataUser.contact.thumbnail, `provider/${dataUser.contact.dni}`)
+    dataUser.contact.thumbnail = url
+    const response = await axios.post('http://localhost:3000/api/provider', dataUser)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
+}
+export const updateProvider = async (data) => {
+  try {
+    if (typeof data.contact.thumbnail === 'object') {
+      const url = await uploadFire(data.contact.thumbnail, `clients/${data.contact.dni}`)
+      data.contact.thumbnail = url
+    } else {
+      data.contact.thumbnail = ''
+    }
+    const contactFormatted = formattUpdate(data.contact)
+    data.contact = contactFormatted
+
+    const response = await axios.put(`http://localhost:3000/api/provider/${data.id}`, data)
+    console.log('response en firebase', response)
+    return response.data
+  } catch (error) {
+    throw new Error(`Error server updateProvider ${error}`)
   }
 }
 

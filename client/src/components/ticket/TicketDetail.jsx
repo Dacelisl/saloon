@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext } from 'react'
 import { customContext } from '../context/CustomContext'
 import { totalPrice } from '../../utils/utils.js'
-const TicketTable = lazy(() => import('./TicketTable.jsx'))
-const ItemPayment = lazy(() => import('./ItemPayment.jsx'))
-const ToggleSwitch = lazy(() => import('../utils/ToggleSwitch.jsx'))
-const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
+import { TicketTable, ItemPayment, ToggleSwitch, InputSearch } from '../imports.js'
 
 const TicketDetail = ({ ticket, setTicket }) => {
   const { employees, allProducts, allServices, handleSearch } = useContext(customContext)

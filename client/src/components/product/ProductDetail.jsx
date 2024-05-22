@@ -1,13 +1,9 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext } from 'react'
 import { customContext } from '../context/CustomContext'
-const InputEdit = lazy(() => import('../utils/InputEdit'))
-const InputArea = lazy(() => import('../utils/InputArea'))
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault'))
-const ImagePreview = lazy(() => import('../utils/ImagePreview'))
-const InputSelect = lazy(() => import('../utils/InputSelect'))
+import { InputEdit, InputArea, ButtonDefault, ImagePreview, InputSelect } from '../imports.js'
 
-const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview }) => {
+const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview, role, toast }) => {
   const { categories, providers } = useContext(customContext)
   const [prevData, setPrevData] = useState('')
 
@@ -25,36 +21,49 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
     setEditable(!editable)
   }
   return (
-    <div className='flex mb-1 border-solid border-2 border-gray-200'>
-      <div className='w-[50%]'>
-        <div className=' p-4 pt-3 rounded-md'>
-          <InputEdit labelName={'Nombre'} value={selectedProduct.name} edit={editable} inputChange={handleFieldChange} type={'text'} name={'name'} />
-          <InputSelect label={'Proveedor'} name={'provider'} itemOption={providers} itemValue={selectedProduct.provider} handleFieldChange={handleFieldChange} editable={editable} />
-
-          <InputSelect label={'Categoria'} name={'category'} itemOption={categories} itemValue={selectedProduct.category} handleFieldChange={handleFieldChange} editable={editable} />
-
-          <InputEdit labelName={'Code'} value={selectedProduct.code} inputChange={handleFieldChange} type={'text'} name={'code'} />
-          <InputEdit labelName={'Stock'} value={selectedProduct.stock} edit={editable} inputChange={handleFieldChange} type={'number'} name={'stock'} />
-          <InputEdit labelName={'Precio'} value={selectedProduct.price} edit={editable} inputChange={handleFieldChange} type={'number'} name={'price'} />
-          {editable ? (
-            <div className='flex'>
-              <ButtonDefault title='Save' onClick={saveChange} />
-              <ButtonDefault title='Cancel' onClick={handleCancel} />
-            </div>
-          ) : (
-            <ButtonDefault title='Edit' onClick={handleEdit} />
-          )}
+    <>
+      <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+        <div className='lg:hidden'>
+          <div className='h-[55%]'>
+            <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} />
+          </div>
         </div>
-      </div>
+        <div>
+          <InputEdit labelName={'Nombre'} value={selectedProduct.name} edit={editable} onChange={handleFieldChange} type={'text'} name={'name'} />
+          <InputSelect label={'Proveedor'} name={'provider'} itemOption={providers} itemValue={selectedProduct.provider} handleFieldChange={handleFieldChange} editable={editable} />
+          <InputSelect label={'Categoria'} name={'category'} itemOption={categories} itemValue={selectedProduct.category} handleFieldChange={handleFieldChange} editable={editable} />
+          <InputEdit labelName={'Code'} value={selectedProduct.code} onChange={handleFieldChange} type={'text'} name={'code'} />
+          <InputEdit labelName={'Stock'} value={selectedProduct.stock} edit={editable} onChange={handleFieldChange} type={'number'} name={'stock'} />
+          <InputEdit labelName={'Precio'} value={selectedProduct.price} edit={editable} onChange={handleFieldChange} type={'number'} name={'price'} />
+        </div>
+        <div>
+          <div className='sm:hidden md:hidden lg:flex h-[45%] lg:mb-2'>
+            <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} />
+          </div>
+          <InputEdit labelName={'Ganancia Empleado %'} value={selectedProduct.profitEmployee} edit={editable} onChange={handleFieldChange} type={'number'} name={'profitEmployee'} />
+          <InputEdit labelName={'Ganancia Salon %'} value={selectedProduct.profitSaloon} edit={editable} onChange={handleFieldChange} type={'number'} name={'profitSaloon'} />
+          <InputArea labelName={'Descripcion'} name={'Description'} onChange={handleFieldChange} value={selectedProduct.description} edit={editable} className='h-[8vh]' />
+        </div>
+      </form>
 
-      {/* region de la imagen y la descripcion  */}
-      <div className='w-[45%] ml-4  mt-6'>
-        <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} />
-        <InputEdit labelName={'Ganancia Empleado %'} value={selectedProduct.profitEmployee} edit={editable} inputChange={handleFieldChange} type={'number'} name={'profitEmployee'} />
-        <InputEdit labelName={'Ganancia Salon %'} value={selectedProduct.profitSaloon} edit={editable} inputChange={handleFieldChange} type={'number'} name={'profitSaloon'} />
-        <InputArea labelName={'Descripcion'} name={'Description'} onChange={handleFieldChange} value={selectedProduct.description} edit={editable} />
-      </div>
-    </div>
+      {role === 'admin' ? (
+        <div className={` ${editable ? 'hidden' : 'flex mb-2'}`}>
+          <span className='contents'>
+            <ButtonDefault title='Edit' onClick={handleEdit} />
+          </span>
+        </div>
+      ) : (
+        ''
+      )}
+      {editable ? (
+        <div className='flex my-2'>
+          <ButtonDefault title='Save' onClick={saveChange} />
+          <ButtonDefault title='Cancel' onClick={handleCancel} />
+        </div>
+      ) : (
+        ''
+      )}
+    </>
   )
 }
 

@@ -48,9 +48,8 @@ const HistoricalClientDetail = ({ selectedClient, ticket }) => {
           ''
         )}
       </div>
-      {/* rigth secction */}
       <div className='w-[30%] mt-3'>
-        <ImagePreview imagenPreview={selectedClient.thumbnail} style='w-[100px] py-0 px-0' />
+        <ImagePreview imagenPreview={selectedClient.thumbnail} className='w-[100px] py-0 px-0' />
       </div>
     </div>
   )

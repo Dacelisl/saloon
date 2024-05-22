@@ -84,9 +84,9 @@ class ProviderServices {
       }
     }
   }
-  async createProvider(name, permissions) {
+  async createProvider(data) {
     try {
-      const newProvider = await providerFactory.createProvider(name, permissions)
+      const newProvider = await providerFactory.createProvider(data)
       if (!newProvider) {
         return {
           status: 'Fail',

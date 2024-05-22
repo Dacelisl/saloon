@@ -1,48 +1,47 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, lazy } from 'react'
-const InputEdit = lazy(() => import('../utils/InputEdit'))
-const InputArea = lazy(() => import('../utils/InputArea'))
-const Register = lazy(() => import('../utils/Register'))
-const Modal = lazy(() => import('../utils/Modal'))
+import { useState, useContext } from 'react'
+import { customContext } from '../context/CustomContext.jsx'
+import { registerProvider } from '../../firebase/firebase.js'
+import { WithAuthentication, InputEdit, InputArea, Register, Modal } from '../imports.js'
 
-const providerDefault = {
-  name: '',
-  description: '',
-  email: '',
-  address: '',
-  city: '',
-  paymentTerms: '',
-  contact: {
-    firstName: '',
-    lastName: '',
-    dni: '',
-    phone: '',
-    address: '',
-    email: '',
-    dateBirthday: '',
-  },
-}
 const ProviderRegister = () => {
-  const [providerData, setProviderData] = useState(providerDefault)
-  const [send, setSend] = useState(true)
+  const { showToast } = useContext(customContext)
+  const [providerData, setProviderData] = useState('')
+  const [contactData, setContactData] = useState('')
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    if (name === 'phone') {
-      const formattedPhone = `${providerData.code}${value}`
-      setProviderData({
-        ...providerData,
-        [name]: formattedPhone,
-      })
-    } else {
-      setProviderData({
-        ...providerData,
-        [name]: value,
-      })
-    }
-    const isFormValid = Object.values(providerData).every((value) => value.trim() !== '')
+    setProviderData({
+      ...providerData,
+      [name]: value,
+    })
+  }
+
+  const sendAction = () => {
+    providerData.contact = contactData
+    const isFormValid = Object.values(providerData).every((value) => {
+      if (typeof value === 'string') {
+        return value.trim() !== ''
+      }
+      return value !== undefined && value !== null
+    })
     if (isFormValid) {
-      setSend(false)
+      handleAddUser()
+    } else {
+      showToast('Falta Informacion', 500)
+    }
+  }
+
+  const handleAddUser = async () => {
+    try {
+      const resMongo = await registerProvider(providerData)
+      if (resMongo.code !== 200) showToast('Error in the registration process', resMongo.code)
+      showToast('Successfully registered user', resMongo.code)
+      setProviderData('')
+      setContactData('')
+    } catch (error) {
+      throw new Error('Unhandled Error:', error)
     }
   }
 
@@ -58,18 +57,17 @@ const ProviderRegister = () => {
             <InputEdit labelName={'Terminos de Pago'} value={providerData.paymentTerms} name={'paymentTerms'} onChange={handleInputChange} edit className='h-9' />
           </form>
           <div className='px-4'>
-            <InputArea labelName={'Descripcion'} name={'Description'} onChange={handleInputChange} value={providerData.description} edit />
+            <InputArea labelName={'Descripcion'} name={'description'} onChange={handleInputChange} value={providerData.description} edit />
           </div>
         </div>
 
         <div className='h-[55%] mt-1'>
           <div className='p-4 mb-1'>
-            <Register labelName={'Datos Contacto'} userData={providerData.contact} handleInputChange={handleInputChange} active={send} />
+            <Register labelName={'Datos Contacto'} userData={contactData} handleAddUser={sendAction} setUserData={setContactData} toast={showToast} />
           </div>
         </div>
       </div>
     </Modal>
   )
 }
-
-export default ProviderRegister
+export default WithAuthentication(['admin'])(ProviderRegister)

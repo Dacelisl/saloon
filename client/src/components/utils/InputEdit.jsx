@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-const InputEdit = ({ label = true, labelName, value, edit =false, onChange , type = 'text', name, className='' }) => {
+const InputEdit = ({ label = true, labelName, value, edit = false, onChange, type = 'text', name, className = '' }) => {
   return (
     <div className='mb-2'>
       {label && (
@@ -10,7 +10,7 @@ const InputEdit = ({ label = true, labelName, value, edit =false, onChange , typ
       )}
       <input
         id={name}
-        value={value}
+        value={value || ''}
         disabled={!edit}
         onChange={onChange}
         type={type}

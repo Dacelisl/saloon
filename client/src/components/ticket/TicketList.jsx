@@ -1,14 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext } from 'react'
 import { customContext } from '../context/CustomContext'
 import { createTicket } from '../../firebase/firebase.js'
-const TicketDetail = lazy(() => import('../ticket/TicketDetail'))
-const TicketPayment = lazy(() => import('../ticket/TicketPayment.jsx'))
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
-const Modal = lazy(() => import('../utils/Modal.jsx'))
+import { WithAuthentication, TicketDetail, TicketPayment, ButtonDefault, Modal } from '../imports.js'
 
 const TicketList = () => {
-  const { ticketDefault, selectedClient, navigate, ticket, setTicket, showToast } = useContext(customContext)
+  const { selectedClient, navigate, ticket, setTicket, showToast } = useContext(customContext)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -18,14 +16,14 @@ const TicketList = () => {
     ticket.customerId = selectedClient.id
     const res = await createTicket(ticket)
     if (res.code >= 400) return showToast('Problemas con el Ticket', res.code)
-    setTicket(ticketDefault)
+    setTicket('')
     navigate(-1)
     showToast('Ticket Creado', res.code)
 
     return res
   }
   const cancelTicket = async () => {
-    setTicket(ticketDefault)
+    setTicket('')
     navigate(-1)
   }
   const showModal = async () => {
@@ -51,5 +49,4 @@ const TicketList = () => {
     </>
   )
 }
-
-export default TicketList
+export default WithAuthentication(['admin'])(TicketList)

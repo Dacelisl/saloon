@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 const InputPhone = ({ phoneNumber, setPhoneNumber, edit, className, value }) => {
   const [countryCode, setCountryCode] = useState('')
-  const [phone, setPhone] = useState(value || '')
+  const [phone, setPhone] = useState(value)
 
   useEffect(() => {
     setPhone(value)
@@ -14,16 +14,15 @@ const InputPhone = ({ phoneNumber, setPhoneNumber, edit, className, value }) => 
   useEffect(() => {
     const getCountryCode = () => {
       if (!phoneNumber) return
-      const phoneFormatt = phoneNumber.replace(/\+/, '').replace(/\s/g, '')
       for (const country of countries) {
-        if (phoneFormatt.startsWith(country.indicativo)) {
+        if (String(phoneNumber).startsWith(country.indicativo)) {
           setCountryCode(country?.indicativo)
-          setPhone(phoneFormatt?.slice(country.indicativo.length))
+          setPhone(String(phoneNumber).slice(country.indicativo.length))
         }
       }
     }
     getCountryCode()
-  }, [ phoneNumber])
+  }, [phoneNumber])
 
   const handleCountryCodeChange = (event) => {
     setCountryCode(event.target.value)

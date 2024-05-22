@@ -1,18 +1,11 @@
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext } from 'react'
 import dark from '../../assets/img/dark.jpg'
 import { singIn } from '../../firebase/firebase'
-
-const ButtonIcon = lazy(() => import('../utils/ButtonIcon'))
-const InputPassword = lazy(() => import('../utils/InputPassword'))
-const InputEdit = lazy(() => import('../utils/InputEdit'))
-const MovingDots = lazy(() => import('../utils/MovingDots'))
-const FloatingDots = lazy(() => import('../utils/FloatingDots'))
-const Toast = lazy(() => import('../utils/Toast'))
-const ModalRecoveryPassword = lazy(() => import('./RecoveryPassword'))
 import { customContext } from '../context/CustomContext'
+import { ButtonIcon, InputPassword, InputEdit, MovingDots, FloatingDots, Toast, RecoveryPassword } from '../imports.js'
 
 const Login = () => {
-  const { navigate, setUserLogin } = useContext(customContext)
+  const { navigate, setUserLogin, fetchFromDatabase } = useContext(customContext)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState(null)
@@ -44,11 +37,19 @@ const Login = () => {
       if (user.userName || user.password != '') {
         const res = await singIn(user.userName, user.password)
         setUserLogin(res.user.email)
+        localStorage.setItem(
+          'sessionData',
+          JSON.stringify({
+            userEmail: res.user.email,
+            userID: res.user.uid,
+          })
+        )
         setUser({
           userName: '',
           password: '',
         })
         showToast('Login Successful', 200)
+        fetchFromDatabase()
         navigate('/')
       }
       return showToast('Enter username and passwords', 500)
@@ -84,7 +85,7 @@ const Login = () => {
             </span>
           </form>
         </div>
-        <ModalRecoveryPassword isOpen={isModalOpen} onClose={handleCloseModal} />
+        <RecoveryPassword isOpen={isModalOpen} onClose={handleCloseModal} />
       </div>
       {toastMessage && <Toast message={toastMessage.message} code={toastMessage.code} />}
     </>

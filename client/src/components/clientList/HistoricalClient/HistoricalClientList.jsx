@@ -1,12 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useContext, lazy } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { customContext } from '../../context/CustomContext.jsx'
 import { updateTicket } from '../../../firebase/firebase.js'
-const HistoricalClientTable = lazy(() => import('./HistoricalClientTable'))
-const HistoricalClientDetail = lazy(() => import('./HistoricalClientDetail'))
-const ButtonDefault = lazy(() => import('../../utils/ButtonDefault.jsx'))
-const Modal = lazy(() => import('../../utils/Modal.jsx'))
-const HistoricalClientCredit = lazy(() => import('./HistoricalClientCredit.jsx'))
+import { WithAuthentication, HistoricalClientDetail, HistoricalClientTable, ButtonDefault, Modal, HistoricalClientCredit } from '../../imports.js'
 
 const HistoricalClientList = () => {
   const { tickets, selectedClient, fetchFromDatabase, showToast } = useContext(customContext)
@@ -39,7 +36,7 @@ const HistoricalClientList = () => {
 
   return (
     <>
-      <Modal type={2} className={'h-3/4 !pb-2 md:h-[90%] xl:w-[70%] xl:h-fit xxl:w-auto xxxl:w-[60%] overflow-auto'}>
+      <Modal type={2} className={'h-3/4 !pb-2 md:h-[90%] xl:w-[85%] xl:h-fit xxl:w-auto xxxl:w-[60%] overflow-auto'}>
         <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
         <HistoricalClientDetail selectedClient={selectedClient} ticket={selectedTicket} />
         <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
@@ -50,4 +47,4 @@ const HistoricalClientList = () => {
   )
 }
 
-export default HistoricalClientList
+export default WithAuthentication(['stylist', 'admin'])(HistoricalClientList)

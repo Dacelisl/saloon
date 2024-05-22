@@ -30,4 +30,15 @@ renderizado condicional segun el rol
 
 --evitar colocar un monto mayor del adeudado en los abonos del ticket
 
---problemas con la carga de los datos, posiblemente tenga que ver con middleware, o login muy rapido y no registra el usuario
+diseño responsive y renderizado condicional segun permisos :
+-modal de inicio y ventanas
+-EarningsEmployee
+-registo cliente 
+-registro producto
+-HistoricalClientList
+-product list
+-client list
+-HamburguerMenu
+
+-falta modificar las fechas y el boton de filtro en earningsEmployee
+/falta modificar el tamaño de las miniaturas para movil sm, md

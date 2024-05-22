@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-import GenericTable from '../utils/GenericTable.jsx'
+import { GenericTable } from '../imports.js'
 
 const ProviderTable = ({ data, onProviderSelected }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)
@@ -16,7 +16,7 @@ const ProviderTable = ({ data, onProviderSelected }) => {
     },
     {
       header: 'Contacto',
-      accessorFn: (row) => `${row.contact.phone}`
+      accessorFn: (row) => `${row.contact.phone}`,
     },
     {
       id: 'more-details',

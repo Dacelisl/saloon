@@ -7,6 +7,7 @@ const providerSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     dni: { type: Number, required: true, unique: true },
+    address: { type: String, required: true },
     phone: {
       type: Number,
       required: true,
@@ -27,6 +28,12 @@ const providerSchema = new Schema({
         },
         message: 'The email format is not valid',
       },
+    },
+    dateBirthday: { type: Date, required: true },
+    thumbnail: {
+      type: String,
+      required: false,
+      default: 'Not Photo',
     },
   },
   address: { type: String, required: true },

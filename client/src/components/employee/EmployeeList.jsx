@@ -1,20 +1,20 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, lazy, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { customContext } from '../context/CustomContext'
 import { getEmployee, updateEmployee } from '../../firebase/firebase'
-const EmployeeTable = lazy(() => import('./EmployeeTable'))
-const EmployeeDetail = lazy(() => import('./EmployeeDetail'))
-const InputSearch = lazy(() => import('../utils/InputSearch'))
-const Modal = lazy(() => import('../utils/Modal'))
+import { WithAuthentication, EmployeeTable, EmployeeDetail, InputSearch, Modal } from '../imports.js'
 
 const EmployeeList = () => {
-  const { employeeDefaultList, employees, setEmployees, selectedEmployee, setSelectedEmployee, handleSearch, showToast } = useContext(customContext)
+  const { employees, setEmployees, handleSearch, showToast } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
+  const [selectedEmployee, setSelectedEmployee] = useState('')
   const [editable, setEditable] = useState(false)
 
   useEffect(() => {
+    if (!selectedEmployee) return
     const selected = employees.find((user) => user.id === selectedEmployee.id)
     setImagenPreview(selected?.thumbnail || '')
   }, [employees, selectedEmployee])
@@ -28,7 +28,7 @@ const EmployeeList = () => {
     setEditable(false)
     const employeeUpdate = await getEmployee()
     setEmployees(employeeUpdate)
-    setSelectedEmployee(employeeDefaultList)
+    setSelectedEmployee('')
     if (res.code > 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }
@@ -39,7 +39,7 @@ const EmployeeList = () => {
 
   return (
     <>
-      <Modal type={2} className={' h-3/4 md:h-[90%]  xl:h-[80%] xl:w-[70%] xxl:h-[90%] xxxl:h-auto xxl:w-auto xxxl:w-[60%] overflow-auto'}>
+      <Modal type={2} className={'!py-6 xl:!top-[3%] xl:!h-[80%]'}>
         <h2 className='text-xl text-center mb-3 text-gray-500 font-bold'>Empleados</h2>
         <EmployeeDetail
           selectedEmployee={selectedEmployee}
@@ -49,6 +49,7 @@ const EmployeeList = () => {
           editable={editable}
           setEditable={setEditable}
           saveChange={saveChange}
+          toast={showToast}
         />
         <InputSearch onSearch={handleSearchEmployee} />
         <EmployeeTable onEmployeeSelected={handleSelect} data={search !== '' ? search : employees} />
@@ -56,5 +57,4 @@ const EmployeeList = () => {
     </>
   )
 }
-
-export default EmployeeList
+export default WithAuthentication(['admin'])(EmployeeList)

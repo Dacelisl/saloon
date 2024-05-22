@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect, lazy } from 'react'
 import { getClients, getTickets, getEmployee, getProducts, getServices, getPaymentsMethod, getRoles, getCategories, getProviders, getEmployeeByEmail } from '../../firebase/firebase'
@@ -9,29 +10,6 @@ import { auth } from '../../firebase/firebaseApp'
 export const customContext = createContext()
 
 const CustomContext = ({ children }) => {
-  const defaultClientList = {
-    firstName: '',
-    lastName: '',
-    dni: '',
-    phone: '',
-    address: '',
-    email: '',
-    dateBirthday: '',
-    firstDate: '',
-    lastDate: '',
-    thumbnail: '',
-    code: '',
-  }
-  const defaultClientRegister = {
-    firstName: '',
-    lastName: '',
-    dni: '',
-    phone: '',
-    address: '',
-    email: '',
-    dateBirthday: '',
-    thumbnail: '',
-  }
   const ticketDefault = {
     customerId: '',
     employeeId: '',
@@ -39,43 +17,16 @@ const CustomContext = ({ children }) => {
     partialPayments: [],
     items: [],
   }
-  const employeeDefault = {
-    firstName: '',
-    lastName: '',
-    dni: '',
-    phone: '',
-    address: '',
-    email: '',
-    dateBirthday: '',
-    thumbnail: '',
-    role: '',
-    password: '',
-  }
-  const employeeDefaultList = {
-    firstName: '',
-    lastName: '',
-    dni: '',
-    phone: '',
-    address: '',
-    email: '',
-    dateBirthday: '',
-    thumbnail: '',
-    role: '',
-    lastConnection: '',
-  }
-  const defaultProduct = {
+  const providerDefault = {
     name: '',
-    provider: '',
-    category: '',
-    code: '',
-    stock: '',
-    price: '',
-    thumbnail: '',
-    profitEmployee: '',
-    profitSaloon: '',
     description: '',
+    address: '',
+    city: '',
+    paymentTerms: '',
+    contact: {},
   }
 
+  const [loading, setLoading] = useState(true)
   const [clients, setClients] = useState([])
   const [tickets, setTickets] = useState([])
   const [employees, setEmployees] = useState([])
@@ -84,11 +35,12 @@ const CustomContext = ({ children }) => {
   const [categories, setCategories] = useState([])
   const [providers, setProviders] = useState([])
   const [roles, setRoles] = useState([])
+  const [role, setRole] = useState('')
 
   const [paymentMethods, setPaymentMethods] = useState([])
-  const [selectedClient, setSelectedClient] = useState(defaultClientList)
-  const [selectedProduct, setSelectedProduct] = useState(defaultProduct)
-  const [selectedEmployee, setSelectedEmployee] = useState(employeeDefaultList)
+  const [selectedClient, setSelectedClient] = useState('')
+  const [selectedProduct, setSelectedProduct] = useState('')
+  const [loggedEmployee, setLoggedEmployee] = useState('')
   const [userLogin, setUserLogin] = useState('')
   const [ticket, setTicket] = useState(ticketDefault)
   const [nextBirthDay, setNextBirthDay] = useState('')
@@ -97,9 +49,10 @@ const CustomContext = ({ children }) => {
   const location = useLocation()
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserLogin(user.email)
+        await fetchFromDatabase()
       }
     })
     return unsubscribe
@@ -133,10 +86,18 @@ const CustomContext = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!userLogin) return
-        const employee = await getEmployeeByEmail(userLogin)
-        setSelectedEmployee(employee)
+        const sessionDataString = localStorage.getItem('sessionData')
+        if (!sessionDataString) {
+          setLoading(false)
+          return
+        }
+        const sessionData = JSON.parse(sessionDataString)
+        setUserLogin(sessionData.userEmail)
+        const employee = await getEmployeeByEmail(sessionData.userEmail)
+        setLoggedEmployee(employee)
+        setRole(employee.role)
         await fetchFromDatabase()
+        setLoading(false)
       } catch (error) {
         throw new Error(`Error getting data: ${error}`)
       }
@@ -165,16 +126,13 @@ const CustomContext = ({ children }) => {
   return (
     <customContext.Provider
       value={{
+        providerDefault,
+        loading,
         setUserLogin,
         fetchFromDatabase,
-        defaultClientList,
-        defaultClientRegister,
-        employeeDefault,
-        employeeDefaultList,
-        defaultProduct,
-        ticketDefault,
         clients,
         roles,
+        role,
         categories,
         providers,
         setClients,
@@ -182,8 +140,8 @@ const CustomContext = ({ children }) => {
         setTickets,
         selectedClient,
         setSelectedClient,
-        selectedEmployee,
-        setSelectedEmployee,
+        loggedEmployee,
+        setLoggedEmployee,
         selectedProduct,
         setSelectedProduct,
         employees,

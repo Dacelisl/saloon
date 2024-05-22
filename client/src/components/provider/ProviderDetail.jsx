@@ -1,17 +1,24 @@
 /* eslint-disable react/prop-types */
-import { useState, lazy } from 'react'
-const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
-const InputArea = lazy(() => import('../utils/InputArea.jsx'))
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
-const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
-const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
+import { useState } from 'react'
+import { InputEdit, InputArea, ButtonDefault, ImagePreview, InputPhone } from '../imports.js'
 
-const ProviderDetail = ({ selectedprovider, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange }) => {
+const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
-    setSelectedClient({ ...selectedprovider, [name]: value })
+    if (name.startsWith('contact.')) {
+      const contactField = name.split('.')[1]
+      setSelectedProvider({
+        ...selectedprovider,
+        contact: {
+          ...selectedprovider.contact,
+          [contactField]: value,
+        },
+      })
+    } else {
+      setSelectedProvider({ ...selectedprovider, [name]: value })
+    }
   }
 
   const handleEdit = () => {
@@ -19,8 +26,8 @@ const ProviderDetail = ({ selectedprovider, setSelectedClient, imagenPreview, se
     setEditable(!editable)
   }
   const handleCancel = () => {
-    setSelectedClient(prevData)
-    setImagenPreview(prevData.thumbnail)
+    setSelectedProvider(prevData)
+    setImagenPreview(prevData.contact.thumbnail)
     setEditable(!editable)
   }
 
@@ -35,43 +42,61 @@ const ProviderDetail = ({ selectedprovider, setSelectedClient, imagenPreview, se
             <InputEdit labelName={'Terminos de Pago'} value={selectedprovider.paymentTerms} name={'paymentTerms'} onChange={handleFieldChange} edit={editable} className='h-8' />
           </form>
           <div className='px-4'>
-            <InputArea labelName={'Descripcion'} name={'Description'} onChange={handleFieldChange} value={selectedprovider.description} edit={editable} className='h-10' />
+            <InputArea labelName={'Descripcion'} name={'description'} onChange={handleFieldChange} value={selectedprovider.description} edit={editable} className='h-10' />
           </div>
         </div>
 
         <h2 className='text-lg pl-4 text-gray-500 font-semibold mt-4'>Contacto:</h2>
-        <div className='flex border p-1  mb-1 rounded-md border-solid  border-gray-200'>
-          <div className='w-[50%]'>
-            <div className=' p-4 rounded-md'>
-              <InputEdit labelName={'Nombre'} value={selectedprovider.firstName} edit={editable} onChange={handleFieldChange} name={'firstName'} className='h-8' />
-              <InputEdit labelName={'Apellido'} value={selectedprovider.lastName} edit={editable} onChange={handleFieldChange} name={'lastName'} className='h-8' />
-              <InputEdit labelName={'Cedula'} value={selectedprovider.dni} edit={false} onChange={handleFieldChange} type={'number'} name={'dni'} className='h-8' />
-              <InputPhone phoneNumber={selectedprovider.phone} setPhoneNumber={handleFieldChange} edit={!editable} className='h-8' />
-              <InputEdit labelName={'Direccion'} value={selectedprovider.address} edit={editable} onChange={handleFieldChange} name={'address'} className='h-8' />
+        <div className='block border p-4  mb-1 rounded-md border-solid  border-gray-200'>
+          <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+            <div className='lg:hidden mt-2'>
+              <div className='h-[55%]'>
+                <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} />
+              </div>
             </div>
-          </div>
 
-          {/* rigth secction */}
-          <div className='w-[45%] ml-4  mt-5'>
-            <div className='h-[55%]'>
-              <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} style='h-[95%]' />
+            <div>
+              <InputEdit labelName={'Nombre'} value={selectedprovider.contact.firstName} edit={editable} onChange={handleFieldChange} name={'contact.firstName'} className='h-8' />
+              <InputEdit labelName={'Apellido'} value={selectedprovider.contact.lastName} edit={editable} onChange={handleFieldChange} name={'contact.lastName'} className='h-8' />
+              <InputEdit labelName={'Cedula'} value={selectedprovider.contact.dni} edit={false} onChange={handleFieldChange} type={'number'} name={'contact.dni'} className='h-8' />
+              <InputPhone phoneNumber={selectedprovider.contact.phone} setPhoneNumber={handleFieldChange} edit={!editable} value={selectedprovider.contact.phone || ''} className='h-8' />
+              <InputEdit labelName={'Direccion'} value={selectedprovider.contact.address} edit={editable} onChange={handleFieldChange} name={'contact.address'} className='h-8' />
             </div>
-            <InputEdit labelName={'Email'} value={selectedprovider.email} edit={false} onChange={handleFieldChange} type={'email'} name={'email'} className='h-8' />
-            <InputEdit labelName={'Fecha Cumpleaños'} value={selectedprovider.dateBirthday} edit={editable} onChange={handleFieldChange} type={'date'} name={'dateBirthday'} className='h-8' />
-          </div>
+            <div>
+              <div className='sm:hidden md:hidden lg:flex h-[48%] mt-6 mb-3 '>
+                <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} className='h-[95%]' toast={toast} />
+              </div>
+
+              <InputEdit labelName={'Email'} value={selectedprovider.contact.email} edit={false} onChange={handleFieldChange} type={'email'} name={'contact.email'} className='h-8' />
+              <InputEdit
+                labelName={'Fecha Cumpleaños'}
+                value={selectedprovider.contact.dateBirthday}
+                edit={editable}
+                onChange={handleFieldChange}
+                type={'date'}
+                name={'contact.dateBirthday'}
+                className='h-8'
+              />
+            </div>
+          </form>
         </div>
       </div>
+      {selectedprovider.name ? (
+        <div className='flex my-2'>
+          <span className='contents'>
+            <ButtonDefault title='Edit' onClick={handleEdit} /> {/* Habilitar para admind */}
+          </span>
+        </div>
+      ) : (
+        ''
+      )}
       {editable ? (
         <div className='flex my-2'>
           <ButtonDefault title='Save' onClick={saveChange} />
           <ButtonDefault title='Cancel' onClick={handleCancel} />
         </div>
       ) : (
-        <div className='flex my-2'>
-          <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} /> {/* Habilitar para admind */}
-          </span>
-        </div>
+        ''
       )}
     </>
   )

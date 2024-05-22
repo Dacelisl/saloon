@@ -1,8 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, lazy } from 'react'
-const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
-const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
-const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
+import { useState, useEffect } from 'react'
+import { ButtonDefault, InputEdit, ModalAux } from '../imports.js'
 
 const ticketDefault = {
   quantity: 1,
@@ -12,7 +11,6 @@ const ItemPayment = ({ isOpen, onClose, saveData, item }) => {
   const [dataChange, setDataChange] = useState(ticketDefault)
   useEffect(() => {
     setDataChange({ ...dataChange, ['itemPrice']: item.price })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item])
 
   const handleFieldChange = (e) => {
@@ -21,7 +19,7 @@ const ItemPayment = ({ isOpen, onClose, saveData, item }) => {
   }
 
   const handleClick = () => {
-    if (dataChange.itemPrice != '' && dataChange.itemPrice != '') {
+    if (dataChange.quantity != '' && dataChange.itemPrice != '') {
       saveData(dataChange)
       setDataChange(ticketDefault)
       onClose()
@@ -33,7 +31,7 @@ const ItemPayment = ({ isOpen, onClose, saveData, item }) => {
       <ModalAux open={isOpen} close={onClose}>
         <h2 className='text-2xl text-slate-500 font-light mb-4'>{item.name}</h2>
         <InputEdit type='number' label={false} labelName={'Enter Quantity'} value={dataChange.quantity} edit={true} onChange={handleFieldChange} name={'quantity'} className='h-10' />
-        <InputEdit type='number' label={false} labelName={'Enter value'} value={dataChange.itemPrice || ''} edit={true} onChange={handleFieldChange} name={'itemPrice'} className='h-10' />
+        <InputEdit type='number' label={false} labelName={'Enter value'} value={dataChange.itemPrice} edit={true} onChange={handleFieldChange} name={'itemPrice'} className='h-10' />
         <span className=' flex justify-center mb-2 '>
           <ButtonDefault title='Guardar' onClick={handleClick} />
         </span>

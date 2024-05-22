@@ -1,4 +1,3 @@
-
 import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
 import { employeeService } from '../services/employee.services.js'
 import admin from '../../firebase.js'
@@ -24,10 +23,16 @@ class EmployeeController {
   }
 
   async getLogOut(req, res) {
-    req.session.destroy((e) => {
-      if (!e) res.json({ status: true, message: 'logOut ok' })
-      else res.json({ status: true, message: 'error logOut' })
-    })
+    try {
+      req.session.destroy(async (err) => {
+        if (err) throw new Error(`Error server getLogOut ${err}`)
+        
+        res.clearCookie('connect.sid')
+        res.json({ status: true, message: 'logOut ok' })
+      })
+    } catch (error) {
+      res.status(500).send('Error logging out')
+    }
   }
   async getLogin(req, res) {
     const accessToken = req.body.accessToken
