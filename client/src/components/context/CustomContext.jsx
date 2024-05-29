@@ -17,13 +17,18 @@ const CustomContext = ({ children }) => {
     partialPayments: [],
     items: [],
   }
-  const providerDefault = {
-    name: '',
-    description: '',
+  const defaultClientList = {
+    firstName: '',
+    lastName: '',
+    dni: '',
+    phone: '',
     address: '',
-    city: '',
-    paymentTerms: '',
-    contact: {},
+    email: '',
+    dateBirthday: '',
+    firstDate: '',
+    lastDate: '',
+    thumbnail: '',
+    code: '',
   }
 
   const [loading, setLoading] = useState(true)
@@ -38,8 +43,7 @@ const CustomContext = ({ children }) => {
   const [role, setRole] = useState('')
 
   const [paymentMethods, setPaymentMethods] = useState([])
-  const [selectedClient, setSelectedClient] = useState('')
-  const [selectedProduct, setSelectedProduct] = useState('')
+  const [selectedClient, setSelectedClient] = useState(defaultClientList)
   const [loggedEmployee, setLoggedEmployee] = useState('')
   const [userLogin, setUserLogin] = useState('')
   const [ticket, setTicket] = useState(ticketDefault)
@@ -126,7 +130,6 @@ const CustomContext = ({ children }) => {
   return (
     <customContext.Provider
       value={{
-        providerDefault,
         loading,
         setUserLogin,
         fetchFromDatabase,
@@ -142,8 +145,6 @@ const CustomContext = ({ children }) => {
         setSelectedClient,
         loggedEmployee,
         setLoggedEmployee,
-        selectedProduct,
-        setSelectedProduct,
         employees,
         setEmployees,
         allProducts,

@@ -4,7 +4,7 @@ const InputEdit = ({ label = true, labelName, value, edit = false, onChange, typ
   return (
     <div className='mb-2'>
       {label && (
-        <label htmlFor={name} className='block text-xs lg:text-base xxl:text-lg  mb-0 font-semibold text-gray-600'>
+        <label htmlFor={name} className='block text-xs lg:text-base xxl:text-lg mb-0 font-semibold text-gray-600'>
           {labelName}:
         </label>
       )}

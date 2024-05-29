@@ -110,7 +110,6 @@ class UserDAO {
       )
       return user
     } catch (error) {
-      console.log('error en el DAO user', error)
       throw new Error(`function DAO updateUser: ${error}`)
     }
   }

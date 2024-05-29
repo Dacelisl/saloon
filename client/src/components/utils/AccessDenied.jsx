@@ -1,9 +1,14 @@
-import { NavLink } from 'react-router-dom'
+import { useContext } from 'react'
+import { customContext } from '../context/CustomContext'
+
+import { Link } from 'react-router-dom'
 import dark from '../../assets/img/dark.jpg'
 import lock from '../../assets/Icons/lock.svg'
 import { FloatingDots, MovingDots } from '../imports.js'
 
 const AccessDenied = () => {
+  const { loggedEmployee } = useContext(customContext)
+
   return (
     <>
       <div
@@ -24,14 +29,14 @@ const AccessDenied = () => {
                 <h1>Acceso Denegado</h1>
                 <p>No tienes permiso para acceder a esta ruta.</p>
               </div>
-              <NavLink
-                to={'/'}
+              <Link
+                to={loggedEmployee ? '/' : '/login'}
                 className={
                   'block relative mx-auto w-fit mt-[20%] text-sm md:text-xl xl:text-2xl font-light text-pink-700  border-2 border-pink-900 transition-opacity duration-200  bg-[#161414e6] p-2 shadow-sm  shadow-slate-200 hover:text-white'
                 }
               >
                 Go Home
-              </NavLink>
+              </Link>
             </div>
           </div>
         </div>

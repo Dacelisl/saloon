@@ -32,7 +32,7 @@ const providerSchema = new Schema({
     dateBirthday: { type: Date, required: true },
     thumbnail: {
       type: String,
-      required: false,
+      required: true,
       default: 'Not Photo',
     },
   },

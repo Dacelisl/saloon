@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { InputEdit, ButtonDefault, ImagePreview, InputPhone } from '../imports.js'
 
-const ClientDetail = ({ selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
+const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -39,7 +39,7 @@ const ClientDetail = ({ selectedClient, setSelectedClient, imagenPreview, setIma
           <InputEdit labelName={'Email'} value={selectedClient.email} edit={false} onChange={handleFieldChange} type={'email'} name={'email'} />
         </div>
         <div>
-          <div className='sm:hidden md:hidden lg:flex h-[48%]'>
+          <div className='sm:hidden md:hidden lg:flex h-[45%] lg:mb-2'>
             <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} />
           </div>
           <InputEdit labelName={'Fecha Cumpleaños'} value={selectedClient.dateBirthday} edit={editable} onChange={handleFieldChange} type={'date'} name={'dateBirthday'} />
@@ -50,9 +50,14 @@ const ClientDetail = ({ selectedClient, setSelectedClient, imagenPreview, setIma
 
       {selectedClient.firstName ? (
         <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} />
-          </span>
+          {loggedEmployee.role === 'admin' ? (
+            <span className='contents'>
+              <ButtonDefault title='Edit' onClick={handleEdit} />
+            </span>
+          ) : (
+            ''
+          )}
+
           <Link to={'/ticket'} className='contents'>
             <ButtonDefault title='Ticket' />
           </Link>

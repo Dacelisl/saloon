@@ -1,6 +1,5 @@
 class EmployeePerformanceSaveDTO {
   constructor(employeePerformance) {
-    console.log('data en el employeePerformanceSaveDto', employeePerformance)
     this.employeeId = employeePerformance.employeeId
     this.earningsDetails = employeePerformance.items.map((detail) => new EarningsDetailSaveDTO(detail, employeePerformance.ticketNumber, employeePerformance.customerId))
   }

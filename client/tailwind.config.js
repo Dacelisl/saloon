@@ -36,5 +36,5 @@ export default {
       xxxl: '1440px',
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 }

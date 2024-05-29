@@ -7,18 +7,40 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
-    if (name.startsWith('contact.')) {
-      const contactField = name.split('.')[1]
-      setSelectedProvider({
-        ...selectedprovider,
-        contact: {
-          ...selectedprovider.contact,
-          [contactField]: value,
-        },
-      })
-    } else {
-      setSelectedProvider({ ...selectedprovider, [name]: value })
-    }
+
+    setSelectedProvider((prevProvider) => {
+      if (name.startsWith('contact.')) {
+        const contactField = name.split('.')[1]
+        return {
+          ...prevProvider,
+          contact: {
+            ...prevProvider.contact,
+            [contactField]: value,
+          },
+        }
+      } else if (name === 'thumbnail') {
+        return {
+          ...prevProvider,
+          contact: {
+            ...prevProvider.contact,
+            thumbnail: value,
+          },
+        }
+      }else if (name === 'phone') {
+        return {
+          ...prevProvider,
+          contact: {
+            ...prevProvider.contact,
+            phone: value,
+          },
+        }
+      } else {
+        return {
+          ...prevProvider,
+          [name]: value,
+        }
+      }
+    })
   }
 
   const handleEdit = () => {
@@ -26,8 +48,8 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
     setEditable(!editable)
   }
   const handleCancel = () => {
-    setSelectedProvider(prevData)
     setImagenPreview(prevData.contact.thumbnail)
+    setSelectedProvider(prevData)
     setEditable(!editable)
   }
 
@@ -42,19 +64,17 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
             <InputEdit labelName={'Terminos de Pago'} value={selectedprovider.paymentTerms} name={'paymentTerms'} onChange={handleFieldChange} edit={editable} className='h-8' />
           </form>
           <div className='px-4'>
-            <InputArea labelName={'Descripcion'} name={'description'} onChange={handleFieldChange} value={selectedprovider.description} edit={editable} className='h-10' />
+            <InputArea labelName={'Descripcion'} name={'description'} onChange={handleFieldChange} value={selectedprovider.description} edit={editable} className='h-14' />
           </div>
         </div>
-
         <h2 className='text-lg pl-4 text-gray-500 font-semibold mt-4'>Contacto:</h2>
-        <div className='block border p-4  mb-1 rounded-md border-solid  border-gray-200'>
+        <div className='block border px-4 pt-2 pb-1  mb-1 rounded-md border-solid  border-gray-200'>
           <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
             <div className='lg:hidden mt-2'>
               <div className='h-[55%]'>
                 <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} />
               </div>
             </div>
-
             <div>
               <InputEdit labelName={'Nombre'} value={selectedprovider.contact.firstName} edit={editable} onChange={handleFieldChange} name={'contact.firstName'} className='h-8' />
               <InputEdit labelName={'Apellido'} value={selectedprovider.contact.lastName} edit={editable} onChange={handleFieldChange} name={'contact.lastName'} className='h-8' />
@@ -64,9 +84,8 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
             </div>
             <div>
               <div className='sm:hidden md:hidden lg:flex h-[48%] mt-6 mb-3 '>
-                <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} className='h-[95%]' toast={toast} />
+                <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} />
               </div>
-
               <InputEdit labelName={'Email'} value={selectedprovider.contact.email} edit={false} onChange={handleFieldChange} type={'email'} name={'contact.email'} className='h-8' />
               <InputEdit
                 labelName={'Fecha Cumpleaños'}
@@ -82,16 +101,16 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
         </div>
       </div>
       {selectedprovider.name ? (
-        <div className='flex my-2'>
+        <div className={` ${editable ? 'hidden' : 'flex my-1'}`}>
           <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} /> {/* Habilitar para admind */}
+            <ButtonDefault title='Edit' onClick={handleEdit} />
           </span>
         </div>
       ) : (
         ''
       )}
       {editable ? (
-        <div className='flex my-2'>
+        <div className='flex my-1'>
           <ButtonDefault title='Save' onClick={saveChange} />
           <ButtonDefault title='Cancel' onClick={handleCancel} />
         </div>

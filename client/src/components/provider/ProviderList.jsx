@@ -1,31 +1,45 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { updateProvider } from '../../firebase/firebase'
 import { customContext } from '../context/CustomContext.jsx'
 import { WithAuthentication, ProviderTable, ProviderDetail, InputSearch, Modal } from '../imports.js'
+const providerDefault = {
+  name: '',
+  description: '',
+  address: '',
+  city: '',
+  paymentTerms: '',
+  contact: {
+    firstName: '',
+    lastName: '',
+    dni: '',
+    phone: '',
+    address: '',
+    email: '',
+    dateBirthday: '',
+    thumbnail: '',
+  },
+}
 
 const ProviderList = () => {
-  const { providerDefault,providers, handleSearch, fetchFromDatabase, showToast } = useContext(customContext)
+  const { providers, handleSearch, fetchFromDatabase, showToast } = useContext(customContext)
   const [selectedProvider, setSelectedProvider] = useState(providerDefault)
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
 
-  useEffect(() => {
-    const selected = providers.find((client) => client.id === selectedProvider.id)
-    setImagenPreview(selected?.thumbnail || '')
-  }, [providers, selectedProvider])
-
   const handleProviderSelect = (providerId) => {
     setSelectedProvider(providerId)
+    setImagenPreview(providerId.contact.thumbnail)
   }
 
   const saveChange = async () => {
     const res = await updateProvider(selectedProvider)
     setEditable(false)
     await fetchFromDatabase()
-    setSelectedProvider('')
+    setSelectedProvider(providerDefault)
+    setImagenPreview('')
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }
@@ -33,10 +47,9 @@ const ProviderList = () => {
   const handleSearchInProvider = (searchTerm) => {
     setSearch(handleSearch(searchTerm, providers))
   }
-
   return (
     <>
-      <Modal type={2} className={' h-3/4 md:h-[90%]  xl:h-[80%] xl:w-[70%] xxl:h-[90%] xxxl:h-[80%] xxl:w-auto xxxl:w-[60%] overflow-auto'}>
+      <Modal type={2} className={'md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:!top-[3%] xl:!h-[85%] xxl:!h-[90%]'}>
         <h2 className='text-xl text-center mb-3 text-gray-500 font-bold'>Proveedores</h2>
         <ProviderDetail
           selectedprovider={selectedProvider}
@@ -49,7 +62,9 @@ const ProviderList = () => {
           toast={showToast}
         />
         <InputSearch onSearch={handleSearchInProvider} />
-        <ProviderTable onProviderSelected={handleProviderSelect} data={search !== '' ? search : providers} />
+        <div className='h-[30%]'>
+          <ProviderTable onProviderSelected={handleProviderSelect} data={search !== '' ? search : providers} />
+        </div>
       </Modal>
     </>
   )

@@ -33,12 +33,14 @@ renderizado condicional segun el rol
 diseño responsive y renderizado condicional segun permisos :
 -modal de inicio y ventanas
 -EarningsEmployee
--registo cliente 
--registro producto
--HistoricalClientList
--product list
--client list
--HamburguerMenu
+-RegisterClient
+-EmployeeRegister
+-ProductRegister
+-ProviderRegister
+-ClientList
+-ProductList
+-ProviderList
+-employeelist
 
--falta modificar las fechas y el boton de filtro en earningsEmployee
-/falta modificar el tamaño de las miniaturas para movil sm, md
+
+ventana de earnings completar para seleccionar empleados, salon, 

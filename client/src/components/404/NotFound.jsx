@@ -15,11 +15,11 @@ const NotFound = () => {
       >
         <MovingDots number={3} />
         <FloatingDots number={15} />
-        <div className='z-20 relative top-[30%] right-[4%] md:top-[32%] w-[80%] xl:w-[40%] xxl:w-[35%] xxxl:w-[25%] m-auto'>
+        <div className='z-20 relative top-[30%] right-[4%] md:top-[32%] w-[80%] xl:w-[40%] xl:top-[38%] xxl:w-[35%] xxxl:w-[25%] m-auto'>
           <img src={notfound_dark} alt='Astronauta flotando en el espacio' />
         </div>
         <h1
-          className='font-sans flex absolute top-3 xl:top-[-5%]  left-[50%] right-[50%] justify-center  sm:text-[120px] md:text-[130px]  xl:text-[180px] font-semibold text-black uppercase '
+          className='font-sans flex absolute top-3 xl:top-[-5%] left-[50%] right-[50%] justify-center sm:text-[120px] md:text-[130px] xl:text-[180px] font-semibold text-black uppercase '
           style={{ textShadow: '-1px -1px 0 #8400ff, 1px 1px 0 #ff005a' }}
         >
           404

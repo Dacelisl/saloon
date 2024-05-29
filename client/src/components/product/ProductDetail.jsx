@@ -47,7 +47,7 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
       </form>
 
       {role === 'admin' ? (
-        <div className={` ${editable ? 'hidden' : 'flex mb-2'}`}>
+        <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
           <span className='contents'>
             <ButtonDefault title='Edit' onClick={handleEdit} />
           </span>

@@ -55,7 +55,9 @@ const ImagePreview = ({ setSelectedItem, imagenPreview, setImagenPreview, toast,
     <div
       id='containerImage'
       className={` ${
-        imagenPreview ? `flow relative items-end content-center mx-auto sm:w-fit sm:h-fit sm:p-0 sm:mb-1 sm:mt-3 lg:p-0 lg:mt-0 lg:mb-4 lg:w-auto border rounded-md bg-white ${className}` : 'flow relative items-end content-center mx-auto sm:mb-1 sm:mt-3 lg:p-0 lg:mt-0 lg:mb-4 h-[25vh] border rounded-md bg-white '
+        imagenPreview !== ''
+          ? `flow relative items-end content-center mx-auto sm:w-fit sm:h-fit sm:p-0 sm:mb-1 sm:mt-3 lg:p-0 lg:mt-0 lg:mb-4 lg:w-auto border rounded-md bg-white ${className}`
+          : 'flow relative items-end content-center mx-auto sm:mb-1 sm:mt-3 lg:p-0 lg:mt-0 lg:mb-4 h-[23vh] border rounded-md bg-white '
       }  `}
     >
       <label htmlFor='uploadImage' className='block p-2 m-auto text-gray-300 text-sm font-bold cursor-pointer'>

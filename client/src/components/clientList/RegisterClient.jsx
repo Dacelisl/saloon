@@ -44,7 +44,7 @@ const RegisterClient = () => {
   }
   return (
     <>
-      <Modal type={2} className={'!py-5 md:h-[90%] lg:h-auto '}>
+      <Modal type={2} className={'!py-5 md:h-[85%] md:top-[3%] lg:h-auto lg:top-[3%]'}>
         <Register labelName={'Registro Cliente'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} toast={showToast} />
       </Modal>
     </>

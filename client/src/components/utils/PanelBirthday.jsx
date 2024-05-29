@@ -13,8 +13,8 @@ const PanelBirthday = () => {
             {nextBirthDay
               ? nextBirthDay.map((item) => (
                   <li className='flex justify-between border-solid border-b-2  border-slate-500 text-slate-100' key={item.id}>
-                    <span className=' pl-1'>{`${item.firstName}  ${item.lastName}`}</span>
-                    <span className=' text-center'>{item.dateBirthday}</span>
+                    <span className=' pl-1'>{`${item.name}  `}</span>
+                    <span className=' text-center'>{item.date}</span>
                   </li>
                 ))
               : ''}

@@ -6,7 +6,8 @@ export async function registeredUser(req, res, next) {
       console.log('no esta registrado')
     } */
   } catch (error) {
-    console.log('error auth', error)
+    req.logger.warning('registeredUser Internal Server Error!', error)
+    throw new Error(`Error auth registeredUser: ${error}`)
   }
 }
 

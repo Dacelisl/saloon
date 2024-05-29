@@ -8,7 +8,7 @@ import { getStartOfWeek, getEndOfWeek, getStartOfMonth, getEndOfMonth, formatDat
 import { WithAuthentication, ButtonDefault, InputEdit, Modal } from '../imports.js'
 
 const EarningsEmployee = () => {
-  const { loggedEmployee, showToast } = useContext(customContext)
+  const { loggedEmployee, employees, showToast } = useContext(customContext)
 
   const [data, setData] = useState([])
   const [minData, setMinData] = useState('')
@@ -16,6 +16,7 @@ const EarningsEmployee = () => {
   const [maxData, setMaxData] = useState('')
   const [maxDate, setMaxDate] = useState('')
   const [filteredData, setFilteredData] = useState([])
+  const [filteredEmployee, setFilteredEmployee] = useState(loggedEmployee)
 
   const startOfWeek = getStartOfWeek()
   const endOfWeek = getEndOfWeek()
@@ -24,20 +25,30 @@ const EarningsEmployee = () => {
 
   useEffect(() => {
     async function loadData() {
-      const selected = await getEarningsEmployeeById(loggedEmployee.id)
+      const selected = await getEarningsEmployeeById(filteredEmployee.id)
       const sortedData = selected.sort((a, b) => new Date(a.date) - new Date(b.date))
       const minDate = sortedData.length > 0 ? sortedData[0].date : null
       const maxDate = sortedData.length > 0 ? sortedData[sortedData.length - 1].date : null
+      const filter = employees.filter((user) => {
+        return user.id === filteredEmployee.id
+      })
+      setFilteredEmployee(filter[0])
       setMinData(minDate)
       setMaxData(maxDate)
       setData(selected)
       setFilteredData(selected)
     }
     loadData()
-  }, [])
+  }, [filteredEmployee])
 
   const handleDateChange = (e) => {
     const { name, value } = e.target
+    if (name === 'employeeId') {
+      const filter = employees.filter((user) => {
+        return user.id === value
+      })
+      setFilteredEmployee(filter[0])
+    }
     if (name === 'minDate') {
       setMinDate(value)
     } else if (name === 'maxDate') {
@@ -83,9 +94,8 @@ const EarningsEmployee = () => {
     const amount = filteredData.reduce((total, earning) => total + parseFloat(earning.totalEarnings), 0).toFixed(2)
     return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(amount)
   }
-
   return (
-    <Modal type={2} className={'!py-6 xl:!top-[3%] xl:!h-[85%] xxxl:!h-auto '}>
+    <Modal type={2} className={'!py-6 px-1 md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:!top-[3%] xl:!h-[85%] xl:max-w-2xl xl:!w-full xxl:max-w-4xl xxl:!h-[90%]'}>
       <div>
         <div className='inline-flex mb-3 '>
           <ButtonDefault title='Todo' onClick={handleClickAll} color={'!w-fit !py-0 !px-1 !ml-5 !mr-3'} />
@@ -94,7 +104,25 @@ const EarningsEmployee = () => {
           <ButtonDefault title='Hoy' onClick={handleClickToday} color={'!w-fit !py-0 !px-1 !mx-2'} />
         </div>
         <div className='block'>
-          <div className='block ml-5 my-1 xl:flex xl:w-[70%]'>
+          <div className='block ml-5 my-1 xl:flex xl:w-[90%]'>
+            {loggedEmployee.role === 'admin' ? (
+              <div className='xl:mr-3'>
+                <label className='block text-xs lg:text-base xxl:text-lg mb-0 font-semibold text-gray-600'>
+                  Empleado:
+                  <select name='employeeId' onChange={handleDateChange} className='w-full px-2 py-0 border rounded-md focus:outline-red-200'>
+                    <option value=''>Seleccione</option>
+                    {employees.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {`${option.firstName} ${option.lastName}`}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            ) : (
+              ''
+            )}
+
             <InputEdit labelName={'Fecha Inicio'} edit value={minDate} onChange={handleDateChange} type={'date'} name={'minDate'} className='flex' />
             <span className='xl:ml-3'>
               <InputEdit labelName={'Fecha Fin'} edit value={maxDate} onChange={handleDateChange} type={'date'} name={'maxDate'} />
@@ -104,7 +132,7 @@ const EarningsEmployee = () => {
         </div>
       </div>
 
-      <div className=' block px-4 pt-2 pb-4 rounded-md'>
+      <div className='block w-full px-2 pt-2 pb-4 rounded-md'>
         <div className='text-justify border-double border-2 border-gray-200 overflow-x-auto'>
           <table className='w-full text-sm overflow-y-scroll'>
             <thead>
@@ -124,7 +152,7 @@ const EarningsEmployee = () => {
                     <td className='pl-1'>{earning.date}</td>
                     <td className='pl-1 text-center'>{detail.ticketNumber}</td>
                     <td className='pl-3'>{`${detail.customer.firstName} ${detail.customer.lastName}`}</td>
-                    <td className='pl-1'>{detail.serviceOrProduct}</td>
+                    <td className='pl-1 text-center'>{detail.serviceOrProduct}</td>
                     <td className='text-center'>{detail.quantity}</td>
                     <td className='text-right pr-3'>{detail.totalCost}</td>
                   </tr>

@@ -46,8 +46,8 @@ const ProviderRegister = () => {
   }
 
   return (
-    <Modal type={2} className={' h-3/4 md:h-[90%]  xl:h-[80%] xl:w-[70%] xxl:h-[90%] xxxl:h-[80%] xxl:w-[45%] overflow-auto'}>
-      <h2 className='text-xl pl-4 font-bold mb-1'>Proveedor</h2>
+    <Modal type={2} className={'xxxl:w-[50%] md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:h-[85%] xl:w-[70%] xl:top-[3%] xxl:h-[90%]'}>
+      <h2 className='text-xl pl-4 font-bold mt-2'>Proveedor</h2>
       <div className='block mb-1'>
         <div className='h-[40%]'>
           <form className='p-4 grid grid-cols-1 lg:grid-cols-2 gap-4'>

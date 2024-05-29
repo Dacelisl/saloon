@@ -11,7 +11,6 @@ import {
   NotFound,
   Cube,
   AccessDenied,
-  BackArrow,
   HamburguerMenu,
   EmployeeRegister,
   EmployeeList,
@@ -34,7 +33,6 @@ function App() {
           }
         >
           <CustomContext>
-            <BackArrow />
             <HamburguerMenu />
             <Routes>
               <Route path='/' element={<Home />} />

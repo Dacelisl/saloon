@@ -111,21 +111,30 @@ export function formatDate(date) {
 export const getUpcomingBirthdays = (clients) => {
   const today = new Date()
   const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000) // Obtener la fecha de hoy más 7 días
-  const todayMonth = today.getMonth() + 1 // Sumar 1 porque los meses en JavaScript van de 0 a 11
-  const todayDay = today.getDate()
-
-  const nextWeekMonth = nextWeek.getMonth() + 1 // Sumar 1 porque los meses en JavaScript van de 0 a 11
-  const nextWeekDay = nextWeek.getDate()
-
-  return clients.filter((client) => {
-    const birthdayMonth = new Date(client.dateBirthday).getMonth() + 1
-    const birthdayDay = new Date(client.dateBirthday).getDate()
-
-    return (
-      (birthdayMonth === todayMonth && birthdayDay >= todayDay) || // Cumpleaños este mes y después de hoy
-      (birthdayMonth === nextWeekMonth && birthdayDay <= nextWeekDay) // Cumpleaños la próxima semana
-    )
+  const upcomingBirthdays = clients.filter((client) => {
+    const birthday = new Date(client.dateBirthday)
+    const birthdayMonth = birthday.getMonth() + 1
+    const birthdayDay = birthday.getDate()
+    const todayMonth = today.getMonth() + 1
+    const todayDay = today.getDate()
+    const nextWeekMonth = nextWeek.getMonth() + 1
+    const nextWeekDay = nextWeek.getDate()
+    const isThisMonthBirthday = birthdayMonth === todayMonth && birthdayDay >= todayDay
+    const isNextWeekBirthday = birthdayMonth === nextWeekMonth && birthdayDay <= nextWeekDay
+    return isThisMonthBirthday || isNextWeekBirthday
   })
+  // Format the day and month for display
+  const formattedUpcomingBirthdays = upcomingBirthdays.map((client) => {
+    const birthday = new Date(client.dateBirthday)
+    const birthdayMonth = birthday.toLocaleString('default', { month: 'long' })
+    const birthdayDay = birthday.getUTCDate()
+    return {
+      id: client.id,
+      name: `${client.firstName} ${client.lastName}`,
+      date: `${birthdayMonth} ${birthdayDay}`,
+    }
+  })
+  return formattedUpcomingBirthdays
 }
 
 export const countries = [

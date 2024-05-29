@@ -14,13 +14,17 @@ const InputPhone = ({ phoneNumber, setPhoneNumber, edit, className, value }) => 
   useEffect(() => {
     const getCountryCode = () => {
       if (!phoneNumber) return
+      const phoneStr = String(phoneNumber)
+      const phoneFormatt = phoneStr.replace(/\+/, '').replace(/\s/g, '')
       for (const country of countries) {
-        if (String(phoneNumber).startsWith(country.indicativo)) {
-          setCountryCode(country?.indicativo)
-          setPhone(String(phoneNumber).slice(country.indicativo.length))
+        if (phoneFormatt.startsWith(country.indicativo)) {
+          setCountryCode(country.indicativo)
+          setPhone(phoneFormatt.slice(country.indicativo.length))
+          break
         }
       }
     }
+
     getCountryCode()
   }, [phoneNumber])
 

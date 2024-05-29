@@ -24,8 +24,8 @@ const HistoricalClientDetail = ({ selectedClient, ticket }) => {
           </div>
         </div>
         {ticket ? (
-          <div className='overflow-x-auto mb-3'>
-            <table className='text-center m-auto overflow-y-scroll'>
+          <div className='h-[30%] overflow-auto mb-3'>
+            <table className='text-center m-auto overflow-scroll'>
               <thead className='bg-button-primary px-4 text-button-text_primary text-xs font-extralight'>
                 <tr>
                   <th className='text-center px-2'>Fecha</th>

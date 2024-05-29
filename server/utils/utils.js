@@ -93,7 +93,6 @@ function convertCurrencyToNumber(currencyString) {
   return isNaN(numericValue) ? 0 : numericValue
 }
 function sendErrorResponse(res, error) {
-  console.log('data error', error)
   return res.status(500).json({
     status: 'error',
     code: 500,

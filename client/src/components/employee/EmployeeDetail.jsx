@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-import { InputEdit, ButtonDefault, ImagePreview, InputPhone } from '../imports.js'
+import { InputEdit, ButtonDefault, ImagePreview, InputPhone, InputSelect } from '../imports.js'
 
-const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
+const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, setImagenPreview, editable, setEditable, saveChange, roles, toast }) => {
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -19,7 +19,6 @@ const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, 
     setImagenPreview(prevData.thumbnail)
     setEditable(!editable)
   }
-
   return (
     <>
       <form className='grid grid-cols-1 lg:grid-cols-2 gap-4 mb-2'>
@@ -38,12 +37,11 @@ const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, 
         </div>
 
         <div>
-          <div className='sm:hidden md:hidden lg:flex lg:my-[10%]'>
+          <div className={`sm:hidden md:hidden lg:flex ${imagenPreview !==''? 'lg:my-[10%] xl:mt-[10%] xl:my-[5%] xxl:my-[10%]':'lg:mt-[15%] lg:mb-[20%] xl:mt-[10%] xl:mb-[12%] xxl:my-[15%] xxxl:mb-[10%]'} `}>
             <ImagePreview editable={editable} imagenPreview={imagenPreview} setImagenPreview={setImagenPreview} setSelectedItem={handleFieldChange} toast={toast} className={'!h-full'} />
           </div>
-
           <InputEdit labelName={'Email'} value={selectedEmployee.email} edit={false} onChange={handleFieldChange} type={'email'} name={'email'} />
-          <InputEdit labelName={'Rol'} value={selectedEmployee.role} edit={editable} onChange={handleFieldChange} name={'role'} />
+          <InputSelect label={'Rol'} name={'role'} itemOption={roles} itemValue={selectedEmployee.role} handleFieldChange={handleFieldChange} editable={editable}  className='h-8'/>
         </div>
       </form>
 

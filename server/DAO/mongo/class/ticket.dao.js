@@ -112,7 +112,6 @@ class TicketDAO {
       ticket.items = await this.mapItemNames(ticket.items)
       ticket.ticketNumber = await this.genTicketNumber()
       ticket.balanceDue = ticket.totalPayment - ticket.partialPayments[0].amount
-      console.log('data en ticket Dao ', ticket);
       await employeePerformanceDAO.createEmployeePerformance(ticket)
       await userDAO.updateHistorysUser(ticket)
       const result = await TicketModel.create(ticket)

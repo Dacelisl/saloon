@@ -160,11 +160,9 @@ export const uploadFire = async (data, url) => {
 /* PRODUCTS */
 export const registerProduct = async (dataProduct) => {
   try {
-    console.log('product img', dataProduct);
     const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
     dataProduct.thumbnail = url
     const response = await axios.post('http://localhost:3000/api/products', dataProduct)
-    console.log('res fire', response);
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -276,14 +274,11 @@ export const updateProvider = async (data) => {
     if (typeof data.contact.thumbnail === 'object') {
       const url = await uploadFire(data.contact.thumbnail, `clients/${data.contact.dni}`)
       data.contact.thumbnail = url
-    } else {
-      data.contact.thumbnail = ''
     }
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
 
     const response = await axios.put(`http://localhost:3000/api/provider/${data.id}`, data)
-    console.log('response en firebase', response)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateProvider ${error}`)

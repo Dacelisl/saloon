@@ -1,4 +1,4 @@
-import { employeeFactory } from '../DAO/factory.js'
+import { employeeFactory, roleFactory } from '../DAO/factory.js'
 import { isValid } from '../utils/utils.js'
 import dataConfig from '../config/process.config.js'
 
@@ -130,6 +130,8 @@ class EmployeeServices {
           payload: {},
         }
       }
+      const rol = await roleFactory.getRoleByName(employee.role)
+      employee.role = rol._id
       const employeeUpdate = await employeeFactory.updateEmployee(employee, id)
       if (employeeUpdate.modifiedCount > 0) {
         const employee = await employeeFactory.getEmployeeById(id)

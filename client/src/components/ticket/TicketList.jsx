@@ -35,9 +35,9 @@ const TicketList = () => {
   }
   return (
     <>
-      <Modal type={2}>
+      <Modal type={2} className={'sm:h-[75%] md:h-[78%] md:top-[3%] lg:top-[5%] lg:h-[75%] xl:!top-[3%] xl:!h-[75%] xxl:!h-[78%] xxxl:!h-[75%]'}>
         <div className=' z-50'>
-          <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
+          <h2 className='text-xl pl-4 text-gray-500 font-bold my-2'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
           <TicketDetail ticket={ticket} setTicket={setTicket} />
           <div className=' my-2 flex'>
             <ButtonDefault title='Cancel' onClick={cancelTicket} />

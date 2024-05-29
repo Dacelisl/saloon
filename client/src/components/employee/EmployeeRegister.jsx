@@ -68,7 +68,7 @@ const EmployeeRegister = () => {
   }
   return (
     <>
-      <Modal type={2} className={'pb-3 xl:h-[80%] xl:top-[3%] xxl:h-[90%] xxl:top-[1%] xxxl:h-[90%]'}>
+      <Modal type={2} className={'!py-3 md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:h-[80%] xl:top-[3%] xxl:h-[90%]'}>
         <Register labelName={'Registro Empleados'} userData={userData} handleAddUser={handleAddUser} setUserData={setUserData} roles={roles} employee toast={showToast} />
       </Modal>
     </>

@@ -28,7 +28,7 @@ const TicketPayment = ({ isOpen, onClose, saveData, totalPayment }) => {
     <>
       <ModalAux open={isOpen} close={onClose}>
         <h2 className='text-2xl text-slate-500 font-light mb-4'>Pago</h2>
-        <InputSelect label={'Metodo de Pago'} name={'paymentMethod'} editable itemOption={paymentMethods} handleFieldChange={handleFieldChange} />
+        <InputSelect label={'Metodo de Pago'} name={'paymentMethod'} editable itemOption={paymentMethods} itemValue={dataChange.paymentMethod} handleFieldChange={handleFieldChange} />
 
         <InputEdit type='number' labelName={'Total a Pagar'} value={totalPayment} onChange={handleFieldChange} name={'amount'} className='h-10' />
 

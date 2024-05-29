@@ -1,5 +1,5 @@
 import { RoleModel } from '../models/role.model.js'
-class RoleDAO { 
+class RoleDAO {
   async getAllRoles() {
     try {
       return await RoleModel.find().lean()
@@ -16,6 +16,14 @@ class RoleDAO {
       return role
     } catch (error) {
       throw new Error(`function DAO createRole ${error}`)
+    }
+  }
+  async getRoleByName(name) {
+    try {
+      const role = await RoleModel.findOne({ name: name })
+      return role
+    } catch (error) {
+      throw new Error(`function DAO getRoleByName  ${error}`)
     }
   }
   async getRoleByID(id) {

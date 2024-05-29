@@ -52,8 +52,8 @@ const GenericTable = ({ data, columns, selectedRowId, setRowSelected, groupBy = 
 
   return (
     <>
-      <div className='w-full mt-2 md:mt-0'>
-        <div className='bg-primary-light w-auto shadow-md h-40 border-black rounded-md overflow-x-auto'>
+      <div className='w-full h-full mt-2 md:mt-0'>
+        <div className=' bg-primary-light w-auto shadow-md h-full border-black rounded-md overflow-auto scrollbar-thin scrollbar-track-[#ddd4b4] scrollbar-thumb-[#fffcf1]'>
           <table className='w-full text-sm text-center text-gray-500 overflow-y-scroll'>
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (

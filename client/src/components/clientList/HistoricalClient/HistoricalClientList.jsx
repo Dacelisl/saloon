@@ -36,11 +36,15 @@ const HistoricalClientList = () => {
 
   return (
     <>
-      <Modal type={2} className={'h-3/4 !pb-2 md:h-[90%] xl:w-[85%] xl:h-fit xxl:w-auto xxxl:w-[60%] overflow-auto'}>
-        <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
-        <HistoricalClientDetail selectedClient={selectedClient} ticket={selectedTicket} />
-        <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
-        <div className='flex my-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} /> : <span className=' mt-6'></span>}</div>
+      <Modal type={2} className={'!py-6 xl:!top-[3%] xl:!h-[80%]'}>
+        <div className='h-[45%]'>
+          <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
+          <HistoricalClientDetail selectedClient={selectedClient} ticket={selectedTicket} />
+        </div>
+        <div className='mt-10 h-[50%]'>
+          <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
+        </div>
+          <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} /> : <span className=' mt-6'></span>}</div>
       </Modal>
       <HistoricalClientCredit isOpen={isModalCreditOpen} onClose={handleCloseCreditModal} saveData={saveData} balanceDue={selectedTicket.balanceDue} />
     </>

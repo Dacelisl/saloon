@@ -103,7 +103,10 @@ const TicketDetail = ({ ticket, setTicket }) => {
               </div>
             </div>
             <InputSearch onSearch={handleSearchInClients} />
+            <div className='h-[30vh]'>
+
             {dataTable.length > 0 && <TicketTable data={search !== '' ? search : dataTable} onItemSelected={setItemSelected} openModal={showModal} />}
+            </div>
           </div>
         </div>
       </div>
