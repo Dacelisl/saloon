@@ -1,6 +1,5 @@
 import { productService } from '../services/product.services.js'
-import { sendErrorResponse, sendSuccessResponse, uploadToFirebase } from '../utils/utils.js'
-import admin from '../../firebase.js'
+import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
 
 class ProductController {
   async getAllProducts(req, res) {

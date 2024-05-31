@@ -1,10 +1,10 @@
 export async function registeredUser(req, res, next) {
   try {
     next()
-    /* if (req.session.user) next()
+    if (req.session.user) next()
     else {
       console.log('no esta registrado')
-    } */
+    }
   } catch (error) {
     req.logger.warning('registeredUser Internal Server Error!', error)
     throw new Error(`Error auth registeredUser: ${error}`)
@@ -14,7 +14,7 @@ export async function registeredUser(req, res, next) {
 export function adminAccess(req, res, next) {
   try {
     next()
-    /* if (req.session.user.rol === 'admin') {
+    if (req.session.user.rol === 'admin') {
       return next()
     } else {
       const ruta = req.originalUrl
@@ -25,7 +25,7 @@ export function adminAccess(req, res, next) {
         message: `authorization error!: ${error}`,
         payload: {},
       })
-    } */
+    }
   } catch (error) {
     req.logger.warning('Internal Server Error!', error)
     return res.status(500).json({

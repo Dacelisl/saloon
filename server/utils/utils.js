@@ -1,38 +1,9 @@
 import { Types } from 'mongoose'
-import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import bcryptjs from 'bcryptjs'
-import sharp from 'sharp'
-import imagemin from 'imagemin'
-
-import admin from '../../firebase.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.resolve(__filename, '../../')
-
-const getDestination = (req, file, cb) => {
-  const tipoArchivo = req.headers['x-tipo-archivo']
-  let uploadFolder = 'public/image/'
-  if (tipoArchivo === 'profile') {
-    uploadFolder += `${tipoArchivo}`
-  } else if (tipoArchivo === 'product') {
-    uploadFolder += `${tipoArchivo}`
-  } else {
-    uploadFolder += `document/${tipoArchivo}`
-  }
-  cb(null, path.join(__dirname, uploadFolder))
-}
-const storage = multer.diskStorage({
-  destination: getDestination,
-  filename: (req, file, cb) => {
-    const uid = req.params.uid
-    const tipoArchivo = req.headers['x-tipo-archivo']
-    const ext = path.extname(file.originalname)
-    const newName = uid + '_' + tipoArchivo + ext
-    cb(null, newName)
-  },
-})
 
 function parsedQuery(query) {
   const response = {}
@@ -129,7 +100,6 @@ function formatCurrency(amount) {
 function formatPercentage(percentage) {
   return `${percentage.toFixed(2)}%`
 }
-
 function extractFunctionAndFile(error) {
   const stackLines = error.stack.split('\n')
   const callSite = stackLines[stackLines.length - 1]
@@ -139,32 +109,6 @@ function extractFunctionAndFile(error) {
   const functionName = beforeParentheses.split('.').pop()
   return { functionName, fileName }
 }
-
-export const uploadToFirebase = async (buffer, filename) => {
-  const bucket = admin.storage().bucket()
-  const file = bucket.file(filename)
-  await file.save(buffer)
-  return file.getMetadata()
-}
-export const resizeAndCompress = async (file) => {
-  const buffer = await sharp(file.buffer)
-    .resize(180, 190) // Tamaño máximo
-    .toBuffer()
-  const optimizedBuffer = await imagemin.buffer(buffer, {
-    plugins: [
-      imagemin.imageminPngquant({
-        quality: [0.6, 0.8], // Rango de calidad
-      }),
-      imagemin.imageminMozjpeg({
-        quality: 70, // Calidad JPEG
-      }),
-    ],
-  })
-  return optimizedBuffer
-}
-
-export const createHash = (password) => bcryptjs.hashSync(password, bcryptjs.genSaltSync(10))
-export const uploader = multer({ storage })
 export {
   __filename,
   __dirname,
