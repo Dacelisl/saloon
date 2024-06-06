@@ -6,10 +6,10 @@ import { connectMongo } from './utils/connectMongo.js'
 import { router } from './routes/index.routes.js'
 import dataConfig from './config/process.config.js'
 import corsw from './middleware/cors.js'
-import {sessions} from './middleware/sessions.js'
+import { sessions } from './middleware/sessions.js'
 
 const app = express()
-app.listen(dataConfig.port, () => logger.info(`listen on http://localhost:${dataConfig.port}, mode:`, dataConfig.mode))
+app.listen(() => logger.info(`listen on ${dataConfig.url_api}, mode:`, dataConfig.mode))
 connectMongo()
 
 app.use(express.json())

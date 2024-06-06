@@ -7,19 +7,17 @@ program.option('--mode <mode>', 'Work Mode', 'development')
 program.parse()
 const mode = program.opts()
 dotenv.config({
-  path: program.opts().mode == 'development' ? './.env.development' : './.env.production',
+  path: program.opts().mode == 'development' ? './.env.development' : './.env.development',
 })
 
 const dataConfig = {
   mode: mode.mode,
+  url_api: process.env.API_URL,
   persistence: process.env.PERSISTENCE,
   port: process.env.PORT,
   userName: process.env.USER_NAME,
   secretKey: process.env.SECRET_ACCESS_KEY,
   databaseName: process.env.DATABASE_NAME,
-  gitClient: process.env.GIT_CLIENT_ID,
-  gitSecret: process.env.GIT_CLIENT_SECRET,
-  gitCallBack: process.env.GIT_CALLBACKURL,
   url_mongo: process.env.URL_MONGO,
   ttl: process.env.TTL,
   emailTest: process.env.EMAIL_TEST,
@@ -32,7 +30,5 @@ const dataConfig = {
   fire_storageBucket: process.env.FIRE_STORAGEBUCKET,
   fire_messagingSenderId: process.env.FIRE_MESSAGINGSENDERID,
   fire_appId: process.env.FIRE_APPID,
-  redis_host: process.env.REDIS_HOST,
-  redis_port: process.env.REDIS_PORT,
 }
 export default dataConfig

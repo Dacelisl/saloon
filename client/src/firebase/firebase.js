@@ -4,11 +4,14 @@ import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
+/* const URL1 = 'https://auth-management-saloon.cloudfunctions.net/' */
+/* const URL = 'http://127.0.0.1:5001/auth-management-saloon/us-central1/api' */
+const URL = 'http://localhost:3001'
 
 /* SLECTS */
 export const getRoles = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/role/')
+    const response = await axios.get(`${URL}/api/role/`)
     const roles = response.data.payload.map((r) => {
       return { name: r.name, id: r._id, permissions: r.permissions }
     })
@@ -19,7 +22,7 @@ export const getRoles = async () => {
 }
 export const getCategories = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/products/categories/')
+    const response = await axios.get(`${URL}/api/products/categories/`)
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })
@@ -30,7 +33,7 @@ export const getCategories = async () => {
 }
 export const getPaymentsMethod = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/tickets/paymentMethods/')
+    const response = await axios.get(`${URL}/api/tickets/paymentMethods/`)
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })
@@ -41,7 +44,7 @@ export const getPaymentsMethod = async () => {
 }
 export const getServices = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/service/')
+    const response = await axios.get(`${URL}/api/service/`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getServices ${error.message}`)
@@ -51,7 +54,8 @@ export const getServices = async () => {
 /* EMPLOYEES */
 export const getEmployee = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/employee/')
+    const response = await axios.get(`${URL}/api/employee/`)
+    console.log('data employee', response)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -66,7 +70,7 @@ export const updateEmployee = async (dataUser) => {
       dataUser.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataUser)
-    const response = await axios.put(`http://localhost:3000/api/employee/${dataUser.id}`, userFormatted)
+    const response = await axios.put(`${URL}/api/employee/${dataUser.id}`, userFormatted)
     return response.status
   } catch (error) {
     throw new Error(`Error server updateEmployee ${error}`)
@@ -74,7 +78,7 @@ export const updateEmployee = async (dataUser) => {
 }
 export const getEarningsEmployees = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/performance/`)
+    const response = await axios.get(`${URL}/api/performance/`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -82,7 +86,7 @@ export const getEarningsEmployees = async () => {
 }
 export const getEarningsEmployeeById = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/performance/employee/${id}`)
+    const response = await axios.get(`${URL}/api/performance/employee/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -90,7 +94,7 @@ export const getEarningsEmployeeById = async (id) => {
 }
 export const getEmployeeByEmail = async (mail) => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/employee/email/${mail}`)
+    const response = await axios.get(`${URL}/api/employee/email/${mail}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -102,16 +106,18 @@ export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
     if (!response) return false
-    await axios.post('http://localhost:3000/api/employee/login', { accessToken: response.user.accessToken })
+    await axios.post(`${URL}/api/employee/login`, { accessToken: response.user.accessToken })
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
   }
 }
+
 export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
-      await axios.post('http://localhost:3000/api/employee/logOut')
+      console.log('cerro session')
+      await axios.post(`${URL}/api/employee/logOut`)
       return true
     })
     .catch(() => {
@@ -130,7 +136,7 @@ export const registerEmployeeMongo = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.thumbnail, `employee/${dataUser.dni}`)
     dataUser.thumbnail = url
-    const response = await axios.post('http://localhost:3000/api/employee/', dataUser)
+    const response = await axios.post(`${URL}/api/employee/`, dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -139,7 +145,7 @@ export const registerEmployeeMongo = async (dataUser) => {
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
     const response = await createUserWithEmailAndPassword(auth, email, password)
-    await axios.post('http://localhost:3000/api/employee/create', { accessToken: response.user.uid, rol })
+    await axios.post(`${URL}/api/employee/create`, { accessToken: response.user.uid, rol })
     return response.user
   } catch (error) {
     throw new Error(`Error server registerEmployeeFire ${error.message}`)
@@ -162,7 +168,7 @@ export const registerProduct = async (dataProduct) => {
   try {
     const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
     dataProduct.thumbnail = url
-    const response = await axios.post('http://localhost:3000/api/products', dataProduct)
+    const response = await axios.post(`${URL}/api/products`, dataProduct)
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -170,7 +176,7 @@ export const registerProduct = async (dataProduct) => {
 }
 export const getProducts = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/products/')
+    const response = await axios.get(`${URL}/api/products/`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -178,7 +184,7 @@ export const getProducts = async () => {
 }
 export const getProductsByName = async (name) => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/products/name/${name}`)
+    const response = await axios.get(`${URL}/api/products/name/${name}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -193,7 +199,7 @@ export const updateProduct = async (dataProduct) => {
       dataProduct.thumbnail = ''
     }
     const productFormatted = formattUpdate(dataProduct)
-    const response = await axios.put(`http://localhost:3000/api/products/${dataProduct.id}`, productFormatted)
+    const response = await axios.put(`${URL}/api/products/${dataProduct.id}`, productFormatted)
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -203,7 +209,7 @@ export const updateProduct = async (dataProduct) => {
 /* CLIENTS */
 export const getClients = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/users/')
+    const response = await axios.get(`${URL}/api/users/`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getClients ${error.message}`)
@@ -213,7 +219,7 @@ export const registerClient = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.thumbnail, `client/${dataUser.dni}`)
     dataUser.thumbnail = url
-    const response = await axios.post('http://localhost:3000/api/users/', dataUser)
+    const response = await axios.post(`${URL}/api/users/`, dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -221,7 +227,7 @@ export const registerClient = async (dataUser) => {
 }
 export const getClientsByName = async (name) => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/users/name/${name}`)
+    const response = await axios.get(`${URL}/api/users/name/${name}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -229,7 +235,7 @@ export const getClientsByName = async (name) => {
 }
 export const getClientsById = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/users/${id}`)
+    const response = await axios.get(`${URL}/api/users/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getClientsById ${error.message}`)
@@ -244,7 +250,7 @@ export const updateClients = async (dataClient) => {
       dataClient.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataClient)
-    const response = await axios.put(`http://localhost:3000/api/users/${dataClient.id}`, userFormatted)
+    const response = await axios.put(`${URL}/api/users/${dataClient.id}`, userFormatted)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateUser ${error}`)
@@ -253,7 +259,7 @@ export const updateClients = async (dataClient) => {
 /* PROVIDERS */
 export const getProviders = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/provider')
+    const response = await axios.get(`${URL}/api/provider`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getProviders ${error.message}`)
@@ -263,7 +269,7 @@ export const registerProvider = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.contact.thumbnail, `provider/${dataUser.contact.dni}`)
     dataUser.contact.thumbnail = url
-    const response = await axios.post('http://localhost:3000/api/provider', dataUser)
+    const response = await axios.post(`${URL}/api/provider`, dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -278,7 +284,7 @@ export const updateProvider = async (data) => {
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
 
-    const response = await axios.put(`http://localhost:3000/api/provider/${data.id}`, data)
+    const response = await axios.put(`${URL}/api/provider/${data.id}`, data)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateProvider ${error}`)
@@ -288,7 +294,7 @@ export const updateProvider = async (data) => {
 /* TICKETS */
 export const getTickets = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/tickets/')
+    const response = await axios.get(`${URL}/api/tickets/`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getTickets ${error.message}`)
@@ -301,7 +307,7 @@ export const updateTicket = async (ticket, data) => {
       ticketNumber: ticket.ticketNumber,
       partialPayments: data,
     }
-    const response = await axios.put(`http://localhost:3000/api/tickets/${ticket.ticketNumber}`, dataChange)
+    const response = await axios.put(`${URL}/api/tickets/${ticket.ticketNumber}`, dataChange)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateTicket ${error.message}`)
@@ -309,7 +315,7 @@ export const updateTicket = async (ticket, data) => {
 }
 export const createTicket = async (dataTicket) => {
   try {
-    const response = await axios.post('http://localhost:3000/api/tickets/', dataTicket)
+    const response = await axios.post(`${URL}/api/tickets/`, dataTicket)
     return response.data
   } catch (error) {
     return error.response.data
@@ -318,12 +324,12 @@ export const createTicket = async (dataTicket) => {
 
 export const verifyUser = async (emailUser, userPassw) => {
   try {
-    const res = await axios.get(`http://localhost:3000/api/employee/email/${emailUser}`)
+    const res = await axios.get(`${URL}/api/employee/email/${emailUser}`)
     if (res.code !== 200) return false
     if (!isValidPassword(userPassw, res.payload.password)) return false
     const currentDate = new Date()
     const formattedDate = currentDate.toLocaleString()
-    await axios.put(`http://localhost:3000/api/employee/${res.payload.id}`, { lastConnection: formattedDate })
+    await axios.put(`${URL}/api/employee/${res.payload.id}`, { lastConnection: formattedDate })
     return true
   } catch (error) {
     throw new Error(`Error server verifyUser ${error}`)

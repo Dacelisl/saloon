@@ -94,8 +94,8 @@ class ProductServices {
         pageNumber,
         hasPrevPage,
         hasNextPage,
-        prevLink: hasPrevPage ? `http://localhost:${dataConfig.port}${baseUrl}?limit=${limitValue}&query=${encodeURIComponent(query)}&page=${pageNumber - 1}` : null,
-        nextLink: hasNextPage ? `http://localhost:${dataConfig.port}${baseUrl}?limit=${limitValue}&query=${encodeURIComponent(query)}&page=${pageNumber + 1}` : null,
+        prevLink: hasPrevPage ? `${dataConfig.url_api}${baseUrl}?limit=${limitValue}&query=${encodeURIComponent(query)}&page=${pageNumber - 1}` : null,
+        nextLink: hasNextPage ? `${dataConfig.url_api}${baseUrl}?limit=${limitValue}&query=${encodeURIComponent(query)}&page=${pageNumber + 1}` : null,
       }
     } catch (error) {
       return {

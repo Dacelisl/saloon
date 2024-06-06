@@ -7,11 +7,12 @@ import Cube from '../utils/Cube'
 const WithAuthentication = (allowedRoles) => (WrappedComponent) => {
   const AuthComponent = (props) => {
     const { loggedEmployee, loading } = useContext(customContext)
+    console.log('datos login',loggedEmployee);
     if (loading) {
       return <Cube />
     }
-    if (loggedEmployee.role !== '') {
-      if (allowedRoles.includes(loggedEmployee.role)) {
+    if (loggedEmployee) {
+      if (loggedEmployee.role !== '' && allowedRoles.includes(loggedEmployee.role)) {
         return <WrappedComponent {...props} />
       } else {
         return <Navigate to='/403' />

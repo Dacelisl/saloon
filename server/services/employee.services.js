@@ -205,7 +205,7 @@ class EmployeeServices {
       }
       const reference = file.path
       const base = reference.match(/\\image\\(.*)/)
-      const path = `http://localhost:${dataConfig.port}${base[0]}`
+      const path = `${dataConfig.url_api}${base[0]}`
       const nuevoDocumento = {
         name: file.filename,
         type: imageType,

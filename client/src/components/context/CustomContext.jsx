@@ -91,13 +91,15 @@ const CustomContext = ({ children }) => {
     const fetchData = async () => {
       try {
         const sessionDataString = localStorage.getItem('sessionData')
-        if (!sessionDataString) {
+        if (!sessionDataString && !userLogin) {
           setLoading(false)
           return
         }
-        const sessionData = JSON.parse(sessionDataString)
-        setUserLogin(sessionData.userEmail)
-        const employee = await getEmployeeByEmail(sessionData.userEmail)
+        if (!userLogin) {
+          const sessionData = JSON.parse(sessionDataString)
+          setUserLogin(sessionData.userEmail)
+        }
+        const employee = await getEmployeeByEmail(userLogin)
         setLoggedEmployee(employee)
         setRole(employee.role)
         await fetchFromDatabase()

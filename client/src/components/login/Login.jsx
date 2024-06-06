@@ -5,7 +5,7 @@ import { customContext } from '../context/CustomContext'
 import { ButtonIcon, InputPassword, InputEdit, MovingDots, FloatingDots, Toast, RecoveryPassword } from '../imports.js'
 
 const Login = () => {
-  const { navigate, setUserLogin, fetchFromDatabase } = useContext(customContext)
+  const { navigate, setUserLogin } = useContext(customContext)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState(null)
@@ -49,7 +49,6 @@ const Login = () => {
           password: '',
         })
         showToast('Login Successful', 200)
-        fetchFromDatabase()
         navigate('/')
       }
       return showToast('Enter username and passwords', 500)

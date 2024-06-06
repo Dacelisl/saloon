@@ -1,6 +1,7 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import CustomContext from './components/context/CustomContext'
+import { initializeFirebase } from './firebase/firebaseApp.js'
 import {
   Login,
   TicketList,
@@ -22,6 +23,29 @@ import {
 } from './components/imports.js'
 
 function App() {
+  const [isFirebaseInitialized, setIsFirebaseInitialized] = useState(false)
+
+  useEffect(() => {
+    const initialize = async () => {
+      await initializeFirebase()
+        .then(() => {
+          setIsFirebaseInitialized(true)
+        })
+        .catch((error) => {
+          console.error('Error initializing Firebase in App.jsx:', error)
+        })
+    }
+    initialize()
+  }, [])
+
+  if (!isFirebaseInitialized) {
+    return (
+      <div className='flex absolute top-[25%] left-[50%]'>
+        <Cube />
+      </div>
+    )
+  }
+
   return (
     <>
       <BrowserRouter>
