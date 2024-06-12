@@ -56,7 +56,7 @@ const CustomContext = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserLogin(user.email)
-        await fetchFromDatabase()
+        setLoading(false)
       }
     })
     return unsubscribe
@@ -95,15 +95,17 @@ const CustomContext = ({ children }) => {
           setLoading(false)
           return
         }
-        if (!userLogin) {
+        if (sessionDataString && !userLogin) {
           const sessionData = JSON.parse(sessionDataString)
           setUserLogin(sessionData.userEmail)
         }
-        const employee = await getEmployeeByEmail(userLogin)
-        setLoggedEmployee(employee)
-        setRole(employee.role)
-        await fetchFromDatabase()
-        setLoading(false)
+        if (userLogin) {
+          const employee = await getEmployeeByEmail(userLogin)
+          setLoggedEmployee(employee)
+          setRole(employee.role)
+          await fetchFromDatabase()
+          setLoading(false)
+        }
       } catch (error) {
         throw new Error(`Error getting data: ${error}`)
       }

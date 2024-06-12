@@ -1,22 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { customContext } from '../context/CustomContext'
 import { logOut } from '../../firebase/firebase'
 
 const HamburguerMenu = () => {
-  const { loggedEmployee, location, navigate, showToast } = useContext(customContext)
-
+  const { loggedEmployee, setLoggedEmployee, location, navigate, showToast } = useContext(customContext)
   const [changeAction, setChangeAction] = useState(false)
-  const [logOutChange, setlogOutChange] = useState(false)
   const isLoginPage = location.pathname === '/login' || location.pathname === '/404' || location.pathname === '/403'
-
-  useEffect(() => {
-    if (logOutChange) {
-      showToast('Log Out', 200)
-      navigate('/login')
-    }
-  }, [logOutChange])
 
   function menuOnClick() {
     setChangeAction(!changeAction)
@@ -26,8 +17,10 @@ const HamburguerMenu = () => {
     try {
       const res = await logOut()
       if (res) {
-        setlogOutChange(true)
+        setLoggedEmployee('')
         localStorage.removeItem('sessionData')
+        showToast('Log Out', 200)
+        navigate('/login')
       }
     } catch (error) {
       showToast('Error Log Out', 500)

@@ -26,8 +26,7 @@ class EmployeeController {
     try {
       req.session.destroy(async (err) => {
         if (err) throw new Error(`Error server getLogOut ${err}`)
-        
-        res.clearCookie('connect.sid')
+        res.clearCookie('session')
         res.json({ status: true, message: 'logOut ok' })
       })
     } catch (error) {
@@ -35,10 +34,16 @@ class EmployeeController {
     }
   }
   async getLogin(req, res) {
-    const accessToken = req.body.accessToken
+    const idToken = req.body.idToken
     try {
-      const decodedToken = await admin.auth().verifyIdToken(accessToken)
-      req.session.user = decodedToken
+      const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn: 60 * 60 * 24 * 1000 }) // 1 day
+      const options = {
+        maxAge: 60 * 60 * 24 * 1000, // 1 day
+        httpOnly: true,
+        secure: true, // Set to true if using https
+        sameSite: 'none', // Set to 'none' to allow cross-site cookies
+      }
+      res.cookie('session', sessionCookie, options)
       res.json({ message: 'Login successful' })
     } catch (error) {
       res.json('Error: authentication server')
@@ -56,7 +61,6 @@ class EmployeeController {
     }
   }
   async getEmployeeByEmail(req, res) {
-    console.log('ingresa al email ');
     const employeeEmail = req.params.email
     try {
       const employee = await employeeService.getEmployeeByEmail(employeeEmail)

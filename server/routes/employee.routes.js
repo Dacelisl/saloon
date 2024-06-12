@@ -1,6 +1,6 @@
 import express from 'express'
 import { employeeController } from '../controllers/employee.controller.js'
-import { adminAccess, registeredUser } from '../middleware/auth.js'
+import { adminAccess, registeredUser, authMiddleware } from '../middleware/auth.js'
 
 export const EmployeeRoutes = express.Router()
 
@@ -9,7 +9,7 @@ EmployeeRoutes.post('/logOut', registeredUser, employeeController.getLogOut)
 EmployeeRoutes.post('/login', employeeController.getLogin)
 EmployeeRoutes.get('/', registeredUser, employeeController.getAllEmployees)
 EmployeeRoutes.get('/:id', registeredUser, employeeController.getEmployeeById)
-EmployeeRoutes.get('/email/:email',registeredUser, employeeController.getEmployeeByEmail)
+EmployeeRoutes.get('/email/:email', registeredUser, employeeController.getEmployeeByEmail)
 EmployeeRoutes.get('/doc/:email', registeredUser, employeeController.getDocuments)
 EmployeeRoutes.post('/', adminAccess, employeeController.saveEmployee)
 EmployeeRoutes.post('/upload/', adminAccess, employeeController.createDocument)

@@ -1,13 +1,17 @@
-export function registeredUser(req, res, next) {
+import admin from '../firebase.js'
+
+export async function registeredUser(req, res, next) {
   try {
-    console.log('ingresa al auth', req.session.user)
-    if (req.session.user) next()
-    else {
-      console.log('no esta registrado')
+    const sessionCookie = req.cookies.session || ''
+    if (!sessionCookie) {
+      return res.status(401).json({ message: 'Not authenticated' })
     }
+    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true)
+    req.session.user = decodedClaims
+    next()
   } catch (error) {
     req.logger.warning('registeredUser Internal Server Error!', error)
-    throw new Error(`Error auth registeredUser: ${error}`)
+    res.status(401).json({ message: 'Not authenticated' })
   }
 }
 

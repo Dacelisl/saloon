@@ -9,13 +9,13 @@ const store = MongoStore.create({
 })
 export const sessions = session({
   store,
-  name: 'dataSalon.sid',
   secret: dataConfig.secret,
-  resave: true,
+  resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
-    maxAge: 36000000,
+    maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
+    secure: true, // Set to true if using https
+    sameSite: 'none',
   },
 })

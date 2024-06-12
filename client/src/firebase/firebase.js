@@ -5,8 +5,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 axios.defaults.withCredentials = true
 /* const URL1 = 'https://auth-management-saloon.cloudfunctions.net/' */
-/* const URL = 'http://127.0.0.1:5001/auth-management-saloon/us-central1/api' */
-const URL = 'http://localhost:3001'
+const URL = 'http://127.0.0.1:5001/auth-management-saloon/us-central1/api'
+/* const URL = 'http://localhost:3000' */
 
 /* SLECTS */
 export const getRoles = async () => {
@@ -55,7 +55,6 @@ export const getServices = async () => {
 export const getEmployee = async () => {
   try {
     const response = await axios.get(`${URL}/api/employee/`)
-    console.log('data employee', response)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -106,7 +105,15 @@ export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
     if (!response) return false
-    await axios.post(`${URL}/api/employee/login`, { accessToken: response.user.accessToken })
+    await axios.post(
+      `${URL}/api/employee/login`,
+      {
+        idToken: response.user.accessToken,
+      },
+      {
+        withCredentials: true, // Permite el envío de cookies
+      }
+    )
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
@@ -116,7 +123,6 @@ export const singIn = async (email, password) => {
 export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
-      console.log('cerro session')
       await axios.post(`${URL}/api/employee/logOut`)
       return true
     })
