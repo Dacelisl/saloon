@@ -26,7 +26,11 @@ class EmployeeController {
     try {
       req.session.destroy(async (err) => {
         if (err) throw new Error(`Error server getLogOut ${err}`)
-        res.clearCookie('session')
+        res.clearCookie('session', {
+          httpOnly: true,
+          secure: true, // Set to true if using https
+          sameSite: 'none',
+        })
         res.json({ status: true, message: 'logOut ok' })
       })
     } catch (error) {
@@ -44,6 +48,7 @@ class EmployeeController {
         sameSite: 'none', // Set to 'none' to allow cross-site cookies
       }
       res.cookie('session', sessionCookie, options)
+      
       res.json({ message: 'Login successful' })
     } catch (error) {
       res.json('Error: authentication server')

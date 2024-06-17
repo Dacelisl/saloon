@@ -7,9 +7,12 @@ import Cube from '../utils/Cube'
 const WithAuthentication = (allowedRoles) => (WrappedComponent) => {
   const AuthComponent = (props) => {
     const { loggedEmployee, loading } = useContext(customContext)
-    console.log('datos login',loggedEmployee);
     if (loading) {
-      return <Cube />
+      return (
+        <div className='flex absolute top-[25%] left-[50%]'>
+          <Cube />
+        </div>
+      )
     }
     if (loggedEmployee) {
       if (loggedEmployee.role !== '' && allowedRoles.includes(loggedEmployee.role)) {

@@ -1,5 +1,5 @@
 import { auth } from './firebaseApp'
-import { isValidPassword, formattUpdate } from '../utils/utils.js'
+import { formattUpdate } from '../utils/utils.js'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
@@ -94,7 +94,7 @@ export const getEarningsEmployeeById = async (id) => {
 export const getEmployeeByEmail = async (mail) => {
   try {
     const response = await axios.get(`${URL}/api/employee/email/${mail}`)
-    return response.data.payload
+    return response.data
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
   }
@@ -105,15 +105,9 @@ export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
     if (!response) return false
-    await axios.post(
-      `${URL}/api/employee/login`,
-      {
-        idToken: response.user.accessToken,
-      },
-      {
-        withCredentials: true, // Permite el envío de cookies
-      }
-    )
+    await axios.post(`${URL}/api/employee/login`, {
+      idToken: response.user.accessToken,
+    })
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
@@ -124,6 +118,7 @@ export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
       await axios.post(`${URL}/api/employee/logOut`)
+      localStorage.removeItem('sessionData')
       return true
     })
     .catch(() => {
@@ -325,19 +320,5 @@ export const createTicket = async (dataTicket) => {
     return response.data
   } catch (error) {
     return error.response.data
-  }
-}
-
-export const verifyUser = async (emailUser, userPassw) => {
-  try {
-    const res = await axios.get(`${URL}/api/employee/email/${emailUser}`)
-    if (res.code !== 200) return false
-    if (!isValidPassword(userPassw, res.payload.password)) return false
-    const currentDate = new Date()
-    const formattedDate = currentDate.toLocaleString()
-    await axios.put(`${URL}/api/employee/${res.payload.id}`, { lastConnection: formattedDate })
-    return true
-  } catch (error) {
-    throw new Error(`Error server verifyUser ${error}`)
   }
 }

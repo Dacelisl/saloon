@@ -27,7 +27,7 @@ class EmployeeController {
       req.session.destroy(async (err) => {
         if (err) throw new Error(`Error server getLogOut ${err}`)
         
-        res.clearCookie('connect.sid')
+        res.clearCookie('dataSalon.sid')
         res.json({ status: true, message: 'logOut ok' })
       })
     } catch (error) {
@@ -56,7 +56,6 @@ class EmployeeController {
     }
   }
   async getEmployeeByEmail(req, res) {
-    console.log('ingresa al email ');
     const employeeEmail = req.params.email
     try {
       const employee = await employeeService.getEmployeeByEmail(employeeEmail)

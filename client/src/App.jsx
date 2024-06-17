@@ -32,6 +32,7 @@ function App() {
           setIsFirebaseInitialized(true)
         })
         .catch((error) => {
+          
           console.error('Error initializing Firebase in App.jsx:', error)
         })
     }

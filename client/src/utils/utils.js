@@ -1,7 +1,3 @@
-import bcryptjs from 'bcryptjs'
-
-export const isValidPassword = (password, hashPassword) => bcryptjs.compareSync(password, hashPassword)
-
 export function PasswordValid(password) {
   if (password.length < 6) {
     return false

@@ -11,8 +11,8 @@ const Modal = ({ children, className, type = 1 }) => {
           backgroundImage: `url(${dark})`,
         }}
       >
-        {/* <FloatingDots number={7} />
-        <MovingDots number={3} /> */}
+        <FloatingDots number={7} />
+        <MovingDots number={3} />
         <div
           className={`z-20 relative px-4 pt-2 sm:pb-2 mx-auto rounded-lg shadow-md shadow-slate-500 ${
             type === 1

@@ -18,7 +18,6 @@ const HamburguerMenu = () => {
       const res = await logOut()
       if (res) {
         setLoggedEmployee('')
-        localStorage.removeItem('sessionData')
         showToast('Log Out', 200)
         navigate('/login')
       }

@@ -56,6 +56,7 @@ const CustomContext = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserLogin(user.email)
+        await fetchFromDatabase()
         setLoading(false)
       }
     })
@@ -64,6 +65,7 @@ const CustomContext = ({ children }) => {
 
   const fetchFromDatabase = async () => {
     try {
+      if (!userLogin) return
       const allEmployee = await getEmployee()
       const allClients = await getClients()
       const allTickets = await getTickets()
@@ -100,11 +102,14 @@ const CustomContext = ({ children }) => {
           setUserLogin(sessionData.userEmail)
         }
         if (userLogin) {
-          const employee = await getEmployeeByEmail(userLogin)
-          setLoggedEmployee(employee)
-          setRole(employee.role)
-          await fetchFromDatabase()
-          setLoading(false)
+          setTimeout(async () => {
+            const employee = await getEmployeeByEmail(userLogin)
+            if (employee.code !== 200) return
+            setLoggedEmployee(employee.payload)
+            setRole(employee.payload.role)
+            await fetchFromDatabase()
+            setLoading(false)
+          }, 500)
         }
       } catch (error) {
         throw new Error(`Error getting data: ${error}`)
@@ -117,13 +122,11 @@ const CustomContext = ({ children }) => {
     const birthday = getUpcomingBirthdays(clients)
     setNextBirthDay(birthday)
   }, [clients])
-
   const handleSearch = (searchTerm, data) => {
     if (searchTerm === '') return data
     const filteredData = data.filter((item) => Object.values(item).some((value) => typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())))
     return filteredData
   }
-
   const showToast = (message, code) => {
     setToastMessage({ message, code })
     setTimeout(() => {

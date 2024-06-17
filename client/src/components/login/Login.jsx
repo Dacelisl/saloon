@@ -2,13 +2,14 @@ import { useState, useContext, useEffect } from 'react'
 import dark from '../../assets/img/dark.jpg'
 import { singIn } from '../../firebase/firebase'
 import { customContext } from '../context/CustomContext'
-import { ButtonIcon, InputPassword, InputEdit, MovingDots, FloatingDots, Toast, RecoveryPassword } from '../imports.js'
+import { ButtonIcon, InputPassword, InputEdit, MovingDots, FloatingDots, Cube, Toast, RecoveryPassword } from '../imports.js'
 
 const Login = () => {
   const { navigate, setUserLogin, loggedEmployee } = useContext(customContext)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState(null)
+  const [loading, setLoading] = useState(false)
   const [user, setUser] = useState({
     userName: '',
     password: '',
@@ -16,9 +17,10 @@ const Login = () => {
 
   useEffect(() => {
     if (loggedEmployee !== '') {
+      setLoading(false)
       navigate('/')
     }
-  }, [loggedEmployee, navigate])
+  }, [loggedEmployee])
 
   const handleOpenModal = () => {
     setIsModalOpen(true)
@@ -40,6 +42,7 @@ const Login = () => {
   const login = async (e) => {
     e.preventDefault()
     try {
+      setLoading(true)
       if (user.userName === '' || user.password === '') return showToast('Enter username and passwords', 500)
       const res = await singIn(user.userName, user.password)
       localStorage.setItem(
@@ -94,6 +97,7 @@ const Login = () => {
         </div>
       )}
       {toastMessage && <Toast message={toastMessage.message} code={toastMessage.code} />}
+      {loading && <Cube hiden={!loading} />}
     </>
   )
 }

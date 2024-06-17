@@ -1,9 +1,8 @@
 export function registeredUser(req, res, next) {
   try {
-    console.log('ingresa al auth', req.session.user)
     if (req.session.user) next()
     else {
-      console.log('no esta registrado')
+      return res.status(401).json({ message: 'Not authenticated' })
     }
   } catch (error) {
     req.logger.warning('registeredUser Internal Server Error!', error)
