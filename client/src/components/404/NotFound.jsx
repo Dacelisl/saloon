@@ -1,8 +1,9 @@
-/* eslint-disable react/prop-types */
+import { lazy } from 'react'
 import { NavLink } from 'react-router-dom'
 import notfound_dark from '../../assets/img/notfound_dark.svg'
 import dark from '../../assets/img/dark.jpg'
-import { MovingDots, FloatingDots } from '../imports'
+const MovingDots = lazy(() => import('../utils/MovingDots.jsx'))
+const FloatingDots = lazy(() => import('../utils/FloatingDots.jsx'))
 
 const NotFound = () => {
   return (

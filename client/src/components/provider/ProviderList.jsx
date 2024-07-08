@@ -1,9 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { updateProvider } from '../../firebase/firebase'
 import { customContext } from '../context/CustomContext.jsx'
-import { WithAuthentication, ProviderTable, ProviderDetail, InputSearch, Modal } from '../imports.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const ProviderDetail = lazy(() => import('./ProviderDetail.jsx'))
+const ProviderTable = lazy(() => import('./ProviderTable.jsx'))
+
 const providerDefault = {
   name: '',
   description: '',

@@ -1,9 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
-import { InputEdit, InputArea, ButtonDefault, ImagePreview, InputPhone } from '../imports.js'
+import { useState, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext'
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputArea = lazy(() => import('../utils/InputArea.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
+const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
 
 const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
   const [prevData, setPrevData] = useState('')
+  const { navigate } = useContext(customContext)
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
@@ -26,7 +32,7 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
             thumbnail: value,
           },
         }
-      }else if (name === 'phone') {
+      } else if (name === 'phone') {
         return {
           ...prevProvider,
           contact: {
@@ -107,7 +113,11 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
           </span>
         </div>
       ) : (
-        ''
+        <div className={` ${editable ? 'hidden' : 'flex my-1'}`}>
+          <span className='contents'>
+            <ButtonDefault title='Agregar' onClick={() => navigate('/providerRegister')} />
+          </span>
+        </div>
       )}
       {editable ? (
         <div className='flex my-1'>

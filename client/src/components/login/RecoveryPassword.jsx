@@ -1,7 +1,9 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { passwordRecovery } from '../../firebase/firebase.js'
-import { customContext } from '../context/CustomContext'
-import { ButtonIcon, ModalAux, InputEdit } from '../imports.js'
+import { customContext } from '../context/CustomContext.jsx'
+const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const ButtonIcon = lazy(() => import('../utils/ButtonIcon.jsx'))
 
 // eslint-disable-next-line react/prop-types
 const RecoveryPassword = ({ isOpen, onClose }) => {
@@ -13,7 +15,7 @@ const RecoveryPassword = ({ isOpen, onClose }) => {
   }
 
   const handleButtonClick = async () => {
-     await passwordRecovery(email)
+    await passwordRecovery(email)
     setEmail('')
     showToast('Check your mailbox', 200)
     onClose()

@@ -12,13 +12,14 @@ class EmployeeController {
       return sendErrorResponse(res, error)
     }
   }
-  async createRol(req, res) {
+  async addRol(req, res) {
     const { accessToken, rol } = req.body
     try {
-      await admin.auth().setCustomUserClaims(accessToken, { rol })
-      res.status(200).json({ success: true })
+      const result = await employeeService.addRol(accessToken, rol)
+      return sendSuccessResponse(res, result)
     } catch (error) {
-      res.status(500).json({ success: false, error: 'Error creating custom claims' })
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
     }
   }
 
@@ -38,9 +39,10 @@ class EmployeeController {
     }
   }
   async getLogin(req, res) {
-    const idToken = req.body.idToken
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
     try {
-      const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn: 60 * 60 * 24 * 1000 }) // 1 day
+      const sessionCookie = await admin.auth().createSessionCookie(token, { expiresIn: 60 * 60 * 24 * 1000 }) // 1 day
       const options = {
         maxAge: 60 * 60 * 24 * 1000, // 1 day
         httpOnly: true,
@@ -48,7 +50,6 @@ class EmployeeController {
         sameSite: 'none', // Set to 'none' to allow cross-site cookies
       }
       res.cookie('session', sessionCookie, options)
-      
       res.json({ message: 'Login successful' })
     } catch (error) {
       res.json('Error: authentication server')

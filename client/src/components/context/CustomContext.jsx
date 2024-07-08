@@ -1,11 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect, lazy } from 'react'
-import { getClients, getTickets, getEmployee, getProducts, getServices, getPaymentsMethod, getRoles, getCategories, getProviders, getEmployeeByEmail } from '../../firebase/firebase'
-import { getUpcomingBirthdays } from '../../utils/utils'
 import { useNavigate, useLocation } from 'react-router-dom'
-const Toast = lazy(() => import('../utils/Toast'))
 import { auth } from '../../firebase/firebaseApp'
+import { getUpcomingBirthdays } from '../../utils/utils.js'
+import { getClients, getTickets, getEmployee, getProducts, getServices, getPaymentsMethod, getRoles, getCategories, getProviders, getEmployeeByEmail } from '../../firebase/firebase'
+const Toast = lazy(() => import('../utils/Toast.jsx'))
 
 export const customContext = createContext()
 
@@ -101,15 +101,13 @@ const CustomContext = ({ children }) => {
           const sessionData = JSON.parse(sessionDataString)
           setUserLogin(sessionData.userEmail)
         }
-        if (userLogin) {
-          setTimeout(async () => {
-            const employee = await getEmployeeByEmail(userLogin)
-            if (employee.code !== 200) return
-            setLoggedEmployee(employee.payload)
-            setRole(employee.payload.role)
-            await fetchFromDatabase()
-            setLoading(false)
-          }, 500)
+        if (userLogin && !loggedEmployee) {
+          const employee = await getEmployeeByEmail(userLogin)
+          if (employee.code !== 200) return
+          setLoggedEmployee(employee.payload)
+          setRole(employee.payload.role)
+          await fetchFromDatabase()
+          setLoading(false)
         }
       } catch (error) {
         throw new Error(`Error getting data: ${error}`)

@@ -26,8 +26,11 @@ class EmployeeController {
     try {
       req.session.destroy(async (err) => {
         if (err) throw new Error(`Error server getLogOut ${err}`)
-        
-        res.clearCookie('dataSalon.sid')
+        res.clearCookie('session', {
+          httpOnly: true,
+          secure: true, // Set to true if using https
+          sameSite: 'none',
+        })
         res.json({ status: true, message: 'logOut ok' })
       })
     } catch (error) {
@@ -35,10 +38,20 @@ class EmployeeController {
     }
   }
   async getLogin(req, res) {
-    const accessToken = req.body.accessToken
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
     try {
-      const decodedToken = await admin.auth().verifyIdToken(accessToken)
-      req.session.user = decodedToken
+      const decodedToken = await admin.auth().verifyIdToken(token)
+      const customClaims = await employeeService.getEmployeeByEmail(decodedToken.email)
+
+      const sessionCookie = await admin.auth().createSessionCookie(customClaims, { expiresIn: 60 * 60 * 24 * 1000 }) // 1 day
+      const options = {
+        maxAge: 60 * 60 * 24 * 1000, // 1 day
+        httpOnly: true,
+        secure: true, // Set to true if using https
+        sameSite: 'none', // Set to 'none' to allow cross-site cookies
+      }
+      res.cookie('session', sessionCookie, options)
       res.json({ message: 'Login successful' })
     } catch (error) {
       res.json('Error: authentication server')

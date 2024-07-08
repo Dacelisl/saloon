@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { customContext } from '../context/CustomContext'
@@ -37,34 +36,22 @@ const HamburguerMenu = () => {
             </div>
             <nav className={changeAction ? 'block' : 'hidden duration-300 ease-out '}>
               <ul className='px-0 py-0 '>
-                <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
+                <li className=' text-slate-50 font-bold sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/'}>Home</Link>
                 </li>
-                <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
-                  <Link to={'/registerCliente'}>Add Client</Link>
-                </li>
-                <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
+                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/users'}>Clients</Link>
                 </li>
 
                 {loggedEmployee.role === 'admin' ? (
                   <>
-                    <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
-                      <Link to={'/registerProduct'}>Add Product</Link>
-                    </li>
-                    <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
+                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/products'}>Product</Link>
                     </li>
-                    <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
-                      <Link to={'/registerEmployee'}>Add Employee</Link>
-                    </li>
-                    <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
+                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/employeeList'}>Employee</Link>
                     </li>
-                    <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
-                      <Link to={'/providerRegister'}>Add Provider</Link>
-                    </li>
-                    <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
+                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/provider'}>Provider</Link>
                     </li>
                   </>
@@ -72,12 +59,12 @@ const HamburguerMenu = () => {
                   ''
                 )}
 
-                <li className=' text-slate-100 sm:text-sm xl:text-base hover:font-bold'>
+                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/earnings'}>Wallet</Link>
                 </li>
 
-                <li className={loggedEmployee.role === 'admin' ? 'mt-7 ml-[30%] xl:mt-10' : 'mt-7 ml-[20%] xl:mt-10'}>
-                  <a href='#' className=' text-slate-100 text-sm border-2 p-1 rounded-sm shadow shadow-slate-300 hover:font-bold' onClick={singOut}>
+                <li className={loggedEmployee.role === 'admin' ? 'mt-7 ml-[10%] xl:mt-8' : 'mt-7 ml-[18%] xl:mt-10'}>
+                  <a href='#' className=' text-slate-50 font-bold text-lg border-2 p-1 rounded-sm shadow shadow-slate-300 hover:font-bold' onClick={singOut}>
                     LogOut
                   </a>
                 </li>
@@ -88,11 +75,11 @@ const HamburguerMenu = () => {
           <div
             className={
               loggedEmployee.role === 'admin'
-                ? `flex fixed w-[520px] h-[700px] translate-x-[60%] -translate-y-[30%]  md:translate-x-[56%] lg:translate-x-[53%] xl:translate-x-[28%] xxl:translate-x-[16%] xxl:-translate-y-[25%] xxxl:-translate-x-[14%] ${
-                    changeAction ? 'z-40 w-0 h-0 mt-8 mr-0 mb-5 ml-5 bg-[#688d52] rounded-[60%] top-0 -right-[30%] duration-300 ease-out' : ''
+                ? `flex fixed w-[520px] h-[700px] translate-x-[57%] -translate-y-[25%] md:translate-x-[54%] lg:translate-x-[51%] xl:translate-x-[26%] xxl:translate-x-[12%] xxl:-translate-y-[25%] xxxl:-translate-x-[16%] ${
+                    changeAction ? 'z-40 w-0 h-0 mt-8 mr-0 mb-5 ml-5 bg-[#28292e] rounded-[60%] top-0 -right-[30%] duration-300 ease-out' : ''
                   }`
-                : `flex fixed w-[520px] h-[500px] translate-x-[65%] -translate-y-[30%]  md:translate-x-[60%] lg:translate-x-[58%] xl:translate-x-[35%] xxl:translate-x-[22%] xxl:-translate-y-[25%] xxxl:-translate-x-[10%] ${
-                    changeAction ? 'z-40 w-0 h-0 mt-8 mr-0 mb-5 ml-5 bg-[#688d52] rounded-[50%] top-0 -right-[30%] duration-300 ease-out' : ''
+                : `flex fixed w-[520px] h-[500px] translate-x-[57%] -translate-y-[25%]  md:translate-x-[55%] lg:translate-x-[50%] xl:translate-x-[28%] xl:-translate-y-[22%] xxl:translate-x-[12%] xxxl:-translate-x-[11%] ${
+                    changeAction ? 'z-40 w-0 h-0 mt-8 mr-0 mb-5 ml-5 bg-[#28292e] rounded-[50%] top-0 -right-[30%] duration-300 ease-out' : ''
                   }`
             }
           ></div>

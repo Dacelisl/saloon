@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
-import { customContext } from '../context/CustomContext'
-import { InputEdit, InputArea, ButtonDefault, ImagePreview, InputSelect } from '../imports.js'
+import { useState, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext.jsx'
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputArea = lazy(() => import('../utils/InputArea.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
+const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
 
 const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview, role, toast }) => {
-  const { categories, providers } = useContext(customContext)
+  const { categories, providers, navigate } = useContext(customContext)
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -50,6 +54,7 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
         <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
           <span className='contents'>
             <ButtonDefault title='Edit' onClick={handleEdit} />
+            <ButtonDefault title='Agregar' onClick={() => navigate('/registerProduct')} />
           </span>
         </div>
       ) : (

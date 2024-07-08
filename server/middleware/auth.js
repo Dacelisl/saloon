@@ -1,18 +1,26 @@
-export function registeredUser(req, res, next) {
+import admin from '../firebase.js'
+
+export async function registeredUser(req, res, next) {
   try {
-    if (req.session.user) next()
-    else {
+    const sessionCookie = req.cookies.session || ''
+    if (!sessionCookie) {
       return res.status(401).json({ message: 'Not authenticated' })
     }
+    next()
   } catch (error) {
     req.logger.warning('registeredUser Internal Server Error!', error)
-    throw new Error(`Error auth registeredUser: ${error}`)
+    res.status(401).json({ message: 'Not authenticated' })
   }
 }
 
-export function adminAccess(req, res, next) {
+export async function adminAccess(req, res, next) {
   try {
-    if (req.session.user.rol === 'admin') {
+    const sessionCookie = req.cookies.session || ''
+    if (!sessionCookie) {
+      return res.status(401).json({ message: 'Not authenticated' })
+    }
+    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true)
+    if (decodedClaims.rol === 'admin') {
       return next()
     } else {
       const ruta = req.originalUrl

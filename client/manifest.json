@@ -1,0 +1,11 @@
+{
+  "name": "project-fabiosalon",
+  "short_name": "fabiosalon",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#000000",
+  "theme_color": "#06051b",
+  "window-controls-overlay": true,
+  "window-controls-overlay-background-color": "#333333",
+  "window-controls-overlay-text-color": "#ffffff"
+}

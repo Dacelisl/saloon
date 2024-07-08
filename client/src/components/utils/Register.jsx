@@ -1,6 +1,12 @@
 /* eslint-disable react/prop-types */
+import { lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { InputEdit, InputPhone, InputSelect, InputPassword, ImagePreview, ButtonDefault } from '../imports.js'
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
+const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
+const InputPassword = lazy(() => import('../utils/InputPassword.jsx'))
+const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const Register = ({ labelName, userData, setUserData, handleAddUser, employee = false, roles, toast }) => {
   const navigate = useNavigate()

@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, lazy } from 'react'
 import { customContext } from '../../context/CustomContext.jsx'
-import { InputSelect, ButtonDefault, InputEdit, ModalAux } from '../../imports.js'
+const ButtonDefault = lazy(() => import('../../utils/ButtonDefault.jsx'))
+const InputSelect = lazy(() => import('../../utils/InputSelect.jsx'))
+const InputEdit = lazy(() => import('../../utils/InputEdit.jsx'))
+const ModalAux = lazy(() => import('../../utils/ModalAux.jsx'))
 
 const HistoricalClientCredit = ({ isOpen, onClose, saveData, balanceDue = '' }) => {
   const { paymentMethods } = useContext(customContext)

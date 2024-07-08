@@ -1,10 +1,10 @@
-import { useContext } from 'react'
+import { useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext'
-
 import { Link } from 'react-router-dom'
 import dark from '../../assets/img/dark.jpg'
 import lock from '../../assets/Icons/lock.svg'
-import { FloatingDots, MovingDots } from '../imports.js'
+const MovingDots = lazy(() => import('../utils/MovingDots.jsx'))
+const FloatingDots = lazy(() => import('../utils/FloatingDots.jsx'))
 
 const AccessDenied = () => {
   const { loggedEmployee } = useContext(customContext)

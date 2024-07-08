@@ -1,6 +1,8 @@
 import { employeeFactory, roleFactory } from '../DAO/factory.js'
 import { isValid } from '../utils/utils.js'
+import admin from '../firebase.js'
 import dataConfig from '../config/process.config.js'
+import { logger } from '../utils/logger.js'
 
 class EmployeeServices {
   validateEmployee(dataEmployee) {
@@ -134,12 +136,17 @@ class EmployeeServices {
       employee.role = rol._id
       const employeeUpdate = await employeeFactory.updateEmployee(employee, id)
       if (employeeUpdate.modifiedCount > 0) {
-        const employee = await employeeFactory.getEmployeeById(id)
+        if (employeeFound.role !== rol.name) {
+          const userRecord = await admin.auth().getUserByEmail(employee.email)
+          await admin.auth().setCustomUserClaims(userRecord.uid, { rol: rol.name })
+          await admin.auth().revokeRefreshTokens(userRecord.uid)
+        }
+        const newEmployee = await employeeFactory.getEmployeeById(id)
         return {
           status: 'success',
           code: 200,
           message: 'employee update successfully',
-          payload: employee,
+          payload: newEmployee,
         }
       } else {
         return {
@@ -194,72 +201,23 @@ class EmployeeServices {
       }
     }
   }
-
-  /* async createDocument(file, imageType, uid) {
-    const esEmail = /\S+@\S+\.\S+/.test(uid)
-    let employee = uid
+  async addRol(token, rol) {
     try {
-      if (esEmail) {
-        const employeeRes = await employeeFactory.getEmployeeByEmail(uid)
-        employee = employeeRes._id
-      }
-      const reference = file.path
-      const base = reference.match(/\\image\\(.*)/)
-      const path = `${dataConfig.url_api}${base[0]}`
-      const nuevoDocumento = {
-        name: file.filename,
-        type: imageType,
-        reference: path,
-      }
-      await employeeFactory.loadDocument({ _id: employee }, { documents: nuevoDocumento })
+      await admin.auth().setCustomUserClaims(token, { rol })
       return {
-        status: 'success',
-        code: 201,
-        message: 'uploading file',
-        payload: nuevoDocumento,
+        status: 'Success',
+        code: 200,
+        message: 'rol add successfully',
+        payload: {},
       }
     } catch (error) {
       return {
-        status: 'Fail',
+        status: 'error',
         code: 500,
+        message: `Error creating custom claims ${error}`,
         payload: {},
-        message: `Error createDocument`,
       }
     }
   }
-  async switchEmployeeRole(employee) {
-    const documentosUsuario = employee.documents.map((documento) => documento.type)
-    const tiposDocumentosRequeridos = ['DNI', 'proofAddress', 'accountStatus']
-    const tieneTodosLosDocumentos = tiposDocumentosRequeridos.every((tipo) => documentosUsuario.includes(tipo))
-
-    if (tieneTodosLosDocumentos) {
-      const updatedEmployee = await employeeFactory.updateEmployee(employee._id, {
-        rol: employee.rol === 'employee' ? 'premium' : 'employee',
-      })
-      if (updatedEmployee.acknowledged) {
-        const employeeUpdate = await this.getEmployeeById(employee._id)
-        return {
-          status: 'success',
-          code: 200,
-          message: 'update employee role',
-          payload: employeeUpdate,
-        }
-      } else {
-        return {
-          status: 'error',
-          code: 500,
-          message: 'Failed to update employee role',
-          payload: {},
-        }
-      }
-    } else {
-      return {
-        status: 'error',
-        code: 400,
-        message: 'The employee does not have all the specified document types',
-        payload: {},
-      }
-    }
-  } */
 }
 export const employeeService = new EmployeeServices()

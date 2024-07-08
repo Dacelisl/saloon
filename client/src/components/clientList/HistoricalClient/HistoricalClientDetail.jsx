@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import ImagePreview from '../../utils/ImagePreview'
+import { lazy } from 'react'
+const ImagePreview = lazy(() => import('../../utils/ImagePreview.jsx'))
 
 const HistoricalClientDetail = ({ selectedClient, ticket }) => {
   return (

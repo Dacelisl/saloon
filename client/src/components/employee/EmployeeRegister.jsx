@@ -1,10 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { registerEmployeeMongo, registerEmployeeFire } from '../../firebase/firebase.js'
-import { WithAuthentication, Register, Modal } from '../imports.js'
 import { PasswordValid } from '../../utils/utils.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const Register = lazy(() => import('../utils/Register.jsx'))
 
 const employeeDefault = {
   firstName: '',
@@ -28,6 +29,7 @@ const EmployeeRegister = () => {
     try {
       const rol = roles.filter((item) => item.name == userData.role)
       userData.role = rol[0].id
+      userData.roleName = rol[0].name
       userData.phone = parseInt(userData.phone)
       if (!PasswordValid(userData.password)) {
         showToast('Password must contain: 8 characters between uppercase, lowercase, and numbers', 500)
@@ -36,7 +38,7 @@ const EmployeeRegister = () => {
       const resMongo = await registerEmployeeMongo(userData)
       switch (resMongo.code) {
         case 201:
-          await registerEmployeeFire(userData.email, userData.password, userData.role)
+          await registerEmployeeFire(userData.email, userData.password, userData.roleName)
           showToast('Empleado Creado', resMongo.code)
           setUserData(employeeDefault)
           break

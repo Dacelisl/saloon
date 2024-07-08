@@ -1,9 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
-import { customContext } from '../context/CustomContext'
-import { updateClients } from '../../firebase/firebase'
-import { WithAuthentication, ClientTable, ClientDetail, InputSearch, Modal } from '../imports'
+import { useState, useContext, lazy } from 'react'
+import { customContext } from '../context/CustomContext.jsx'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+const updateClients = lazy(() => import('../../firebase/firebase'))
+const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const ClientTable = lazy(() => import('./ClientTable.jsx'))
+const ClientDetail = lazy(() => import('./ClientDetail.jsx'))
 
 const ClientList = () => {
   const { clients, selectedClient, loggedEmployee, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)

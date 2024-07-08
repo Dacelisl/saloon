@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
-import { ButtonDefault, InputEdit, InputSelect, ModalAux } from '../imports.js'
+const ModalAux = lazy(() => import('../utils/ModalAux.jsx'))
+const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 
 const ticketDefault = {
   paymentDate: new Date(),

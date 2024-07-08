@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
+import { useState, lazy } from 'react'
 import { Link } from 'react-router-dom'
-
-import { InputEdit, ButtonDefault, ImagePreview, InputPhone } from '../imports.js'
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
+const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
 
 const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
   const [prevData, setPrevData] = useState('')

@@ -1,9 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { updateProduct } from '../../firebase/firebase'
-import { customContext } from '../context/CustomContext'
-import { WithAuthentication, ProductTable, ProductDetail, InputSearch, Modal } from '../imports.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+import { customContext } from '../context/CustomContext.jsx'
+const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const ProductDetail = lazy(() => import('./ProductDetail.jsx'))
+const ProductTable = lazy(() => import('./ProductTable.jsx'))
 
 const defaultProduct = {
   name: '',

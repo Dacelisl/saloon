@@ -1,9 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { registerProvider } from '../../firebase/firebase.js'
-import { WithAuthentication, InputEdit, InputArea, Register, Modal } from '../imports.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputArea = lazy(() => import('../utils/InputArea.jsx'))
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const Register = lazy(() => import('../utils/Register.jsx'))
 
 const ProviderRegister = () => {
   const { showToast } = useContext(customContext)

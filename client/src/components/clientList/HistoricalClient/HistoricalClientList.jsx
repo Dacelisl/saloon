@@ -1,9 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, lazy } from 'react'
+import WithAuthentication from '../../utils/WithAuthentication.jsx'
 import { customContext } from '../../context/CustomContext.jsx'
-import { updateTicket } from '../../../firebase/firebase.js'
-import { WithAuthentication, HistoricalClientDetail, HistoricalClientTable, ButtonDefault, Modal, HistoricalClientCredit } from '../../imports.js'
+const updateTicket = lazy(() => import('../../../firebase/firebase.js'))
+const Modal = lazy(() => import('../../utils/Modal.jsx'))
+const ButtonDefault = lazy(() => import('../../utils/ButtonDefault.jsx'))
+const HistoricalClientDetail = lazy(() => import('../HistoricalClient/HistoricalClientDetail.jsx'))
+const HistoricalClientTable = lazy(() => import('../HistoricalClient/HistoricalClientTable.jsx'))
+const HistoricalClientCredit = lazy(() => import('../HistoricalClient/HistoricalClientCredit.jsx'))
 
 const HistoricalClientList = () => {
   const { tickets, selectedClient, fetchFromDatabase, showToast } = useContext(customContext)
@@ -44,7 +48,7 @@ const HistoricalClientList = () => {
         <div className='mt-10 h-[50%]'>
           <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
         </div>
-          <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} /> : <span className=' mt-6'></span>}</div>
+        <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} /> : <span className=' mt-6'></span>}</div>
       </Modal>
       <HistoricalClientCredit isOpen={isModalCreditOpen} onClose={handleCloseCreditModal} saveData={saveData} balanceDue={selectedTicket.balanceDue} />
     </>

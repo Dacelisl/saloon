@@ -3,15 +3,30 @@ import { formattUpdate } from '../utils/utils.js'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
-axios.defaults.withCredentials = true
-/* const URL1 = 'https://auth-management-saloon.cloudfunctions.net/' */
-const URL = 'http://127.0.0.1:5001/auth-management-saloon/us-central1/api'
-/* const URL = 'http://localhost:3000' */
+
+
+const instance = axios.create({
+  withCredentials: true,
+})
+
+async function makeRequest(method, url, data = null, headers = {}) {
+  try {
+    const response = await instance({
+      method: method,
+      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/api${url}`,
+      data: data,
+      headers: headers,
+    })
+    return response
+  } catch (error) {
+    throw new Error('Error en la solicitud: makeRequest', error)
+  }
+}
 
 /* SLECTS */
 export const getRoles = async () => {
   try {
-    const response = await axios.get(`${URL}/api/role/`)
+    const response = await makeRequest('GET', '/api/role')
     const roles = response.data.payload.map((r) => {
       return { name: r.name, id: r._id, permissions: r.permissions }
     })
@@ -22,7 +37,7 @@ export const getRoles = async () => {
 }
 export const getCategories = async () => {
   try {
-    const response = await axios.get(`${URL}/api/products/categories/`)
+    const response = await makeRequest('GET', '/api/products/categories/')
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })
@@ -33,7 +48,7 @@ export const getCategories = async () => {
 }
 export const getPaymentsMethod = async () => {
   try {
-    const response = await axios.get(`${URL}/api/tickets/paymentMethods/`)
+    const response = await makeRequest('GET', '/api/tickets/paymentMethods')
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })
@@ -44,7 +59,7 @@ export const getPaymentsMethod = async () => {
 }
 export const getServices = async () => {
   try {
-    const response = await axios.get(`${URL}/api/service/`)
+    const response = await makeRequest('GET', '/api/service')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getServices ${error.message}`)
@@ -54,7 +69,7 @@ export const getServices = async () => {
 /* EMPLOYEES */
 export const getEmployee = async () => {
   try {
-    const response = await axios.get(`${URL}/api/employee/`)
+    const response = await makeRequest('GET', '/api/employee')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -69,7 +84,7 @@ export const updateEmployee = async (dataUser) => {
       dataUser.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataUser)
-    const response = await axios.put(`${URL}/api/employee/${dataUser.id}`, userFormatted)
+    const response = await makeRequest('PUT', `/api/employee/${dataUser.id}`, userFormatted, { 'Content-Type': 'application/json' })
     return response.status
   } catch (error) {
     throw new Error(`Error server updateEmployee ${error}`)
@@ -77,7 +92,7 @@ export const updateEmployee = async (dataUser) => {
 }
 export const getEarningsEmployees = async () => {
   try {
-    const response = await axios.get(`${URL}/api/performance/`)
+    const response = await makeRequest('GET', '/api/performance')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -85,7 +100,7 @@ export const getEarningsEmployees = async () => {
 }
 export const getEarningsEmployeeById = async (id) => {
   try {
-    const response = await axios.get(`${URL}/api/performance/employee/${id}`)
+    const response = await makeRequest('GET', `/api/performance/employee/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -93,7 +108,7 @@ export const getEarningsEmployeeById = async (id) => {
 }
 export const getEmployeeByEmail = async (mail) => {
   try {
-    const response = await axios.get(`${URL}/api/employee/email/${mail}`)
+    const response = await makeRequest('GET', `/api/employee/email/${mail}`)
     return response.data
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -104,10 +119,8 @@ export const getEmployeeByEmail = async (mail) => {
 export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
-    if (!response) return false
-    await axios.post(`${URL}/api/employee/login`, {
-      idToken: response.user.accessToken,
-    })
+    if (!response) return response
+    await makeRequest('POST', '/api/employee/login', null, { Authorization: `Bearer ${response.user.accessToken}` })
     return response
   } catch (error) {
     throw new Error(`Error server singIn ${error.message}`)
@@ -117,7 +130,7 @@ export const singIn = async (email, password) => {
 export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
-      await axios.post(`${URL}/api/employee/logOut`)
+      await makeRequest('DELETE', '/api/employee/logOut')
       localStorage.removeItem('sessionData')
       return true
     })
@@ -126,6 +139,7 @@ export const logOut = async () => {
     })
   return res
 }
+
 export const passwordRecovery = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email)
@@ -137,7 +151,7 @@ export const registerEmployeeMongo = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.thumbnail, `employee/${dataUser.dni}`)
     dataUser.thumbnail = url
-    const response = await axios.post(`${URL}/api/employee/`, dataUser)
+    const response = await makeRequest('POST', '/api/employee', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -146,7 +160,7 @@ export const registerEmployeeMongo = async (dataUser) => {
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
     const response = await createUserWithEmailAndPassword(auth, email, password)
-    await axios.post(`${URL}/api/employee/create`, { accessToken: response.user.uid, rol })
+    await makeRequest('POST', '/api/employee/create', { accessToken: response.user.uid, rol })
     return response.user
   } catch (error) {
     throw new Error(`Error server registerEmployeeFire ${error.message}`)
@@ -169,7 +183,7 @@ export const registerProduct = async (dataProduct) => {
   try {
     const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
     dataProduct.thumbnail = url
-    const response = await axios.post(`${URL}/api/products`, dataProduct)
+    const response = await makeRequest('POST', '/api/products', dataProduct)
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -177,7 +191,7 @@ export const registerProduct = async (dataProduct) => {
 }
 export const getProducts = async () => {
   try {
-    const response = await axios.get(`${URL}/api/products/`)
+    const response = await makeRequest('GET', '/api/products')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -185,7 +199,7 @@ export const getProducts = async () => {
 }
 export const getProductsByName = async (name) => {
   try {
-    const response = await axios.get(`${URL}/api/products/name/${name}`)
+    const response = await makeRequest('GET', `/api/products/name/${name}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -200,7 +214,7 @@ export const updateProduct = async (dataProduct) => {
       dataProduct.thumbnail = ''
     }
     const productFormatted = formattUpdate(dataProduct)
-    const response = await axios.put(`${URL}/api/products/${dataProduct.id}`, productFormatted)
+    const response = await makeRequest('PUT', `/api/products/${dataProduct.id}`, productFormatted)
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -210,7 +224,7 @@ export const updateProduct = async (dataProduct) => {
 /* CLIENTS */
 export const getClients = async () => {
   try {
-    const response = await axios.get(`${URL}/api/users/`)
+    const response = await makeRequest('GET', `/api/users`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getClients ${error.message}`)
@@ -220,7 +234,7 @@ export const registerClient = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.thumbnail, `client/${dataUser.dni}`)
     dataUser.thumbnail = url
-    const response = await axios.post(`${URL}/api/users/`, dataUser)
+    const response = await makeRequest('POST', '/api/users', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -228,7 +242,7 @@ export const registerClient = async (dataUser) => {
 }
 export const getClientsByName = async (name) => {
   try {
-    const response = await axios.get(`${URL}/api/users/name/${name}`)
+    const response = await makeRequest('GET', `/api/users/name/${name}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -236,7 +250,7 @@ export const getClientsByName = async (name) => {
 }
 export const getClientsById = async (id) => {
   try {
-    const response = await axios.get(`${URL}/api/users/${id}`)
+    const response = await makeRequest('GET', `/api/users/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getClientsById ${error.message}`)
@@ -251,7 +265,7 @@ export const updateClients = async (dataClient) => {
       dataClient.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataClient)
-    const response = await axios.put(`${URL}/api/users/${dataClient.id}`, userFormatted)
+    const response = await makeRequest('PUT', `/api/users/${dataClient.id}`, userFormatted)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateUser ${error}`)
@@ -260,7 +274,7 @@ export const updateClients = async (dataClient) => {
 /* PROVIDERS */
 export const getProviders = async () => {
   try {
-    const response = await axios.get(`${URL}/api/provider`)
+    const response = await makeRequest('GET', `/api/provider`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getProviders ${error.message}`)
@@ -270,7 +284,7 @@ export const registerProvider = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.contact.thumbnail, `provider/${dataUser.contact.dni}`)
     dataUser.contact.thumbnail = url
-    const response = await axios.post(`${URL}/api/provider`, dataUser)
+    const response = await makeRequest('POST', '/api/provider', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -285,7 +299,7 @@ export const updateProvider = async (data) => {
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
 
-    const response = await axios.put(`${URL}/api/provider/${data.id}`, data)
+    const response = await makeRequest('PUT', `/api/provider/${data.id}`, data)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateProvider ${error}`)
@@ -295,7 +309,7 @@ export const updateProvider = async (data) => {
 /* TICKETS */
 export const getTickets = async () => {
   try {
-    const response = await axios.get(`${URL}/api/tickets/`)
+    const response = await makeRequest('GET', `/api/tickets`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getTickets ${error.message}`)
@@ -308,7 +322,7 @@ export const updateTicket = async (ticket, data) => {
       ticketNumber: ticket.ticketNumber,
       partialPayments: data,
     }
-    const response = await axios.put(`${URL}/api/tickets/${ticket.ticketNumber}`, dataChange)
+    const response = await makeRequest('PUT', `/api/tickets/${ticket.ticketNumber}`, dataChange)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateTicket ${error.message}`)
@@ -316,7 +330,7 @@ export const updateTicket = async (ticket, data) => {
 }
 export const createTicket = async (dataTicket) => {
   try {
-    const response = await axios.post(`${URL}/api/tickets/`, dataTicket)
+    const response = await makeRequest('POST', '/api/tickets', dataTicket)
     return response.data
   } catch (error) {
     return error.response.data

@@ -6,8 +6,6 @@ export async function registeredUser(req, res, next) {
     if (!sessionCookie) {
       return res.status(401).json({ message: 'Not authenticated' })
     }
-    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true)
-    req.session.user = decodedClaims
     next()
   } catch (error) {
     req.logger.warning('registeredUser Internal Server Error!', error)
@@ -15,9 +13,14 @@ export async function registeredUser(req, res, next) {
   }
 }
 
-export function adminAccess(req, res, next) {
+export async function adminAccess(req, res, next) {
   try {
-    if (req.session.user.rol === 'admin') {
+    const sessionCookie = req.cookies.session || ''
+    if (!sessionCookie) {
+      return res.status(401).json({ message: 'Not authenticated' })
+    }
+    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true)
+    if (decodedClaims.rol === 'admin') {
       return next()
     } else {
       const ruta = req.originalUrl

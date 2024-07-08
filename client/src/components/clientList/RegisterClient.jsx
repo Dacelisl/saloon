@@ -1,8 +1,8 @@
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { registerClient } from '../../firebase/firebase.js'
-import { customContext } from '../context/CustomContext'
-import { Register, Modal } from '../imports.js'
+import { customContext } from '../context/CustomContext.jsx'
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const Register = lazy(() => import('../utils/Register.jsx'))
 
 const RegisterClient = () => {
   const { fetchFromDatabase, showToast } = useContext(customContext)

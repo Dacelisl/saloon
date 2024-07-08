@@ -1,8 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { registerProduct } from '../../firebase/firebase'
-import { customContext } from '../context/CustomContext'
-import { WithAuthentication, InputEdit, InputSelect, InputArea, ImagePreview, ButtonDefault, Modal } from '../imports.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+import { customContext } from '../context/CustomContext.jsx'
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
+const InputArea = lazy(() => import('../utils/InputArea.jsx'))
+const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const ProductRegister = () => {
   const { categories, providers, showToast, navigate } = useContext(customContext)

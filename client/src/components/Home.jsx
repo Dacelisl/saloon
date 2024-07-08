@@ -1,10 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
+import { lazy } from 'react'
 import { Link } from 'react-router-dom'
 import addUser from '../assets/Icons/addUser.svg'
 import users from '../assets/Icons/users.svg'
 import bills from '../assets/Icons/bills.svg'
-import { WithAuthentication, Logo, Modal, IconContainer, PanelBirthday } from './imports.js'
+import WithAuthentication from '../components/utils/WithAuthentication.jsx'
+const Logo = lazy(() => import('../components/utils/Logo.jsx'))
+const Modal = lazy(() => import('../components/utils/Modal.jsx'))
+const IconContainer = lazy(() => import('../components/utils/IconContainer.jsx'))
+const PanelBirthday = lazy(() => import('../components/utils/PanelBirthday.jsx'))
 
 const Home = () => {
   return (
@@ -32,4 +36,4 @@ const Home = () => {
   )
 }
 
-export default WithAuthentication(['stylist', 'admin'])(Home)
+export default WithAuthentication(['stylist', 'admin', 'Auxiliar'])(Home)

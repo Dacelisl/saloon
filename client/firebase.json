@@ -1,12 +1,13 @@
 {
   "hosting": {
+    "site": "project-fabiosalon",
     "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
-      {
-        "source": "/config",
-        "function": "getConfig"
-      },
       {
         "source": "**",
         "destination": "/index.html"

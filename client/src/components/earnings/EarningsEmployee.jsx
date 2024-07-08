@@ -1,11 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
-import { useState, useEffect, useContext } from 'react'
-import { customContext } from '../context/CustomContext.jsx'
+import { useState, useEffect, useContext, lazy } from 'react'
 import { getEarningsEmployeeById } from '../../firebase/firebase.js'
 import { getStartOfWeek, getEndOfWeek, getStartOfMonth, getEndOfMonth, formatDate } from '../../utils/utils.js'
-import { WithAuthentication, ButtonDefault, InputEdit, Modal } from '../imports.js'
+import { customContext } from '../context/CustomContext.jsx'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const Modal = lazy(() => import('../utils/Modal.jsx'))
 
 const EarningsEmployee = () => {
   const { loggedEmployee, employees, showToast } = useContext(customContext)

@@ -1,9 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext'
 import { createTicket } from '../../firebase/firebase.js'
-import { WithAuthentication, TicketDetail, TicketPayment, ButtonDefault, Modal } from '../imports.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
+const Modal = lazy(() => import('../utils/Modal.jsx'))
+const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
+const TicketDetail = lazy(() => import('./TicketDetail.jsx'))
+const TicketPayment = lazy(() => import('./TicketPayment.jsx'))
 
 const TicketList = () => {
   const { selectedClient, navigate, ticket, setTicket, showToast } = useContext(customContext)

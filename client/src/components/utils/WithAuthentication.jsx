@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { useContext } from 'react'
+import { useContext, lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { customContext } from '../context/CustomContext'
-import Cube from '../utils/Cube'
+const Cube = lazy(() => import('../utils/Cube.jsx'))
 
 const WithAuthentication = (allowedRoles) => (WrappedComponent) => {
   const AuthComponent = (props) => {

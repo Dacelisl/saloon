@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext'
 import { totalPrice } from '../../utils/utils.js'
-import { TicketTable, ItemPayment, ToggleSwitch, InputSearch } from '../imports.js'
+const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
+const ToggleSwitch = lazy(() => import('../utils/ToggleSwitch.jsx'))
+const TicketTable = lazy(() => import('./TicketTable.jsx'))
+const ItemPayment = lazy(() => import('./ItemPayment.jsx'))
 
 const TicketDetail = ({ ticket, setTicket }) => {
   const { employees, allProducts, allServices, handleSearch } = useContext(customContext)
@@ -103,10 +106,7 @@ const TicketDetail = ({ ticket, setTicket }) => {
               </div>
             </div>
             <InputSearch onSearch={handleSearchInClients} />
-            <div className='h-[30vh]'>
-
-            {dataTable.length > 0 && <TicketTable data={search !== '' ? search : dataTable} onItemSelected={setItemSelected} openModal={showModal} />}
-            </div>
+            <div className='h-[30vh]'>{dataTable.length > 0 && <TicketTable data={search !== '' ? search : dataTable} onItemSelected={setItemSelected} openModal={showModal} />}</div>
           </div>
         </div>
       </div>
