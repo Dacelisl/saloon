@@ -1,7 +1,7 @@
 import dataConfig from '../config/process.config.js'
 import { connectMongo } from '../utils/connectMongo.js'
 
-export let employeeFactory, productFactory, providerFactory, employeePerformanceFactory, userFactory, expenseFactory, serviceFactory, roleFactory, ticketFactory
+export let employeeFactory, productFactory, providerFactory, employeePerformanceFactory, userFactory, expenseFactory, serviceFactory, roleFactory, ticketFactory, diagnosticFactory
 
 switch (dataConfig.persistence) {
   case 'mongo':
@@ -24,6 +24,8 @@ switch (dataConfig.persistence) {
     serviceFactory = serviceDAO
     const { ticketDAO } = await import('./mongo/class/ticket.dao.js')
     ticketFactory = ticketDAO
+    const { diagnosticDao } = await import('./mongo/class/diagnostic.dao.js')
+    diagnosticFactory = diagnosticDao
     break
   default:
     break

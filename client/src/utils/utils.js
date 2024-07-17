@@ -25,7 +25,7 @@ export const resizeAndCompress = async (file) => {
             resolve(blob)
           },
           'image/jpeg',
-          0.8
+          0.9
         )
       }
       img.src = e.target.result

@@ -10,7 +10,6 @@
   "display": "fullscreen",
   "background_color": "#06051b",
   "icons": [
-    { "purpose": "maskable", "sizes": "512x512", "src": "/icons/icon512_maskable.png", "type": "image/png" },
     { "purpose": "maskable", "sizes": "192x192", "src": "/icons/android-chrome-192x192.png", "type": "image/png" },
     { "purpose": "any", "sizes": "512x512", "src": "/icons/icon512_rounded.png", "type": "image/png" }
   ],
