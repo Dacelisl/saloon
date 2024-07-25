@@ -11,15 +11,15 @@ import { DiagnosticRoutes } from '../routes/diagnostic.routes.js'
 import { EmployeePerformanceRoutes } from '../routes/employeePerformance.routes.js'
 
 export const router = express.Router()
-router.use('/api/products', ProductRoutes)
-router.use('/api/provider', ProviderRoutes)
-router.use('/api/users', UserRoutes)
-router.use('/api/employee', EmployeeRoutes)
-router.use('/api/role', RoleRoutes)
-router.use('/api/service', ServiceRoutes)
-router.use('/api/tickets', TicketRoutes)
-router.use('/api/diagnostic', DiagnosticRoutes)
-router.use('/api/performance', EmployeePerformanceRoutes)
+router.use('/products', ProductRoutes)
+router.use('/provider', ProviderRoutes)
+router.use('/users', UserRoutes)
+router.use('/employee', EmployeeRoutes)
+router.use('/role', RoleRoutes)
+router.use('/service', ServiceRoutes)
+router.use('/tickets', TicketRoutes)
+router.use('/diagnostic', DiagnosticRoutes)
+router.use('/performance', EmployeePerformanceRoutes)
 
 router.get('*', (req, res) => {
   return res.status(404).json({

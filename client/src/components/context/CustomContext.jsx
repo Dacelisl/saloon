@@ -4,7 +4,22 @@ import { createContext, useState, useEffect, lazy } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { auth } from '../../firebase/firebaseApp'
 import { getUpcomingBirthdays } from '../../utils/utils.js'
-import { getClients, getTickets, getEmployee, getProducts, getServices, getPaymentsMethod, getRoles, getCategories, getProviders, getEmployeeByEmail } from '../../firebase/firebase'
+import {
+  getClients,
+  getTickets,
+  getEmployee,
+  getProducts,
+  getServices,
+  getPaymentsMethod,
+  getRoles,
+  getCategories,
+  getProviders,
+  getEmployeeByEmail,
+  getDiagnostics,
+  getHairTypes,
+  getProcedureTypes,
+  getScalpTypes,
+} from '../../firebase/firebase'
 const Toast = lazy(() => import('../utils/Toast.jsx'))
 
 export const customContext = createContext()
@@ -18,6 +33,7 @@ const CustomContext = ({ children }) => {
     items: [],
   }
   const defaultClientList = {
+    id:'',
     firstName: '',
     lastName: '',
     dni: '',
@@ -30,6 +46,26 @@ const CustomContext = ({ children }) => {
     thumbnail: '',
     code: '',
   }
+  const defaultDiagnostic = {
+    client: {
+      dni: '',
+      firstName: '',
+      lastName: '',
+    },
+    employee: {
+      firstName: '',
+      lastName: '',
+    },
+    date: '',
+    procedureType: '',
+    hairCondition: '',
+    scalpCondition: '',
+    stylistNotes: '',
+    recommendations: '',
+    nextAppointment: '',
+    photoBefore: '',
+    photoAfter: '',
+  }
 
   const [loading, setLoading] = useState(true)
   const [clients, setClients] = useState([])
@@ -39,6 +75,12 @@ const CustomContext = ({ children }) => {
   const [allProducts, setAllProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [providers, setProviders] = useState([])
+  const [diagnostics, setDiagnostics] = useState([])
+
+  const [scalpTypes, setScalpTypes] = useState([])
+  const [procedureTypes, setProcedureTypes] = useState([])
+  const [HairTypes, setHairTypes] = useState([])
+
   const [roles, setRoles] = useState([])
   const [role, setRole] = useState('')
 
@@ -70,21 +112,38 @@ const CustomContext = ({ children }) => {
       const allClients = await getClients()
       const allTickets = await getTickets()
       const method = await getPaymentsMethod()
+      const allDiagnostic = await getDiagnostics()
       const services = await getServices()
       const products = await getProducts()
       const categ = await getCategories()
       const prov = await getProviders()
       const rols = await getRoles()
+      const procedures = await getProcedureTypes()
+      const hairs = await getHairTypes()
+      const scalp = await getScalpTypes()
 
-      setEmployees(allEmployee)
+      const employees = allEmployee.map((emp) => ({
+        ...emp,
+        fullName: `${emp.firstName} ${emp.lastName}`,
+      }))
+      const clients = allClients.map((user) => ({
+        ...user,
+        fullName: `${user.firstName} ${user.lastName}`,
+      }))
+
+      setEmployees(employees)
       setRoles(rols)
       setCategories(categ)
       setProviders(prov)
       setAllServices(services)
       setAllProducts(products)
-      setClients(allClients)
+      setClients(clients)
       setTickets(allTickets)
       setPaymentMethods(method)
+      setDiagnostics(allDiagnostic)
+      setScalpTypes(scalp)
+      setHairTypes(hairs)
+      setProcedureTypes(procedures)
     } catch (error) {
       throw new Error(`Error getting data: ${error}`)
     }
@@ -142,10 +201,14 @@ const CustomContext = ({ children }) => {
         roles,
         role,
         categories,
+        scalpTypes,
+        HairTypes,
+        procedureTypes,
         providers,
         setClients,
         tickets,
         setTickets,
+        diagnostics,
         selectedClient,
         setSelectedClient,
         loggedEmployee,
@@ -163,6 +226,7 @@ const CustomContext = ({ children }) => {
         ticket,
         setTicket,
         nextBirthDay,
+        defaultDiagnostic
       }}
     >
       {children}

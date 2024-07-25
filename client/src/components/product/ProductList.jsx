@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext, useEffect, lazy } from 'react'
 import { updateProduct } from '../../firebase/firebase'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
 import { customContext } from '../context/CustomContext.jsx'
@@ -25,8 +25,16 @@ const ProductList = () => {
   const { allProducts, handleSearch, fetchFromDatabase, role, showToast } = useContext(customContext)
   const [search, setSearch] = useState('')
   const [selectedProduct, setSelectedProduct] = useState(defaultProduct)
+  const [filteredProduct, setFilteredProduct] = useState([])
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
+
+  useEffect(() => {
+    const selected = allProducts.sort((a, b) => a.provider.toLowerCase().localeCompare(b.provider.toLowerCase()))
+    setFilteredProduct(selected)
+    setSelectedProduct(selected[0])
+    setImagenPreview(selected[0].thumbnail)
+  }, [allProducts])
 
   const handleProductSelect = (productId) => {
     setSelectedProduct(productId)
@@ -64,7 +72,7 @@ const ProductList = () => {
         />
         <InputSearch onSearch={handleSearchInProducts} />
         <div className='h-[30%]'>
-          <ProductTable onProductSelected={handleProductSelect} data={search !== '' ? search : allProducts} />
+          <ProductTable onProductSelected={handleProductSelect} data={search !== '' ? search : filteredProduct} />
         </div>
       </Modal>
     </>

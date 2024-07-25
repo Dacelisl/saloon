@@ -15,10 +15,10 @@ const HistoricalClientList = () => {
   const [selectedTicket, setSelectedTicket] = useState('')
   const [ticketsClient, setTicketsClient] = useState('')
   const [isModalCreditOpen, setIsModalCreditOpen] = useState(false)
-
   useEffect(() => {
-    const selected = tickets.filter((ticket) => ticket.customer.id === selectedClient.id)
+    const selected = tickets.filter((ticket) => ticket.customer.id === selectedClient.id).sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate))
     setTicketsClient(selected)
+    setSelectedTicket(selected[0])
   }, [selectedClient, tickets])
 
   const handleTicketSelect = (ticket) => {

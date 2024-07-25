@@ -34,7 +34,7 @@ export default {
       lg: '425px',
       xl: '768px',
       xxl: '1024px',
-      xxxl: '1440px',
+      xxxl: '1279px',
     },
   },
   plugins: [tailwindScrollbar],

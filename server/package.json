@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js --mode production",
     "build:backend": "nodemon server.js --mode development",
-    "dev": "nodemon -e yaml,js server.js --mode development"
+    "dev": "nodemon --watch . -e js,json --exec node server.js --mode development"
   },
   "author": "Diego celis",
   "license": "ISC",

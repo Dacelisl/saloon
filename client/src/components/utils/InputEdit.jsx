@@ -4,7 +4,7 @@ const InputEdit = ({ label = true, labelName, value, edit = false, onChange, typ
   return (
     <div className='mb-2'>
       {label && (
-        <label htmlFor={name} className='block text-xs lg:text-base xxl:text-lg mb-0 font-semibold text-gray-600'>
+        <label htmlFor={name} className='block text-xs lg:text-base xxl:text-lg font-semibold text-gray-600'>
           {labelName}:
         </label>
       )}
@@ -17,7 +17,7 @@ const InputEdit = ({ label = true, labelName, value, edit = false, onChange, typ
         autoComplete='off'
         name={name}
         placeholder={label ? '' : labelName}
-        className={`w-full px-2 py-0 border rounded-md focus:outline-red-200 ${className}`}
+        className={`w-full px-2 mt-1 text-sm py-1 border rounded-md focus:outline-red-200 ${className}`}
       />
     </div>
   )

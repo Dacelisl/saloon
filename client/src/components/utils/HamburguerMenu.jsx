@@ -34,13 +34,21 @@ const HamburguerMenu = () => {
               <div className={`block h-[6px] w-full duration-300 ease-out bg-slate-100 rounded ${changeAction ? 'opacity-0' : ''}`}></div>
               <div className={`block h-[6px] w-full duration-300 ease-out bg-slate-100 rounded translate-y-1 ${changeAction ? '!-translate-y-2 rotate-45' : ''}`}></div>
             </div>
-            <nav className={changeAction ? 'block' : 'hidden duration-300 ease-out '}>
-              <ul className='px-0 py-0 '>
+            <div className={`fixed z-[-40] top-0 right-0 w-full h-full bg-opacity-50 ${changeAction ? 'block' : 'hidden'}`} onClick={menuOnClick}></div>
+            <nav
+              className={`fixed top-0 right-0 w-[40vw] xl:w-[22vw] xxl:w-[18vw] xxxl:w-[12vw] h-full bg-[#709e83] transform ${
+                changeAction ? 'translate-x-0' : 'translate-x-full'
+              } transition-transform duration-300 ease-out z-[-40]`}
+            >
+              <ul className='px-[10%] mt-[10vh] z-[-51]'>
                 <li className=' text-slate-50 font-bold sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/'}>Home</Link>
                 </li>
                 <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/users'}>Clients</Link>
+                </li>
+                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                  <Link to={'/diagnostic'}>Diagnostic</Link>
                 </li>
 
                 {loggedEmployee.role === 'admin' ? (
@@ -71,18 +79,6 @@ const HamburguerMenu = () => {
               </ul>
             </nav>
           </div>
-
-          <div
-            className={
-              loggedEmployee.role === 'admin'
-                ? `flex fixed w-[520px] h-[700px] translate-x-[57%] -translate-y-[25%] md:translate-x-[54%] lg:translate-x-[51%] xl:translate-x-[26%] xxl:translate-x-[12%] xxl:-translate-y-[25%] xxxl:-translate-x-[16%] ${
-                    changeAction ? 'z-40 w-0 h-0 mt-8 mr-0 mb-5 ml-5 bg-[#28292e] rounded-[60%] top-0 -right-[30%] duration-300 ease-out' : ''
-                  }`
-                : `flex fixed w-[520px] h-[500px] translate-x-[57%] -translate-y-[25%]  md:translate-x-[55%] lg:translate-x-[50%] xl:translate-x-[28%] xl:-translate-y-[22%] xxl:translate-x-[12%] xxxl:-translate-x-[11%] ${
-                    changeAction ? 'z-40 w-0 h-0 mt-8 mr-0 mb-5 ml-5 bg-[#28292e] rounded-[50%] top-0 -right-[30%] duration-300 ease-out' : ''
-                  }`
-            }
-          ></div>
         </>
       )}
     </>

@@ -10,7 +10,7 @@ const DiagnosticSchema = new Schema({
   date: { type: Date, required: true, default: Date.now },
   procedureType: { type: String, required: true, enum: procedureTypeEnum },
   hairCondition: { type: String, required: true, enum: hairConditionEnum },
-  scalpCondition: { type: String, required: true, enum: scalpConditionEnum },
+  scalpCondition: { type: String, required: true, enum: scalpConditionEnum }, 
   stylistNotes: { type: String, trim: true },
   recommendations: { type: String, trim: true },
   nextAppointment: { type: Date },

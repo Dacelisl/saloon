@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext, useEffect, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
+import { updateClients } from '../../firebase/firebase.js'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
-const updateClients = lazy(() => import('../../firebase/firebase'))
 const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
 const Modal = lazy(() => import('../utils/Modal.jsx'))
 const ClientTable = lazy(() => import('./ClientTable.jsx'))
@@ -14,6 +14,12 @@ const ClientList = () => {
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
+
+  useEffect(() => {
+    const selected = clients.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
+    setSelectedClient(selected[0])
+    setImagenPreview(selected[0].thumbnail)
+  }, [clients])
 
   const handleClientSelect = (clientId) => {
     setSelectedClient(clientId)

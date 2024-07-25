@@ -63,8 +63,11 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
           <Link to={'/ticket'} className='contents'>
             <ButtonDefault title='Ticket' />
           </Link>
+          <Link to={'/diagnostic'} className='contents'>
+            <ButtonDefault title='Diagnostico' />
+          </Link>
           <Link to={'/historical'} className='contents'>
-            <ButtonDefault title='Ver Historial' disabled={selectedClient ? false : true} />
+            <ButtonDefault title='Historial' disabled={selectedClient ? false : true} />
           </Link>
         </div>
       ) : (

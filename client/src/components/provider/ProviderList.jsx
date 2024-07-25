@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext, useEffect, lazy } from 'react'
 import { updateProvider } from '../../firebase/firebase'
 import { customContext } from '../context/CustomContext.jsx'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
@@ -32,6 +32,11 @@ const ProviderList = () => {
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
+
+  useEffect(() => {
+    setSelectedProvider(providers[0])
+    setImagenPreview(providers[0].contact.thumbnail)
+  }, [providers])
 
   const handleProviderSelect = (providerId) => {
     setSelectedProvider(providerId)

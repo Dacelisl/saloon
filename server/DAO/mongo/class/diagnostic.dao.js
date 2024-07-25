@@ -29,6 +29,32 @@ class DiagnosticDao {
       throw new Error(`function DAO getAllDiagnosticsByUserId  ${error}`)
     }
   }
+
+  async getScalpTypes() {
+    try {
+      const enumValues = Object.values(DiagnosticModel.schema.path('scalpCondition').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getscalpTypes  ${error}`)
+    }
+  }
+  async getProcedureTypes() {
+    try {
+      const enumValues = Object.values(DiagnosticModel.schema.path('procedureType').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getProcedureTypes  ${error}`)
+    }
+  }
+  async getHairTypes() {
+    try {
+      const enumValues = Object.values(DiagnosticModel.schema.path('hairCondition').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getHairTypes  ${error}`)
+    }
+  }
+
   async createDiagnostic(diagnosticData) {
     try {
       const diagnostic = await DiagnosticModel.create(diagnosticData)

@@ -11,6 +11,8 @@ const ProviderList = lazy(() => import('./components/provider/ProviderList.jsx')
 const ProviderRegister = lazy(() => import('./components/provider/ProviderRegister.jsx'))
 const ProductRegister = lazy(() => import('./components/product/ProductRegister.jsx'))
 const EmployeeList = lazy(() => import('./components/employee/EmployeeList.jsx'))
+const RegisterDiagnostic = lazy(() => import('./components/diagnostic/RegisterDiagnostic.jsx'))
+const DiagnosticList = lazy(() => import('./components/diagnostic/DiagnosticList.jsx'))
 const EmployeeRegister = lazy(() => import('./components/employee/EmployeeRegister.jsx'))
 const EarningsEmployee = lazy(() => import('./components/earnings/EarningsEmployee.jsx'))
 const HistoricalClientList = lazy(() => import('./components/clientList/HistoricalClient/HistoricalClientList.jsx'))
@@ -67,6 +69,8 @@ function App() {
               <Route path='users' element={<ClientList />} />
               <Route path='registerCliente' element={<RegisterClient />} />
               <Route path='historical' element={<HistoricalClientList />} />
+              <Route path='diagnostic' element={<DiagnosticList />} />
+              <Route path='registerDiagnostic' element={<RegisterDiagnostic />} />
               <Route path='ticket' element={<TicketList />} />
               <Route path='provider' element={<ProviderList />} />
               <Route path='providerRegister' element={<ProviderRegister />} />

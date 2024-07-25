@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-const InputSelect = ({ label, name, itemValue, itemOption, handleFieldChange, editable = false, className = '' }) => {
+const InputSelect = ({ label, name, itemValue, itemOption, handleFieldChange, editable = false, className = '', optionValueKey = 'name', optionDisplayKey = 'name' }) => {
   return (
     <div className='mb-2'>
       <label className='block text-xs lg:text-base xxl:text-lg font-semibold text-gray-600'>
@@ -14,8 +14,8 @@ const InputSelect = ({ label, name, itemValue, itemOption, handleFieldChange, ed
         >
           <option value=''>Seleccione</option>
           {itemOption.map((option) => (
-            <option key={option.id} value={option.name}>
-              {option.name}
+            <option key={option.id} value={option[optionValueKey]}>
+              {option[optionDisplayKey]}
             </option>
           ))}
         </select>

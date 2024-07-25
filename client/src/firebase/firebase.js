@@ -1,19 +1,21 @@
 import { auth } from './firebaseApp'
-import { formattUpdate } from '../utils/utils.js'
+import { formattUpdate, formatDate } from '../utils/utils.js'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 
-
 const instance = axios.create({
   withCredentials: true,
 })
+const date = new Date()
+const dateNow = formatDate(date)
 
 async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/api${url}`,
+      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/api${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
@@ -26,7 +28,7 @@ async function makeRequest(method, url, data = null, headers = {}) {
 /* SLECTS */
 export const getRoles = async () => {
   try {
-    const response = await makeRequest('GET', '/api/role')
+    const response = await makeRequest('GET', '/role')
     const roles = response.data.payload.map((r) => {
       return { name: r.name, id: r._id, permissions: r.permissions }
     })
@@ -37,7 +39,7 @@ export const getRoles = async () => {
 }
 export const getCategories = async () => {
   try {
-    const response = await makeRequest('GET', '/api/products/categories/')
+    const response = await makeRequest('GET', '/products/categories/')
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })
@@ -48,7 +50,7 @@ export const getCategories = async () => {
 }
 export const getPaymentsMethod = async () => {
   try {
-    const response = await makeRequest('GET', '/api/tickets/paymentMethods')
+    const response = await makeRequest('GET', '/tickets/paymentMethods')
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })
@@ -59,7 +61,7 @@ export const getPaymentsMethod = async () => {
 }
 export const getServices = async () => {
   try {
-    const response = await makeRequest('GET', '/api/service')
+    const response = await makeRequest('GET', '/service')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getServices ${error.message}`)
@@ -69,7 +71,7 @@ export const getServices = async () => {
 /* EMPLOYEES */
 export const getEmployee = async () => {
   try {
-    const response = await makeRequest('GET', '/api/employee')
+    const response = await makeRequest('GET', '/employee')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -84,7 +86,7 @@ export const updateEmployee = async (dataUser) => {
       dataUser.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataUser)
-    const response = await makeRequest('PUT', `/api/employee/${dataUser.id}`, userFormatted, { 'Content-Type': 'application/json' })
+    const response = await makeRequest('PUT', `/employee/${dataUser.id}`, userFormatted, { 'Content-Type': 'application/json' })
     return response.status
   } catch (error) {
     throw new Error(`Error server updateEmployee ${error}`)
@@ -92,7 +94,7 @@ export const updateEmployee = async (dataUser) => {
 }
 export const getEarningsEmployees = async () => {
   try {
-    const response = await makeRequest('GET', '/api/performance')
+    const response = await makeRequest('GET', '/performance')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -100,7 +102,7 @@ export const getEarningsEmployees = async () => {
 }
 export const getEarningsEmployeeById = async (id) => {
   try {
-    const response = await makeRequest('GET', `/api/performance/employee/${id}`)
+    const response = await makeRequest('GET', `/performance/employee/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -108,7 +110,7 @@ export const getEarningsEmployeeById = async (id) => {
 }
 export const getEmployeeByEmail = async (mail) => {
   try {
-    const response = await makeRequest('GET', `/api/employee/email/${mail}`)
+    const response = await makeRequest('GET', `/employee/email/${mail}`)
     return response.data
   } catch (error) {
     throw new Error(`Error server getEmployee ${error.message}`)
@@ -120,17 +122,16 @@ export const singIn = async (email, password) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password)
     if (!response) return response
-    await makeRequest('POST', '/api/employee/login', null, { Authorization: `Bearer ${response.user.accessToken}` })
+    await makeRequest('POST', '/employee/login', null, { Authorization: `Bearer ${response.user.accessToken}` })
     return response
   } catch (error) {
-    throw new Error(`Error server singIn ${error.message}`)
+    throw new Error(`Error server singIn ${error}`)
   }
 }
-
 export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
-      await makeRequest('DELETE', '/api/employee/logOut')
+      await makeRequest('DELETE', '/employee/logOut')
       localStorage.removeItem('sessionData')
       return true
     })
@@ -139,7 +140,6 @@ export const logOut = async () => {
     })
   return res
 }
-
 export const passwordRecovery = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email)
@@ -151,7 +151,7 @@ export const registerEmployeeMongo = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.thumbnail, `employee/${dataUser.dni}`)
     dataUser.thumbnail = url
-    const response = await makeRequest('POST', '/api/employee', dataUser)
+    const response = await makeRequest('POST', '/employee', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -160,7 +160,7 @@ export const registerEmployeeMongo = async (dataUser) => {
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
     const response = await createUserWithEmailAndPassword(auth, email, password)
-    await makeRequest('POST', '/api/employee/create', { accessToken: response.user.uid, rol })
+    await makeRequest('POST', '/employee/create', { accessToken: response.user.uid, rol })
     return response.user
   } catch (error) {
     throw new Error(`Error server registerEmployeeFire ${error.message}`)
@@ -183,7 +183,7 @@ export const registerProduct = async (dataProduct) => {
   try {
     const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
     dataProduct.thumbnail = url
-    const response = await makeRequest('POST', '/api/products', dataProduct)
+    const response = await makeRequest('POST', '/products', dataProduct)
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -191,7 +191,7 @@ export const registerProduct = async (dataProduct) => {
 }
 export const getProducts = async () => {
   try {
-    const response = await makeRequest('GET', '/api/products')
+    const response = await makeRequest('GET', '/products')
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -199,7 +199,7 @@ export const getProducts = async () => {
 }
 export const getProductsByName = async (name) => {
   try {
-    const response = await makeRequest('GET', `/api/products/name/${name}`)
+    const response = await makeRequest('GET', `/products/name/${name}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -214,7 +214,7 @@ export const updateProduct = async (dataProduct) => {
       dataProduct.thumbnail = ''
     }
     const productFormatted = formattUpdate(dataProduct)
-    const response = await makeRequest('PUT', `/api/products/${dataProduct.id}`, productFormatted)
+    const response = await makeRequest('PUT', `/products/${dataProduct.id}`, productFormatted)
     return response.data
   } catch (error) {
     throw new Error(`Error server registerProduct ${error}`)
@@ -224,7 +224,7 @@ export const updateProduct = async (dataProduct) => {
 /* CLIENTS */
 export const getClients = async () => {
   try {
-    const response = await makeRequest('GET', `/api/users`)
+    const response = await makeRequest('GET', `/users`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getClients ${error.message}`)
@@ -234,7 +234,7 @@ export const registerClient = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.thumbnail, `client/${dataUser.dni}`)
     dataUser.thumbnail = url
-    const response = await makeRequest('POST', '/api/users', dataUser)
+    const response = await makeRequest('POST', '/users', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -242,7 +242,7 @@ export const registerClient = async (dataUser) => {
 }
 export const getClientsByName = async (name) => {
   try {
-    const response = await makeRequest('GET', `/api/users/name/${name}`)
+    const response = await makeRequest('GET', `/users/name/${name}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getRoles ${error.message}`)
@@ -250,7 +250,7 @@ export const getClientsByName = async (name) => {
 }
 export const getClientsById = async (id) => {
   try {
-    const response = await makeRequest('GET', `/api/users/${id}`)
+    const response = await makeRequest('GET', `/users/${id}`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getClientsById ${error.message}`)
@@ -265,7 +265,7 @@ export const updateClients = async (dataClient) => {
       dataClient.thumbnail = ''
     }
     const userFormatted = formattUpdate(dataClient)
-    const response = await makeRequest('PUT', `/api/users/${dataClient.id}`, userFormatted)
+    const response = await makeRequest('PUT', `/users/${dataClient.id}`, userFormatted)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateUser ${error}`)
@@ -274,7 +274,7 @@ export const updateClients = async (dataClient) => {
 /* PROVIDERS */
 export const getProviders = async () => {
   try {
-    const response = await makeRequest('GET', `/api/provider`)
+    const response = await makeRequest('GET', `/provider`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getProviders ${error.message}`)
@@ -284,7 +284,7 @@ export const registerProvider = async (dataUser) => {
   try {
     const url = await uploadFire(dataUser.contact.thumbnail, `provider/${dataUser.contact.dni}`)
     dataUser.contact.thumbnail = url
-    const response = await makeRequest('POST', '/api/provider', dataUser)
+    const response = await makeRequest('POST', '/provider', dataUser)
     return response.data
   } catch (error) {
     return error.response.data
@@ -299,17 +299,96 @@ export const updateProvider = async (data) => {
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
 
-    const response = await makeRequest('PUT', `/api/provider/${data.id}`, data)
+    const response = await makeRequest('PUT', `/provider/${data.id}`, data)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateProvider ${error}`)
+  }
+}
+/* DIAGNOSTICS */
+export const getDiagnostics = async () => {
+  try {
+    const response = await makeRequest('GET', `/diagnostic`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getDiagnostics ${error.message}`)
+  }
+}
+export const getDiagnosticById = async (id) => {
+  try {
+    const response = await makeRequest('GET', `/diagnostic/id/${id}`)
+    return response.data.payload
+  } catch (error) {
+    throw new Error(`Error server getDiagnosticById ${error.message}`)
+  }
+}
+export const registerDiagnostic = async (dataUser) => {
+  try {
+    const url1 = await uploadFire(dataUser.photoBefore, `diagnostics/${dataUser.userId}-before-${dateNow}`)
+    dataUser.photoBefore = url1
+    const url2 = await uploadFire(dataUser.photoAfter, `diagnostics/${dataUser.userId}-after-${dateNow}`)
+    dataUser.photoAfter = url2
+    const response = await makeRequest('POST', '/diagnostic', dataUser)
+    return response.data
+  } catch (error) {
+    throw new Error(`Error server registerDiagnostic ${error}`)
+  }
+}
+export const updateDiagnostic = async (data) => {
+  try {
+    if (typeof data.photoBefore === 'object') {
+      const url = await uploadFire(data.photoBefore, `diagnostics/${data.dni}-before-${dateNow}`)
+      data.photoBefore = url
+    }
+    if (typeof data.photoAfter === 'object') {
+      const url = await uploadFire(data.photoAfter, `diagnostics/${data.dni}-after-${dateNow}`)
+      data.photoAfter = url
+    }
+    const response = await makeRequest('PUT', `/diagnostic/${data.id}`, data)
+    return response.data
+  } catch (error) {
+    throw new Error(`Error server updateDiagnostic ${error}`)
+  }
+}
+
+export const getScalpTypes = async () => {
+  try {
+    const response = await makeRequest('GET', '/diagnostic/scalpTypes/')
+    const options = response.data.payload.map((item, index) => {
+      return { id: index.toString(), name: item }
+    })
+    return options
+  } catch (error) {
+    throw new Error(`Error server getScalpTypes ${error.message}`)
+  }
+}
+export const getProcedureTypes = async () => {
+  try {
+    const response = await makeRequest('GET', '/diagnostic/procedureTypes/')
+    const options = response.data.payload.map((item, index) => {
+      return { id: index.toString(), name: item }
+    })
+    return options
+  } catch (error) {
+    throw new Error(`Error server getProcedureTypes ${error.message}`)
+  }
+}
+export const getHairTypes = async () => {
+  try {
+    const response = await makeRequest('GET', '/diagnostic/hairTypes/')
+    const options = response.data.payload.map((item, index) => {
+      return { id: index.toString(), name: item }
+    })
+    return options
+  } catch (error) {
+    throw new Error(`Error server getHairTypes ${error.message}`)
   }
 }
 
 /* TICKETS */
 export const getTickets = async () => {
   try {
-    const response = await makeRequest('GET', `/api/tickets`)
+    const response = await makeRequest('GET', `/tickets`)
     return response.data.payload
   } catch (error) {
     throw new Error(`Error server getTickets ${error.message}`)
@@ -322,7 +401,7 @@ export const updateTicket = async (ticket, data) => {
       ticketNumber: ticket.ticketNumber,
       partialPayments: data,
     }
-    const response = await makeRequest('PUT', `/api/tickets/${ticket.ticketNumber}`, dataChange)
+    const response = await makeRequest('PUT', `/tickets/${ticket.ticketNumber}`, dataChange)
     return response.data
   } catch (error) {
     throw new Error(`Error server updateTicket ${error.message}`)
@@ -330,7 +409,7 @@ export const updateTicket = async (ticket, data) => {
 }
 export const createTicket = async (dataTicket) => {
   try {
-    const response = await makeRequest('POST', '/api/tickets', dataTicket)
+    const response = await makeRequest('POST', '/tickets', dataTicket)
     return response.data
   } catch (error) {
     return error.response.data

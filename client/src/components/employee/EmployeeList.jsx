@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useContext, lazy } from 'react'
+import { useState, useContext, useEffect, lazy } from 'react'
 import { getEmployee, updateEmployee } from '../../firebase/firebase'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
 import { customContext } from '../context/CustomContext.jsx'
@@ -15,6 +15,12 @@ const EmployeeList = () => {
   const [imagenPreview, setImagenPreview] = useState('')
   const [selectedEmployee, setSelectedEmployee] = useState('')
   const [editable, setEditable] = useState(false)
+
+  useEffect(() => {
+    const selected = employees.sort((a, b) => new Date(b.dateBirthday) - new Date(a.dateBirthday))
+    setSelectedEmployee(selected[0])
+    setImagenPreview(selected[0].thumbnail)
+  }, [employees])
 
   const handleSelect = (userId) => {
     setSelectedEmployee(userId)

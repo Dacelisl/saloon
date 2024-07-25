@@ -2,6 +2,7 @@
 import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext'
 import { totalPrice } from '../../utils/utils.js'
+import InputSelect from '../utils/InputSelect.jsx'
 const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
 const ToggleSwitch = lazy(() => import('../utils/ToggleSwitch.jsx'))
 const TicketTable = lazy(() => import('./TicketTable.jsx'))
@@ -88,19 +89,7 @@ const TicketDetail = ({ ticket, setTicket }) => {
         <div className='h-[70%] block'>
           <div className=' p-4 rounded-md'>
             <div className='flex m-auto'>
-              <div className='pb-4 xl:relative xxl:m-auto'>
-                <label className='block text-xs font-semibold text-gray-600'>
-                  Empleado:
-                  <select name='employeeId' onChange={handleFieldChange} className='w-full px-1 h-8 text-sm border rounded-md'>
-                    <option value=''>Seleccione</option>
-                    {employees.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {`${option.firstName} ${option.lastName}`}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+              <InputSelect label={'Empleado'} name={'employeeId'} handleFieldChange={handleFieldChange} itemOption={employees} optionValueKey='id' optionDisplayKey='fullName' editable />
               <div className='block ml-5 sm:w-[47%] xl:relative xxl:m-auto xl:w-auto'>
                 <ToggleSwitch label={'Productos / Servicios'} toggleState={toggleState} handleToggleChange={handleToggleChange} />
               </div>

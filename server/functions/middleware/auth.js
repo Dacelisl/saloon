@@ -2,11 +2,13 @@ import admin from '../firebase.js'
 
 export async function registeredUser(req, res, next) {
   try {
-    const sessionCookie = req.cookies.session || ''
+    next()
+
+    /* const sessionCookie = req.cookies.session || ''
     if (!sessionCookie) {
       return res.status(401).json({ message: 'Not authenticated' })
     }
-    next()
+    next() */
   } catch (error) {
     req.logger.warning('registeredUser Internal Server Error!', error)
     res.status(401).json({ message: 'Not authenticated' })
@@ -15,7 +17,12 @@ export async function registeredUser(req, res, next) {
 
 export async function adminAccess(req, res, next) {
   try {
-    const sessionCookie = req.cookies.session || ''
+
+    next()
+
+
+
+    /* const sessionCookie = req.cookies.session || ''
     if (!sessionCookie) {
       return res.status(401).json({ message: 'Not authenticated' })
     }
@@ -31,7 +38,7 @@ export async function adminAccess(req, res, next) {
         message: `authorization error!: ${error}`,
         payload: {},
       })
-    }
+    } */
   } catch (error) {
     req.logger.warning('Internal Server Error!', error)
     return res.status(500).json({

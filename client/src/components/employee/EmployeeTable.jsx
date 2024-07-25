@@ -26,7 +26,7 @@ const EmployeeTable = ({ data, onEmployeeSelected }) => {
           className={`px-2 py-1 text-sm font-medium bg-button-primary text-button-text_primary hover:text-button-text_hover focus:bg-button-hover rounded-md focus:outline-1 focus:ring-1 focus:ring-gray-500 `}
           onClick={() => setSelectedColumnId(row.id)}
         >
-          Detalles
+          <span className='md:hidden'>Ver</span> <span className='sm:hidden md:block'>Detalles</span>
         </button>
       ),
     },
