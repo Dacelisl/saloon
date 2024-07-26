@@ -53,7 +53,7 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
       {role === 'admin' ? (
         <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
           <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} />
+            <ButtonDefault title='Editar' onClick={handleEdit} />
             <ButtonDefault title='Agregar' onClick={() => navigate('/registerProduct')} />
           </span>
         </div>
@@ -62,8 +62,8 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
       )}
       {editable ? (
         <div className='flex my-2'>
-          <ButtonDefault title='Save' onClick={saveChange} />
-          <ButtonDefault title='Cancel' onClick={handleCancel} />
+          <ButtonDefault title='Guardar' onClick={saveChange} />
+          <ButtonDefault title='Cancelar' onClick={handleCancel} />
         </div>
       ) : (
         ''

@@ -89,7 +89,17 @@ const TicketDetail = ({ ticket, setTicket }) => {
         <div className='h-[70%] block'>
           <div className=' p-4 rounded-md'>
             <div className='flex m-auto'>
-              <InputSelect label={'Empleado'} name={'employeeId'} handleFieldChange={handleFieldChange} itemOption={employees} optionValueKey='id' optionDisplayKey='fullName' editable />
+              <InputSelect
+                label={'Empleado'}
+                name={'employeeId'}
+                handleFieldChange={handleFieldChange}
+                itemOption={employees}
+                optionValueKey='id'
+                optionDisplayKey='fullName'
+                itemValue={ticket.employeeId}
+                editable
+                className=' block w-[90%] mr-2'
+              />
               <div className='block ml-5 sm:w-[47%] xl:relative xxl:m-auto xl:w-auto'>
                 <ToggleSwitch label={'Productos / Servicios'} toggleState={toggleState} handleToggleChange={handleToggleChange} />
               </div>

@@ -45,22 +45,22 @@ const HamburguerMenu = () => {
                   <Link to={'/'}>Home</Link>
                 </li>
                 <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
-                  <Link to={'/users'}>Clients</Link>
+                  <Link to={'/users'}>Clientes</Link>
                 </li>
                 <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
-                  <Link to={'/diagnostic'}>Diagnostic</Link>
+                  <Link to={'/diagnostic'}>Diagnostico</Link>
                 </li>
 
                 {loggedEmployee.role === 'admin' ? (
                   <>
                     <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
-                      <Link to={'/products'}>Product</Link>
+                      <Link to={'/products'}>Productos</Link>
                     </li>
                     <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
-                      <Link to={'/employeeList'}>Employee</Link>
+                      <Link to={'/employeeList'}>Empleados</Link>
                     </li>
                     <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
-                      <Link to={'/provider'}>Provider</Link>
+                      <Link to={'/provider'}>Proveedores</Link>
                     </li>
                   </>
                 ) : (

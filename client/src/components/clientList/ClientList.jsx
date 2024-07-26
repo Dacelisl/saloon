@@ -43,7 +43,7 @@ const ClientList = () => {
   return (
     <>
       <Modal type={2} className={'!p-3 md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:top-[3%] xxl:h-[90%]'}>
-        <h2 className='text-xl pl-4 text-gray-500 font-bold mb-3'>Clients</h2>
+        <h2 className='text-xl flex justify-center text-gray-500 font-bold mb-3'>Clientes</h2>
         <ClientDetail
           loggedEmployee={loggedEmployee}
           selectedClient={selectedClient}

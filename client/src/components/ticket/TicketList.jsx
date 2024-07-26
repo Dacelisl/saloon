@@ -43,7 +43,7 @@ const TicketList = () => {
           <h2 className='text-xl pl-4 text-gray-500 font-bold my-2'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
           <TicketDetail ticket={ticket} setTicket={setTicket} />
           <div className=' my-2 flex'>
-            <ButtonDefault title='Cancel' onClick={cancelTicket} />
+            <ButtonDefault title='Cancelar' onClick={cancelTicket} />
             <ButtonDefault title='Continuar' onClick={showModal} />
           </div>
         </div>

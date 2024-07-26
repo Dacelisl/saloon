@@ -54,24 +54,16 @@ const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, 
           <InputSelect label={'Rol'} name={'role'} itemOption={roles} itemValue={selectedEmployee.role} handleFieldChange={handleFieldChange} editable={editable} className='h-8' />
         </div>
       </form>
-
-      {selectedEmployee.firstName ? (
-        <div className={` ${editable ? 'hidden' : 'flex relative mx-auto'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} />
-          </span>
-        </div>
-      ) : (
-        <div className={` ${editable ? 'hidden' : 'flex relative mx-auto'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Agregar' onClick={() => navigate('/registerEmployee')} />
-          </span>
-        </div>
-      )}
+      <div className={` ${editable ? 'hidden' : 'flex relative mx-auto'}`}>
+        <span className='contents'>
+          <ButtonDefault title='Editar' onClick={handleEdit} />
+          <ButtonDefault title='Agregar' onClick={() => navigate('/reg  isterEmployee')} />
+        </span>
+      </div>
       {editable ? (
         <div className='flex my-2'>
-          <ButtonDefault title='Save' onClick={saveChange} />
-          <ButtonDefault title='Cancel' onClick={handleCancel} />
+          <ButtonDefault title='Guardar' onClick={saveChange} />
+          <ButtonDefault title='Cancelar' onClick={handleCancel} />
         </div>
       ) : (
         ''

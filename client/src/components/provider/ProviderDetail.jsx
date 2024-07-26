@@ -106,23 +106,17 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
           </form>
         </div>
       </div>
-      {selectedprovider.name ? (
-        <div className={` ${editable ? 'hidden' : 'flex my-1'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} />
-          </span>
-        </div>
-      ) : (
-        <div className={` ${editable ? 'hidden' : 'flex my-1'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Agregar' onClick={() => navigate('/providerRegister')} />
-          </span>
-        </div>
-      )}
+      <div className={` ${editable ? 'hidden' : 'flex my-1'}`}>
+        <span className='contents'>
+          <ButtonDefault title='Editar' onClick={handleEdit} />
+          <ButtonDefault title='Agregar' onClick={() => navigate('/providerRegister')} />
+        </span>
+      </div>
+
       {editable ? (
         <div className='flex my-1'>
-          <ButtonDefault title='Save' onClick={saveChange} />
-          <ButtonDefault title='Cancel' onClick={handleCancel} />
+          <ButtonDefault title='Guardar' onClick={saveChange} />
+          <ButtonDefault title='Cancelar' onClick={handleCancel} />
         </div>
       ) : (
         ''

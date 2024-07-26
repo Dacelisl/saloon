@@ -60,7 +60,6 @@ class DiagnosticController {
   }
   async createDiagnostic(req, res) {
     const diagnosticData = req.body
-    console.log('data en controller', diagnosticData);
     try {
       const response = await diagnosticServices.createDiagnostic(diagnosticData)
       return sendSuccessResponse(res, response)

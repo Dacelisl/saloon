@@ -93,7 +93,7 @@ const DiagnosticDetail = ({
       {selectedDiagnostic.client.firstName ? (
         <div className={` ${editable ? 'hidden' : 'flex relative mx-auto mt-8 mb-3'}`}>
           <span className='contents'>
-            <ButtonDefault title='Edit' onClick={handleEdit} />
+            <ButtonDefault title='Editar' onClick={handleEdit} />
           </span>
           <span className='contents'>
             <ButtonDefault title='Agregar' onClick={() => navigate('/registerDiagnostic')} />
@@ -106,10 +106,11 @@ const DiagnosticDetail = ({
           </span>
         </div>
       )}
+
       {editable ? (
         <div className='flex mt-8 mb-4'>
-          <ButtonDefault title='Save' onClick={saveChange} />
-          <ButtonDefault title='Cancel' onClick={handleCancel} />
+          <ButtonDefault title='Guardar' onClick={saveChange} />
+          <ButtonDefault title='Cancelar' onClick={handleCancel} />
         </div>
       ) : (
         ''

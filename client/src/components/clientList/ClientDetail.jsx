@@ -54,7 +54,7 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
         <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
           {loggedEmployee.role === 'admin' ? (
             <span className='contents'>
-              <ButtonDefault title='Edit' onClick={handleEdit} />
+              <ButtonDefault title='Editar' onClick={handleEdit} />
             </span>
           ) : (
             ''
@@ -75,8 +75,8 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
       )}
       {editable ? (
         <div className='flex my-2'>
-          <ButtonDefault title='Save' onClick={saveChange} />
-          <ButtonDefault title='Cancel' onClick={handleCancel} />
+          <ButtonDefault title='Guardar' onClick={saveChange} />
+          <ButtonDefault title='Cancelar' onClick={handleCancel} />
         </div>
       ) : (
         ''

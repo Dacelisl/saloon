@@ -5,6 +5,7 @@ import { getEarningsEmployeeById } from '../../firebase/firebase.js'
 import { getStartOfWeek, getEndOfWeek, getStartOfMonth, getEndOfMonth, formatDate } from '../../utils/utils.js'
 import { customContext } from '../context/CustomContext.jsx'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
+import InputSelect from '../utils/InputSelect.jsx'
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const Modal = lazy(() => import('../utils/Modal.jsx'))
@@ -28,7 +29,7 @@ const EarningsEmployee = () => {
   useEffect(() => {
     async function loadData() {
       const selected = await getEarningsEmployeeById(filteredEmployee.id)
-      const sortedData = selected.sort((a, b) => new Date(a.date) - new Date(b.date))
+      const sortedData = selected.sort((a, b) => new Date(b.date) - new Date(a.date))
       const minDate = sortedData.length > 0 ? sortedData[0].date : null
       const maxDate = sortedData.length > 0 ? sortedData[sortedData.length - 1].date : null
       const filter = employees.filter((user) => {
@@ -108,19 +109,19 @@ const EarningsEmployee = () => {
         <div className='block'>
           <div className='block ml-5 my-1 xl:flex xl:w-[90%]'>
             {loggedEmployee.role === 'admin' ? (
-              <div className='xl:mr-3'>
-                <label className='block text-xs lg:text-base xxl:text-lg mb-0 font-semibold text-gray-600'>
-                  Empleado:
-                  <select name='employeeId' onChange={handleDateChange} className='w-full px-2 py-0 border rounded-md focus:outline-red-200'>
-                    <option value=''>Seleccione</option>
-                    {employees.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {`${option.firstName} ${option.lastName}`}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+              <span className='mr-3'>
+                <InputSelect
+                  label={'Empleado:'}
+                  name={'employeeId'}
+                  itemOption={employees}
+                  itemValue={filteredEmployee.id}
+                  handleFieldChange={handleDateChange}
+                  optionValueKey='id'
+                  optionDisplayKey='fullName'
+                  editable
+                  className='!h-8 '
+                />
+              </span>
             ) : (
               ''
             )}

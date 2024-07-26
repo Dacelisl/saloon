@@ -37,6 +37,7 @@ const DiagnosticList = () => {
   const [editable, setEditable] = useState(false)
 
   useEffect(() => {
+    if (!selectedClient.dni) return
     const selected = diagnostics.filter((data) => data.client.dni === selectedClient.dni).sort((a, b) => new Date(b.date) - new Date(a.date))
     setDiagnosticsFilter(selected)
     setSelectedDiagnostic(selected[0])
