@@ -23,7 +23,7 @@ const TicketDetail = ({ ticket, setTicket }) => {
   }
   const handleToggleChange = (e) => {
     setToggleState(e.target.checked)
-    const newData = e.target.checked ? allProducts : allServices
+    const newData = e.target.checked ? allServices : allProducts
     setDataTable(newData)
   }
 

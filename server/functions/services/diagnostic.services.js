@@ -183,5 +183,85 @@ class DiagnosticServices {
       }
     }
   }
+
+  async getScalpTypes() {
+    try {
+      const payload = await diagnosticFactory.getScalpTypes()
+      if (!payload) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, ScalpTypes not found getScalpTypes`,
+          payload: {},
+        }
+      }
+      return {
+        status: 'Success',
+        code: 200,
+        message: 'ScalpTypes found getScalpTypes',
+        payload: payload,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 500,
+        message: `Internal Server Error getScalpTypes ${error}`,
+        payload: {},
+      }
+    }
+  }
+
+  async getProcedureTypes() {
+    try {
+      const payload = await diagnosticFactory.getProcedureTypes()
+      if (!payload) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, ProcedureTypes not found getProcedureTypes`,
+          payload: {},
+        }
+      }
+      return {
+        status: 'Success',
+        code: 200,
+        message: 'ProcedureTypes found getProcedureTypes',
+        payload: payload,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 500,
+        message: `Internal Server Error getProcedureTypes ${error}`,
+        payload: {},
+      }
+    }
+  }
+  async getHairTypes() {
+    try {
+      const payload = await diagnosticFactory.getHairTypes()
+      if (!payload) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, HairTypes not found getHairTypes`,
+          payload: {},
+        }
+      }
+      return {
+        status: 'Success',
+        code: 200,
+        message: 'HairTypes found getHairTypes',
+        payload: payload,
+      }
+    } catch (error) {
+      return {
+        status: 'Fail',
+        code: 500,
+        message: `Internal Server Error getHairTypes ${error}`,
+        payload: {},
+      }
+    }
+  }
 }
 export const diagnosticServices = new DiagnosticServices()

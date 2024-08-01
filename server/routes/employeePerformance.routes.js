@@ -8,3 +8,4 @@ EmployeePerformanceRoutes.get('/', registeredUser, employeePerformanceController
 EmployeePerformanceRoutes.get('/customer/:cid', registeredUser, employeePerformanceController.getPerformancesByCustomerDNI)
 EmployeePerformanceRoutes.get('/employee/:eid', registeredUser, employeePerformanceController.getPerformancesByEmployeeDNI)
 EmployeePerformanceRoutes.get('/range/', registeredUser, employeePerformanceController.getPerformanceByDate)
+EmployeePerformanceRoutes.get('/company/', registeredUser, employeePerformanceController.getCompanyPerformance)

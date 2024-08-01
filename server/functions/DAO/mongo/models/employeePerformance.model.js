@@ -13,6 +13,7 @@ const EmployeePerformanceSchema = new Schema({
       itemPrice: { type: Number, required: true },
       totalCost: { type: Number, required: true },
       employeeEarnings: { type: Number, required: true },
+      companyEarnings: { type: Number, required: true },
     },
   ],
 })

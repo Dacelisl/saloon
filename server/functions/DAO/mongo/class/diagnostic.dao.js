@@ -1,7 +1,7 @@
 import { DiagnosticModel } from '../models/diagnostic.model.js'
 import { DiagnosticDTO } from '../../DTO/diagnostic.dto.js'
 
-class DiagnosticDao {
+class DiagnosticDAO {
   async getAllUsersDiagnostics() {
     try {
       let diagnostics = await DiagnosticModel.find().populate('userId', 'firstName lastName dni dateBirthday email thumbnail ').populate('employeeId', 'firstName lastName').lean()
@@ -29,6 +29,32 @@ class DiagnosticDao {
       throw new Error(`function DAO getAllDiagnosticsByUserId  ${error}`)
     }
   }
+
+  async getScalpTypes() {
+    try {
+      const enumValues = Object.values(DiagnosticModel.schema.path('scalpCondition').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getscalpTypes  ${error}`)
+    }
+  }
+  async getProcedureTypes() {
+    try {
+      const enumValues = Object.values(DiagnosticModel.schema.path('procedureType').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getProcedureTypes  ${error}`)
+    }
+  }
+  async getHairTypes() {
+    try {
+      const enumValues = Object.values(DiagnosticModel.schema.path('hairCondition').enumValues)
+      return enumValues
+    } catch (error) {
+      throw new Error(`function DAO getHairTypes  ${error}`)
+    }
+  }
+
   async createDiagnostic(diagnosticData) {
     try {
       const diagnostic = await DiagnosticModel.create(diagnosticData)
@@ -54,4 +80,4 @@ class DiagnosticDao {
     }
   }
 }
-export const diagnosticDao = new DiagnosticDao()
+export const diagnosticDAO = new DiagnosticDAO()

@@ -54,7 +54,7 @@ class EmployeePerformanceDAO {
     }
   }
 
-  async createEmployeePerformance(dataEmployeePerformance) {
+  async createEmployeePerformance(dataEmployeePerformance) { 
     try {
       const performance = new EmployeePerformanceSaveDTO(dataEmployeePerformance)
       const result = await EmployeePerformanceModel.create(performance)
@@ -90,6 +90,33 @@ class EmployeePerformanceDAO {
       return result
     } catch (error) {
       throw new Error(`function DAO updatePerformanceById  ${error}`)
+    }
+  }
+
+  async getCompanyEarningsByEmployee(employeeId) {
+    try {
+      const employeePerformances = await EmployeePerformanceModel.find({ employeeId }).lean()
+      const companyEarnings = employeePerformances.reduce((total, performance) => {
+        const performanceEarnings = performance.earningsDetails.reduce((sum, detail) => sum + detail.companyEarnings, 0)
+        return total + performanceEarnings
+      }, 0)
+      return companyEarnings
+    } catch (error) {
+      throw new Error(`function DAO getCompanyEarningsByEmployee ${error}`)
+    }
+  }
+  async getCompanyPerformance() {
+    try {
+      const allPerformances = await EmployeePerformanceModel.find().lean()
+      const totalCompanyEarnings = allPerformances.reduce((total, performance) => {
+        const performanceEarnings = performance.earningsDetails.reduce((sum, detail) => sum + detail.companyEarnings, 0)
+        return total + performanceEarnings
+      }, 0)
+
+      return totalCompanyEarnings
+    } catch (error) {
+
+      throw new Error(`function DAO getTotalCompanyEarnings ${error}`)
     }
   }
 }

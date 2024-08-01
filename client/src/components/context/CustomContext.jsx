@@ -33,7 +33,7 @@ const CustomContext = ({ children }) => {
     items: [],
   }
   const defaultClientList = {
-    id:'',
+    id: '',
     firstName: '',
     lastName: '',
     dni: '',
@@ -98,16 +98,27 @@ const CustomContext = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserLogin(user.email)
-        await fetchFromDatabase()
+      } else {
         setLoading(false)
       }
     })
-    return unsubscribe
+    return () => unsubscribe()
   }, [])
+  useEffect(() => {
+    if (userLogin) {
+      fetchFromDatabase()
+      setLoading(false)
+    }
+  }, [userLogin])
 
   const fetchFromDatabase = async () => {
     try {
       if (!userLogin) return
+      const employee = await getEmployeeByEmail(userLogin)
+      if (employee.code !== 200) return
+      setLoggedEmployee(employee.payload)
+      setRole(employee.payload.role)
+
       const allEmployee = await getEmployee()
       const allClients = await getClients()
       const allTickets = await getTickets()
@@ -148,32 +159,6 @@ const CustomContext = ({ children }) => {
       throw new Error(`Error getting data: ${error}`)
     }
   }
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const sessionDataString = localStorage.getItem('sessionData')
-        if (!sessionDataString && !userLogin) {
-          setLoading(false)
-          return
-        }
-        if (sessionDataString && !userLogin) {
-          const sessionData = JSON.parse(sessionDataString)
-          setUserLogin(sessionData.userEmail)
-        }
-        if (userLogin && !loggedEmployee) {
-          const employee = await getEmployeeByEmail(userLogin)
-          if (employee.code !== 200) return
-          setLoggedEmployee(employee.payload)
-          setRole(employee.payload.role)
-          await fetchFromDatabase()
-          setLoading(false)
-        }
-      } catch (error) {
-        throw new Error(`Error getting data: ${error}`)
-      }
-    }
-    fetchData()
-  }, [userLogin])
 
   useEffect(() => {
     const birthday = getUpcomingBirthdays(clients)
@@ -226,7 +211,7 @@ const CustomContext = ({ children }) => {
         ticket,
         setTicket,
         nextBirthDay,
-        defaultDiagnostic
+        defaultDiagnostic,
       }}
     >
       {children}

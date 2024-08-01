@@ -5,7 +5,7 @@ import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/aut
 let auth
 
 async function initializeFirebase() {
-  const response = await axios.get('https://us-central1-project-fabiosalon.cloudfunctions.net/getFirebaseConfig')
+  const response = await axios.get('https://us-central1-project-fabiosalon.cloudfunctions.net/getConfigFirebase')
   const firebaseConfig = response.data
   const app = initializeApp(firebaseConfig)
   auth = getAuth(app)

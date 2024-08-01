@@ -14,8 +14,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/api${url}`, */
-      url: `http://localhost:3000/api${url}`,
+      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`,
+      /* url: `http://localhost:3000/api${url}`, */
       data: data,
       headers: headers,
     })
@@ -132,7 +132,6 @@ export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
       await makeRequest('DELETE', '/employee/logOut')
-      localStorage.removeItem('sessionData')
       return true
     })
     .catch(() => {

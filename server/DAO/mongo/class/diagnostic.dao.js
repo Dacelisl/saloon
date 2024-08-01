@@ -1,7 +1,7 @@
 import { DiagnosticModel } from '../models/diagnostic.model.js'
 import { DiagnosticDTO } from '../../DTO/diagnostic.dto.js'
 
-class DiagnosticDao {
+class DiagnosticDAO {
   async getAllUsersDiagnostics() {
     try {
       let diagnostics = await DiagnosticModel.find().populate('userId', 'firstName lastName dni dateBirthday email thumbnail ').populate('employeeId', 'firstName lastName').lean()
@@ -80,4 +80,4 @@ class DiagnosticDao {
     }
   }
 }
-export const diagnosticDao = new DiagnosticDao()
+export const diagnosticDAO = new DiagnosticDAO()

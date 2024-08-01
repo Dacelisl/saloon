@@ -5,6 +5,7 @@ class EmployeePerformanceDTO {
     this.employee = this.mapEmployee(employeePerformance.employeeId)
     this.date = formatDate(employeePerformance.date)
     this.totalEarnings = parseFloat(this.calculateTotalExpectedEarnings(employeePerformance.earningsDetails))
+    this.totalEarningsCompany = parseFloat(this.calculateTotalExpectedEarningsCompany(employeePerformance.earningsDetails))
     this.earningsDetails = employeePerformance.earningsDetails.map((detail) => new EarningsDetailDTO(detail))
   }
   mapEmployee(employee) {
@@ -16,6 +17,12 @@ class EmployeePerformanceDTO {
   calculateTotalExpectedEarnings(items) {
     return items.reduce((total, detail) => {
       const detailDTO = detail.employeeEarnings
+      return total + detailDTO
+    }, 0)
+  }
+  calculateTotalExpectedEarningsCompany(items) {
+    return items.reduce((total, detail) => {
+      const detailDTO = detail.companyEarnings
       return total + detailDTO
     }, 0)
   }
@@ -31,6 +38,7 @@ class EarningsDetailDTO {
     this.itemPrice = formatCurrency(earningsDetail.itemPrice)
     this.totalCost = formatCurrency(earningsDetail.totalCost)
     this.employeeEarnings = parseFloat(earningsDetail.employeeEarnings)
+    this.companyEarnings = parseFloat(earningsDetail.companyEarnings)
   }
   mapCustomer(customer) {
     return {

@@ -24,8 +24,8 @@ switch (dataConfig.persistence) {
     serviceFactory = serviceDAO
     const { ticketDAO } = await import('./mongo/class/ticket.dao.js')
     ticketFactory = ticketDAO
-    const { diagnosticDao } = await import('./mongo/class/diagnostic.dao.js')
-    diagnosticFactory = diagnosticDao
+    const { diagnosticDAO } = await import('./mongo/class/diagnostic.dao.js')
+    diagnosticFactory = diagnosticDAO
     break
   default:
     break

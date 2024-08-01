@@ -45,13 +45,6 @@ const Login = () => {
       if (user.userName === '' || user.password === '') return showToast('Enter username and passwords', 500)
       setLoading(true)
       const res = await singIn(user.userName, user.password)
-      localStorage.setItem(
-        'sessionData',
-        JSON.stringify({
-          userEmail: res.user.email,
-          userID: res.user.uid,
-        })
-      )
       setUser({
         userName: '',
         password: '',

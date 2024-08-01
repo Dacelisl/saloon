@@ -13,12 +13,18 @@ class EarningsDetailSaveDTO {
     this.quantity = earningsDetail.quantity
     this.itemPrice = earningsDetail.itemPrice
     this.totalCost = earningsDetail.itemPrice * earningsDetail.quantity
-    this.employeeEarnings = this.employeeEarning(earningsDetail)
+    this.employeeEarnings = this.calculateEmployeeEarnings(earningsDetail)
+    this.companyEarnings = this.calculateCompanyEarnings(earningsDetail)
   }
-  employeeEarning(sale) {
+
+  calculateEmployeeEarnings(sale) {
     let total = sale.itemPrice * sale.quantity
-    let employeeTotal = total * (sale.profitEmployee / 100)
-    return employeeTotal
+    return total * (sale.profitEmployee / 100)
+  }
+
+  calculateCompanyEarnings(sale) {
+    let total = sale.itemPrice * sale.quantity
+    return total * ((100 - sale.profitEmployee) / 100)
   }
 }
 

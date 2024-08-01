@@ -27,6 +27,32 @@ class EmployeePerformanceServices {
       }
     }
   }
+  async getCompanyPerformance() {
+    try { 
+      const companyPerformances = await employeePerformanceFactory.getCompanyPerformance()
+      if (!companyPerformances) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: `Error, getCompanyPerformance not found getCompanyPerformance`,
+          payload: {},
+        }
+      }
+      return {
+        status: 'success',
+        code: 200,
+        message: 'all companyPerformances',
+        payload: companyPerformances,
+      }
+    } catch (error) {
+      return {
+        status: 'error',
+        code: 500,
+        message: `error getting all companyPerformances : getPerformances ${error}`,
+        payload: {},
+      }
+    }
+  }
   async getPerformancesByCustomerDNI(customerId) {
     try {
       const employeePerformanceFound = await employeePerformanceFactory.getPerformancesByCustomerDNI(customerId)

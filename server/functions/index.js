@@ -27,9 +27,9 @@ connectMongo()
 
 app.listen(() => logger.info(`listen on ${dataConfig.url_api}, mode:`, dataConfig.mode))
 
-export const api = functions.https.onRequest(app)
+export const back = functions.https.onRequest(app)
 
-export const getFirebaseConfig = functions.https.onRequest((request, response) => {
+export const getConfigFirebase = functions.https.onRequest((request, response) => {
   const firebaseConfig = {
     apiKey: process.env.FIRE_APIKEY || functions.config().config.api_key,
     authDomain: process.env.FIRE_AUTHDOMAIN || functions.config().config.auth_domain,
