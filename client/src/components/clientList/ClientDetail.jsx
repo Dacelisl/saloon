@@ -6,7 +6,7 @@ const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
 
-const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
+const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast, showData }) => {
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -63,12 +63,17 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
           <Link to={'/ticket'} className='contents'>
             <ButtonDefault title='Ticket' />
           </Link>
-          <Link to={'/diagnostic'} className='contents'>
+          <Link to={showData.diagnostic ? '/diagnostic' : '/registerDiagnostic'} className='contents'>
             <ButtonDefault title='Diagnostico' />
           </Link>
-          <Link to={'/historical'} className='contents'>
-            <ButtonDefault title='Historial' disabled={selectedClient ? false : true} />
-          </Link>
+
+          {showData.historical ? (
+            <Link to={'/historical'} className='contents'>
+              <ButtonDefault title='Historial' disabled={selectedClient ? false : true} />
+            </Link>
+          ) : (
+            ''
+          )}
         </div>
       ) : (
         ''

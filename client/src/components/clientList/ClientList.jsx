@@ -9,17 +9,24 @@ const ClientTable = lazy(() => import('./ClientTable.jsx'))
 const ClientDetail = lazy(() => import('./ClientDetail.jsx'))
 
 const ClientList = () => {
-  const { clients, selectedClient, loggedEmployee, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)
+  const { clients, selectedClient, tickets, diagnostics, loggedEmployee, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
   const [editable, setEditable] = useState(false)
+  const [showData, setShowData] = useState({ diagnostic: false, historical: false })
 
   useEffect(() => {
     const selected = clients.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
     setSelectedClient(selected[0])
     setImagenPreview(selected[0].thumbnail)
   }, [clients])
+
+  useEffect(() => {
+    const ticketFound = tickets.filter((ticket) => ticket.customer.id === selectedClient.id)
+    const diagnosticFound = diagnostics.filter((data) => data.client.dni === selectedClient.dni)
+    setShowData({ diagnostic: diagnosticFound.length > 0, historical: ticketFound.length > 0 })
+  }, [diagnostics, selectedClient, tickets])
 
   const handleClientSelect = (clientId) => {
     setSelectedClient(clientId)
@@ -54,6 +61,7 @@ const ClientList = () => {
           setEditable={setEditable}
           saveChange={saveChange}
           toast={showToast}
+          showData={showData}
         />
         <InputSearch onSearch={handleSearchInClients} />
         <div className='h-[30%]'>

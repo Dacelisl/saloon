@@ -47,9 +47,6 @@ const HamburguerMenu = () => {
                 <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/users'}>Clientes</Link>
                 </li>
-                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
-                  <Link to={'/diagnostic'}>Diagnostico</Link>
-                </li>
 
                 {loggedEmployee.role === 'admin' ? (
                   <>
