@@ -106,7 +106,7 @@ class TicketDAO {
     }
   }
 
-  async createTicket(ticketData) {
+  async createTicket(ticketData) {  
     try {
       let ticket = totalPrice(ticketData)
       ticket.items = await this.mapItemNames(ticket.items)

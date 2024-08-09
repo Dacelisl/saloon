@@ -12,7 +12,7 @@ const PanelBirthday = () => {
     <div className='z-50 flex relative justify-center mt-[5%] '>
       <div className='absolute h-[30vh] w-full grid bg-[#373938b5] p-4 rounded-2xl shadow-md shadow-slate-100'>
         <span className='pb-4 font-semibold text-lg text-center text-slate-100'>Proximos Cumpleaños</span>
-        <div className='text-justify overflow-y-auto '>
+        <div className='text-justify overflow-y-scroll '>
           <ul className='text-justify text-base font-normal'>
             {nextBirthDay
               ? nextBirthDay.map((item) => (

@@ -43,11 +43,11 @@ const EarningsCompanyTable = ({ data }) => {
                 </tr>
               ))}
               <tr className='w-full bg-secondary-light'>
-                <td className='py-1 text-right pr-9 text-base font-medium' colSpan={2}>
+                <td className='py-1 text-right pr-4 text-base font-medium' colSpan={2}>
                   Totales:
                 </td>
-                <td className='py-1 text-center pr-3 font-medium'>{totalEmployee}</td>
-                <td className='py-1 text-right pr-3 font-medium'>{totalCompany}</td>
+                <td className='py-1 text-center mr-2 font-medium'>{totalEmployee}</td>
+                <td className='py-1 text-right mr-2 font-medium'>{totalCompany}</td>
               </tr>
             </tbody>
           </table>

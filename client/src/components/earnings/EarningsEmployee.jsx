@@ -107,14 +107,14 @@ const EarningsEmployee = () => {
         <div className='inline-flex mb-3'>
           {loggedEmployee.role === 'admin' && (
             <span className='!ml-5'>
-              <ToggleSwitch label={'Company / Employee'} toggleState={toggleState} handleToggleChange={handleToggleChange} />
+              <ToggleSwitch label={`${toggleState ? 'Empleado' : 'Empresa'}`} toggleState={toggleState} handleToggleChange={handleToggleChange} />
             </span>
           )}
           <span className='flex my-auto max-h-fit'>
-            <ButtonDefault title='Todo' onClick={handleClickAll} color={'!w-fit !py-0 !px-1 !ml-5 !mr-3'} />
-            <ButtonDefault title='Semana' onClick={handleClickWeek} color={'!w-fit !py-0 !px-1 !mx-2'} />
-            <ButtonDefault title='Mes' onClick={handleClickMonth} color={'!w-fit !py-0 !px-1 !mx-2'} />
-            <ButtonDefault title='Hoy' onClick={handleClickToday} color={'!w-fit !py-0 !px-1 !mx-2'} />
+            <ButtonDefault title='Todo' onClick={handleClickAll} color={'!w-fit !py-0 !px-1 !ml-3 !mr-1'} />
+            <ButtonDefault title='Semana' onClick={handleClickWeek} color={'!w-fit !py-0 !px-1 !mx-1'} />
+            <ButtonDefault title='Mes' onClick={handleClickMonth} color={'!w-fit !py-0 !px-1 !mx-1'} />
+            <ButtonDefault title='Hoy' onClick={handleClickToday} color={'!w-fit !py-0 !px-1 !mx-1'} />
           </span>
         </div>
         <div className='block'>

@@ -13,6 +13,8 @@ class UserDTO {
     this.firstDate = formatDate(user.firstDate)
     this.lastDate = formatDate(user.lastDate)
     this.thumbnail = user.thumbnail
+      ? user.thumbnail
+      : 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/photo_default.jpeg?alt=media&token=67c47487-f9e3-4a29-b856-05bf117dc3c8'
     this.serviceHistory = this.mapServiceHistory(user.serviceHistory)
     this.shopping = this.mapShopping(user.shopping)
   }

@@ -12,6 +12,15 @@ class EmployeePerformanceController {
       return sendErrorResponse(res, error)
     }
   }
+  async getCompanyPerformance(req, res) {
+    try {
+      const companyPerformances = await employeePerformanceService.getCompanyPerformance()
+      return sendSuccessResponse(res, companyPerformances)
+    } catch (error) {
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
+    }
+  }
   async getPerformancesByCustomerDNI(req, res) {
     const employeePerformanceCustomer = req.params.cid
     try {
