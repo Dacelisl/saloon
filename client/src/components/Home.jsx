@@ -16,7 +16,7 @@ const Home = () => {
       <Logo />
       <Modal>
         <div className='grid z-30 grid-rows-[auto,1fr,auto] relative h-full'>
-          <div id='body' className='relative contents overflow-auto h-[60%]'>
+          <div  className='relative contents overflow-auto'>
             <PanelBirthday />
           </div>
           <div id='footer' className='flex absolute w-full bottom-0 h-[20%] justify-around items-center'>

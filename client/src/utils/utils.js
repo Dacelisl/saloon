@@ -128,9 +128,15 @@ export const getUpcomingBirthdays = (clients) => {
       id: client.id,
       name: `${client.firstName} ${client.lastName}`,
       date: `${birthdayMonth} ${birthdayDay}`,
+      birthdayDate: birthday,
     }
   })
-  return formattedUpcomingBirthdays
+  const sortedData = formattedUpcomingBirthdays.sort((a, b) => {
+    const dateA = new Date(2000, a.birthdayDate.getMonth(), a.birthdayDate.getDate())
+    const dateB = new Date(2000, b.birthdayDate.getMonth(), b.birthdayDate.getDate())
+    return dateA.getTime() - dateB.getTime()
+  })
+  return sortedData
 }
 
 export const countries = [

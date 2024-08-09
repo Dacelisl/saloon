@@ -2,6 +2,7 @@ import { formatDate, formatCurrency } from '../../utils/utils.js'
 
 class EmployeePerformanceDTO {
   constructor(employeePerformance) {
+    this.id = employeePerformance._id
     this.employee = this.mapEmployee(employeePerformance.employeeId)
     this.date = formatDate(employeePerformance.date)
     this.totalEarnings = parseFloat(this.calculateTotalExpectedEarnings(employeePerformance.earningsDetails))

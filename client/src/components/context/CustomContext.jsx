@@ -87,7 +87,6 @@ const CustomContext = ({ children }) => {
   const [paymentMethods, setPaymentMethods] = useState([])
   const [selectedClient, setSelectedClient] = useState(defaultClientList)
   const [loggedEmployee, setLoggedEmployee] = useState('')
-  const [userLogin, setUserLogin] = useState('')
   const [ticket, setTicket] = useState(ticketDefault)
   const [nextBirthDay, setNextBirthDay] = useState('')
   const [toastMessage, setToastMessage] = useState(null)
@@ -95,30 +94,36 @@ const CustomContext = ({ children }) => {
   const location = useLocation()
 
   useEffect(() => {
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 4000)
+  }, [toastMessage])
+
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setUserLogin(user.email)
-      } else {
+      if (!user) return setLoading(false)
+      try {
+        const employee = await getEmployeeByEmail(user.email)
+        if (!employee.code || employee.code !== 200) {
+          setToastMessage({ message: 'Usuario no Encontrado o Eliminado', code: 500 })
+          await auth.signOut()
+          return
+        }
+        setLoggedEmployee(employee.payload)
+        setRole(employee.payload.role)
+        setToastMessage({ message: 'Login Successful', code: 200 })
+        fetchFromDatabase()
+      } catch (error) {
+        setToastMessage({ message: 'Error de Conexion', code: 500 })
+      } finally {
         setLoading(false)
       }
     })
     return () => unsubscribe()
   }, [])
-  useEffect(() => {
-    if (userLogin) {
-      fetchFromDatabase()
-      setLoading(false)
-    }
-  }, [userLogin])
 
   const fetchFromDatabase = async () => {
     try {
-      if (!userLogin) return
-      const employee = await getEmployeeByEmail(userLogin)
-      if (employee.code !== 200) return
-      setLoggedEmployee(employee.payload)
-      setRole(employee.payload.role)
-
       const allEmployee = await getEmployee()
       const allClients = await getClients()
       const allTickets = await getTickets()
@@ -164,6 +169,7 @@ const CustomContext = ({ children }) => {
     const birthday = getUpcomingBirthdays(clients)
     setNextBirthDay(birthday)
   }, [clients])
+  
   const handleSearch = (searchTerm, data) => {
     if (searchTerm === '') return data
     const filteredData = data.filter((item) => Object.values(item).some((value) => typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())))
@@ -171,16 +177,12 @@ const CustomContext = ({ children }) => {
   }
   const showToast = (message, code) => {
     setToastMessage({ message, code })
-    setTimeout(() => {
-      setToastMessage(null)
-    }, 10000)
   }
 
   return (
     <customContext.Provider
       value={{
         loading,
-        setUserLogin,
         fetchFromDatabase,
         clients,
         roles,
@@ -215,7 +217,7 @@ const CustomContext = ({ children }) => {
       }}
     >
       {children}
-      {toastMessage && <Toast message={toastMessage.message} code={toastMessage.code} />}
+      {toastMessage && <Toast message={toastMessage.message} code={toastMessage.code} time={4000} />}
     </customContext.Provider>
   )
 }

@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const Toast = ({ message, code, nameIcon, positionX = 'top', positionY = 'right', time = 5000 }) => {
+const Toast = ({ message = 'Default Text for Toast', code, nameIcon, positionX = 'top', positionY = 'right', time = 3000 }) => {
   const [estado, setEstado] = useState(true)
   const closeToast = () => setEstado(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      closeToast()
+    }, time)
+  }, [message, time])
 
   const toastContainer = `flex fixed z-50 items-end m-2 flex-col ${positionY == 'right' ? 'right-0 md:right-[1%]' : 'left-0 md:left-[1%]'} ${positionX == 'top' ? 'top-[2%]' : 'bottom-[2%]'}`
   const toastType = `flex w-max h-auto rounded-md p-1 flex-row-reverse bg-neutral-900 shadow shadow-slate-500`
 
-  setTimeout(closeToast, time)
-  const type = code >= 200 && code < 400 ? 'success' : 'alert';
+  const type = code >= 200 && code < 400 ? 'success' : 'alert'
   return (
     <div className={toastContainer}>
       <div className={estado ? toastType : 'hidden'}>
@@ -30,7 +35,7 @@ const Toast = ({ message, code, nameIcon, positionX = 'top', positionY = 'right'
               }}
             ></ion-icon>
           </span>
-          {message || 'Default Text for Toast'}
+          {message}
         </div>
       </div>
     </div>

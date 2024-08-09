@@ -54,7 +54,7 @@ class EmployeePerformanceDAO {
     }
   }
 
-  async createEmployeePerformance(dataEmployeePerformance) { 
+  async createEmployeePerformance(dataEmployeePerformance) {
     try {
       const performance = new EmployeePerformanceSaveDTO(dataEmployeePerformance)
       const result = await EmployeePerformanceModel.create(performance)
@@ -115,7 +115,6 @@ class EmployeePerformanceDAO {
 
       return totalCompanyEarnings
     } catch (error) {
-
       throw new Error(`function DAO getTotalCompanyEarnings ${error}`)
     }
   }

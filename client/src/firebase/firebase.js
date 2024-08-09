@@ -14,14 +14,14 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`,
-      /* url: `http://localhost:3000/api${url}`, */
+      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
     return response
   } catch (error) {
-    throw new Error('Error en la solicitud: makeRequest', error)
+    throw new Error(error.response.data.message)
   }
 }
 
@@ -34,7 +34,7 @@ export const getRoles = async () => {
     })
     return roles
   } catch (error) {
-    throw new Error(`Error server getRoles ${error.message}`)
+    return error
   }
 }
 export const getCategories = async () => {
@@ -45,7 +45,7 @@ export const getCategories = async () => {
     })
     return options
   } catch (error) {
-    throw new Error(`Error server getCategories ${error.message}`)
+    return error
   }
 }
 export const getPaymentsMethod = async () => {
@@ -56,7 +56,7 @@ export const getPaymentsMethod = async () => {
     })
     return options
   } catch (error) {
-    throw new Error(`Error server getPaymentsMethod ${error.message}`)
+    return error
   }
 }
 export const getServices = async () => {
@@ -64,7 +64,7 @@ export const getServices = async () => {
     const response = await makeRequest('GET', '/service')
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getServices ${error.message}`)
+    return error
   }
 }
 
@@ -74,7 +74,7 @@ export const getEmployee = async () => {
     const response = await makeRequest('GET', '/employee')
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getEmployee ${error.message}`)
+    return error
   }
 }
 export const updateEmployee = async (dataUser) => {
@@ -89,7 +89,7 @@ export const updateEmployee = async (dataUser) => {
     const response = await makeRequest('PUT', `/employee/${dataUser.id}`, userFormatted, { 'Content-Type': 'application/json' })
     return response.status
   } catch (error) {
-    throw new Error(`Error server updateEmployee ${error}`)
+    return error
   }
 }
 export const getEarningsEmployees = async () => {
@@ -97,7 +97,7 @@ export const getEarningsEmployees = async () => {
     const response = await makeRequest('GET', '/performance')
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getEmployee ${error.message}`)
+    return error
   }
 }
 export const getEarningsEmployeeById = async (id) => {
@@ -105,7 +105,7 @@ export const getEarningsEmployeeById = async (id) => {
     const response = await makeRequest('GET', `/performance/employee/${id}`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getEmployee ${error.message}`)
+    return error
   }
 }
 export const getEmployeeByEmail = async (mail) => {
@@ -113,7 +113,7 @@ export const getEmployeeByEmail = async (mail) => {
     const response = await makeRequest('GET', `/employee/email/${mail}`)
     return response.data
   } catch (error) {
-    throw new Error(`Error server getEmployee ${error.message}`)
+    return error
   }
 }
 
@@ -125,7 +125,7 @@ export const singIn = async (email, password) => {
     await makeRequest('POST', '/employee/login', null, { Authorization: `Bearer ${response.user.accessToken}` })
     return response
   } catch (error) {
-    throw new Error(`Error server singIn ${error}`)
+    return error
   }
 }
 export const logOut = async () => {
@@ -143,7 +143,7 @@ export const passwordRecovery = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email)
   } catch (error) {
-    throw new Error(`Error server passwordRecovery ${error}`)
+    return error
   }
 }
 export const registerEmployeeMongo = async (dataUser) => {
@@ -162,7 +162,7 @@ export const registerEmployeeFire = async (email, password, rol) => {
     await makeRequest('POST', '/employee/create', { accessToken: response.user.uid, rol })
     return response.user
   } catch (error) {
-    throw new Error(`Error server registerEmployeeFire ${error.message}`)
+    return error
   }
 }
 
@@ -174,7 +174,7 @@ export const uploadFire = async (data, url) => {
     const downloadURL = await getDownloadURL(snapshot.ref)
     return downloadURL
   } catch (error) {
-    throw new Error(`Error server uploadFire ${error}`)
+    return error
   }
 }
 /* PRODUCTS */
@@ -185,7 +185,7 @@ export const registerProduct = async (dataProduct) => {
     const response = await makeRequest('POST', '/products', dataProduct)
     return response.data
   } catch (error) {
-    throw new Error(`Error server registerProduct ${error}`)
+    return error
   }
 }
 export const getProducts = async () => {
@@ -193,7 +193,7 @@ export const getProducts = async () => {
     const response = await makeRequest('GET', '/products')
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getRoles ${error.message}`)
+    return error
   }
 }
 export const getProductsByName = async (name) => {
@@ -201,7 +201,7 @@ export const getProductsByName = async (name) => {
     const response = await makeRequest('GET', `/products/name/${name}`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getRoles ${error.message}`)
+    return error
   }
 }
 export const updateProduct = async (dataProduct) => {
@@ -216,7 +216,7 @@ export const updateProduct = async (dataProduct) => {
     const response = await makeRequest('PUT', `/products/${dataProduct.id}`, productFormatted)
     return response.data
   } catch (error) {
-    throw new Error(`Error server registerProduct ${error}`)
+    return error
   }
 }
 
@@ -226,7 +226,7 @@ export const getClients = async () => {
     const response = await makeRequest('GET', `/users`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getClients ${error.message}`)
+    return error
   }
 }
 export const registerClient = async (dataUser) => {
@@ -244,7 +244,7 @@ export const getClientsByName = async (name) => {
     const response = await makeRequest('GET', `/users/name/${name}`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getRoles ${error.message}`)
+    return error
   }
 }
 export const getClientsById = async (id) => {
@@ -252,7 +252,7 @@ export const getClientsById = async (id) => {
     const response = await makeRequest('GET', `/users/${id}`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getClientsById ${error.message}`)
+    return error
   }
 }
 export const updateClients = async (dataClient) => {
@@ -267,7 +267,7 @@ export const updateClients = async (dataClient) => {
     const response = await makeRequest('PUT', `/users/${dataClient.id}`, userFormatted)
     return response.data
   } catch (error) {
-    throw new Error(`Error server updateUser ${error}`)
+    return error
   }
 }
 /* PROVIDERS */
@@ -276,7 +276,7 @@ export const getProviders = async () => {
     const response = await makeRequest('GET', `/provider`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getProviders ${error.message}`)
+    return error
   }
 }
 export const registerProvider = async (dataUser) => {
@@ -301,7 +301,7 @@ export const updateProvider = async (data) => {
     const response = await makeRequest('PUT', `/provider/${data.id}`, data)
     return response.data
   } catch (error) {
-    throw new Error(`Error server updateProvider ${error}`)
+    return error
   }
 }
 /* DIAGNOSTICS */
@@ -310,7 +310,7 @@ export const getDiagnostics = async () => {
     const response = await makeRequest('GET', `/diagnostic`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getDiagnostics ${error.message}`)
+    return error
   }
 }
 export const getDiagnosticById = async (id) => {
@@ -318,7 +318,7 @@ export const getDiagnosticById = async (id) => {
     const response = await makeRequest('GET', `/diagnostic/id/${id}`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getDiagnosticById ${error.message}`)
+    return error
   }
 }
 export const registerDiagnostic = async (dataUser) => {
@@ -330,7 +330,7 @@ export const registerDiagnostic = async (dataUser) => {
     const response = await makeRequest('POST', '/diagnostic', dataUser)
     return response.data
   } catch (error) {
-    throw new Error(`Error server registerDiagnostic ${error}`)
+    return error
   }
 }
 export const updateDiagnostic = async (data) => {
@@ -346,7 +346,7 @@ export const updateDiagnostic = async (data) => {
     const response = await makeRequest('PUT', `/diagnostic/${data.id}`, data)
     return response.data
   } catch (error) {
-    throw new Error(`Error server updateDiagnostic ${error}`)
+    return error
   }
 }
 
@@ -358,7 +358,7 @@ export const getScalpTypes = async () => {
     })
     return options
   } catch (error) {
-    throw new Error(`Error server getScalpTypes ${error.message}`)
+    return error
   }
 }
 export const getProcedureTypes = async () => {
@@ -369,7 +369,7 @@ export const getProcedureTypes = async () => {
     })
     return options
   } catch (error) {
-    throw new Error(`Error server getProcedureTypes ${error.message}`)
+    return error
   }
 }
 export const getHairTypes = async () => {
@@ -380,7 +380,7 @@ export const getHairTypes = async () => {
     })
     return options
   } catch (error) {
-    throw new Error(`Error server getHairTypes ${error.message}`)
+    return error
   }
 }
 
@@ -390,7 +390,7 @@ export const getTickets = async () => {
     const response = await makeRequest('GET', `/tickets`)
     return response.data.payload
   } catch (error) {
-    throw new Error(`Error server getTickets ${error.message}`)
+    return error
   }
 }
 export const updateTicket = async (ticket, data) => {
@@ -403,7 +403,7 @@ export const updateTicket = async (ticket, data) => {
     const response = await makeRequest('PUT', `/tickets/${ticket.ticketNumber}`, dataChange)
     return response.data
   } catch (error) {
-    throw new Error(`Error server updateTicket ${error.message}`)
+    return error
   }
 }
 export const createTicket = async (dataTicket) => {

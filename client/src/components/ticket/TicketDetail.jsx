@@ -11,7 +11,7 @@ const ItemPayment = lazy(() => import('./ItemPayment.jsx'))
 const TicketDetail = ({ ticket, setTicket }) => {
   const { employees, allProducts, allServices, handleSearch } = useContext(customContext)
 
-  const [dataTable, setDataTable] = useState(allServices)
+  const [dataTable, setDataTable] = useState(allProducts)
   const [itemSelected, setItemSelected] = useState('')
   const [search, setSearch] = useState('')
   const [toggleState, setToggleState] = useState(false)
@@ -31,7 +31,7 @@ const TicketDetail = ({ ticket, setTicket }) => {
     const item = {
       itemId: itemSelected.id,
       name: itemSelected.name,
-      itemType: toggleState ? 'product' : 'service',
+      itemType: toggleState ? 'service' : 'product',
       quantity: data.quantity,
       itemPrice: data.itemPrice,
     }
@@ -50,7 +50,7 @@ const TicketDetail = ({ ticket, setTicket }) => {
     return total
   }
   const handleSearchInClients = (searchTerm) => {
-    const data = toggleState ? allProducts : allServices
+    const data = toggleState ? allServices : allProducts
     setSearch(searchTerm != '' ? handleSearch(searchTerm, data) : '')
   }
 

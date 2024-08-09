@@ -9,7 +9,7 @@ const TicketDetail = lazy(() => import('./TicketDetail.jsx'))
 const TicketPayment = lazy(() => import('./TicketPayment.jsx'))
 
 const TicketList = () => {
-  const { selectedClient, navigate, ticket, setTicket, showToast } = useContext(customContext)
+  const { selectedClient, navigate, ticket, setTicket, showToast, fetchFromDatabase } = useContext(customContext)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -22,8 +22,7 @@ const TicketList = () => {
     setTicket('')
     navigate(-1)
     showToast('Ticket Creado', res.code)
-
-    return res
+    await fetchFromDatabase()
   }
   const cancelTicket = async () => {
     setTicket('')
