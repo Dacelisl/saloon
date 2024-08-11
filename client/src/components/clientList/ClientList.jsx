@@ -18,8 +18,10 @@ const ClientList = () => {
 
   useEffect(() => {
     const selected = clients.sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
-    setSelectedClient(selected[0])
-    setImagenPreview(selected[0].thumbnail)
+    if (selected.length > 0) {
+      setSelectedClient(selected[0])
+      setImagenPreview(selected[0]?.thumbnail)
+    }
   }, [clients])
 
   useEffect(() => {

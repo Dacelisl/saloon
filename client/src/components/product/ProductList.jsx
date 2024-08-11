@@ -31,9 +31,11 @@ const ProductList = () => {
 
   useEffect(() => {
     const selected = allProducts.sort((a, b) => a.provider.toLowerCase().localeCompare(b.provider.toLowerCase()))
-    setFilteredProduct(selected)
-    setSelectedProduct(selected[0])
-    setImagenPreview(selected[0].thumbnail)
+    if (selected.length > 0) {
+      setFilteredProduct(selected)
+      setSelectedProduct(selected[0])
+      setImagenPreview(selected[0].thumbnail)
+    }
   }, [allProducts])
 
   const handleProductSelect = (productId) => {

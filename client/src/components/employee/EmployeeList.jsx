@@ -18,8 +18,10 @@ const EmployeeList = () => {
 
   useEffect(() => {
     const selected = employees.sort((a, b) => new Date(b.dateBirthday) - new Date(a.dateBirthday))
-    setSelectedEmployee(selected[0])
-    setImagenPreview(selected[0].thumbnail)
+    if (selected.length > 0) {
+      setSelectedEmployee(selected[0])
+      setImagenPreview(selected[0].thumbnail)
+    }
   }, [employees])
 
   const handleSelect = (userId) => {

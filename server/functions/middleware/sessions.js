@@ -9,7 +9,7 @@ const store = MongoStore.create({
 })
 export const sessions = session({
   store,
-  name:'express-session',
+  name:'session',
   secret: dataConfig.secret,
   resave: false,
   saveUninitialized: false,

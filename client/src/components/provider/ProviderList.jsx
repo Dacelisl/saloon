@@ -34,8 +34,10 @@ const ProviderList = () => {
   const [editable, setEditable] = useState(false)
 
   useEffect(() => {
-    setSelectedProvider(providers[0])
-    setImagenPreview(providers[0].contact.thumbnail)
+    if (providers.length > 0) {
+      setSelectedProvider(providers[0])
+      setImagenPreview(providers[0].contact.thumbnail)
+    }
   }, [providers])
 
   const handleProviderSelect = (providerId) => {

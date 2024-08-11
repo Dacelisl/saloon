@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "project-fabiosalon"
-  }
+    "default": "project-fabiosalon",
+    "frontSalon": "project-fabiosalon"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

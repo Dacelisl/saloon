@@ -105,6 +105,8 @@ const CustomContext = ({ children }) => {
       try {
         const employee = await getEmployeeByEmail(user.email)
         if (!employee.code || employee.code !== 200) {
+          console.log('data employee front', employee);
+          
           setToastMessage({ message: 'Usuario no Encontrado o Eliminado', code: 500 })
           await auth.signOut()
           return
