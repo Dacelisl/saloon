@@ -104,9 +104,7 @@ const CustomContext = ({ children }) => {
       if (!user) return setLoading(false)
       try {
         const employee = await getEmployeeByEmail(user.email)
-        if (!employee.code || employee.code !== 200) {
-          console.log('data employee front', employee);
-          
+        if (!employee.code || employee.code !== 200) {          
           setToastMessage({ message: 'Usuario no Encontrado o Eliminado', code: 500 })
           await auth.signOut()
           return
@@ -180,12 +178,21 @@ const CustomContext = ({ children }) => {
   const showToast = (message, code) => {
     setToastMessage({ message, code })
   }
+  const isDataComplete = (data) => {
+    for (const key in data) {
+      if (data[key] === '') {
+        return false
+      }
+    }
+    return true
+  }
 
   return (
     <customContext.Provider
       value={{
         loading,
         fetchFromDatabase,
+        isDataComplete,
         clients,
         roles,
         role,

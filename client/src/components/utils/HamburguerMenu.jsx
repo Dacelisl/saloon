@@ -59,6 +59,9 @@ const HamburguerMenu = () => {
                     <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/provider'}>Proveedores</Link>
                     </li>
+                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                      <Link to={'/services'}>Servicios</Link>
+                    </li>
                   </>
                 ) : (
                   ''

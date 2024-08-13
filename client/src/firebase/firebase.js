@@ -14,8 +14,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`,
-      /* url: `http://localhost:3000/api${url}`, */
+      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
@@ -63,6 +63,22 @@ export const getServices = async () => {
   try {
     const response = await makeRequest('GET', '/service')
     return response.data.payload
+  } catch (error) {
+    return error
+  }
+}
+export const updateServices = async (data) => {
+  try {
+    const response = await makeRequest('PUT', `/service/${data.id}`, data)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+export const createServices = async (data) => {
+  try {
+    const response = await makeRequest('POST', `/service`, data)
+    return response.data
   } catch (error) {
     return error
   }

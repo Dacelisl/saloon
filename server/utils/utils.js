@@ -97,9 +97,6 @@ function convertToMongoDate(simpleDate) {
 function formatCurrency(amount) {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(amount)
 }
-function formatPercentage(percentage) {
-  return `${percentage.toFixed(2)}%`
-}
 function extractFunctionAndFile(error) {
   const stackLines = error.stack.split('\n')
   const callSite = stackLines[stackLines.length - 1]
@@ -121,7 +118,6 @@ export {
   timeDifference,
   randomTicketNumber,
   formatCurrency,
-  formatPercentage,
   formatDate,
   totalPrice,
   sendErrorResponse,

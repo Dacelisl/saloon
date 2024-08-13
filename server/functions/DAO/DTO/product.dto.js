@@ -1,4 +1,4 @@
-import { formatDate, formatPercentage, formatCurrency } from '../../utils/utils.js'
+import { formatDate } from '../../utils/utils.js'
 export class ProductDTO {
   constructor(product) {
     this.id = product._id

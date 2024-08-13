@@ -9,9 +9,21 @@ const Modal = lazy(() => import('../utils/Modal.jsx'))
 const Register = lazy(() => import('../utils/Register.jsx'))
 
 const ProviderRegister = () => {
-  const { showToast } = useContext(customContext)
-  const [providerData, setProviderData] = useState('')
-  const [contactData, setContactData] = useState('')
+  const { showToast, isDataComplete } = useContext(customContext)
+  const [providerData, setProviderData] = useState({
+    name: '',
+    description: '',
+    address: '',
+    city: '',
+    paymentTerms: '',
+  })
+  const [contactData, setContactData] = useState({
+    firstName: '',
+    lastName: '',
+    dni: '',
+    phone: '',
+    email: '',
+  })
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -22,6 +34,9 @@ const ProviderRegister = () => {
   }
 
   const sendAction = () => {
+    if (!isDataComplete(providerData)) return showToast('Faltan propiedades', 500)
+    if (!isDataComplete(contactData)) return showToast('Faltan propiedades en contacto', 500)
+
     providerData.contact = contactData
     const isFormValid = Object.values(providerData).every((value) => {
       if (typeof value === 'string') {

@@ -13,6 +13,7 @@ const ProductRegister = lazy(() => import('./components/product/ProductRegister.
 const EmployeeList = lazy(() => import('./components/employee/EmployeeList.jsx'))
 const RegisterDiagnostic = lazy(() => import('./components/diagnostic/RegisterDiagnostic.jsx'))
 const DiagnosticList = lazy(() => import('./components/diagnostic/DiagnosticList.jsx'))
+const ServiceList = lazy(() => import('./components/service/ServiceList.jsx'))
 const EmployeeRegister = lazy(() => import('./components/employee/EmployeeRegister.jsx'))
 const EarningsEmployee = lazy(() => import('./components/earnings/EarningsEmployee.jsx'))
 const HistoricalClientList = lazy(() => import('./components/clientList/HistoricalClient/HistoricalClientList.jsx'))
@@ -73,6 +74,7 @@ function App() {
               <Route path='registerDiagnostic' element={<RegisterDiagnostic />} />
               <Route path='ticket' element={<TicketList />} />
               <Route path='provider' element={<ProviderList />} />
+              <Route path='services' element={<ServiceList />} />
               <Route path='providerRegister' element={<ProviderRegister />} />
               <Route path='404' element={<NotFound />} />
               <Route path='403' element={<AccessDenied />} />

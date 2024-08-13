@@ -1,4 +1,4 @@
-import { formatDate, formatPercentage, formatCurrency } from '../../utils/utils.js'
+import { formatDate } from '../../utils/utils.js'
 export class ProductDTO {
   constructor(product) {
     this.id = product._id
@@ -8,7 +8,7 @@ export class ProductDTO {
     this.price = product.price
     this.thumbnail = product.thumbnail
       ? product.thumbnail
-      : 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/product_default.jpeg?alt=media&token=b2f73ec4-ca7e-40af-906b-4304d965f37a'
+      : 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/product_default.jpeg?alt=media&token=2759e34e-9ba5-48da-8c0f-1810828c740b'
     this.code = product.code
     this.provider = product.provider
     this.stock = product.stock

@@ -57,7 +57,7 @@ const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, 
       <div className={` ${editable ? 'hidden' : 'flex relative mx-auto'}`}>
         <span className='contents'>
           <ButtonDefault title='Editar' onClick={handleEdit} />
-          <ButtonDefault title='Agregar' onClick={() => navigate('/reg  isterEmployee')} />
+          <ButtonDefault title='Agregar' onClick={() => navigate('/registerEmployee')} />
         </span>
       </div>
       {editable ? (

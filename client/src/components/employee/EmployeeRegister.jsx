@@ -65,7 +65,7 @@ const EmployeeRegister = () => {
           break
       }
     } catch (error) {
-      throw new Error('Unhandled Error:', error)
+      showToast('Unhandled Error', 500)
     }
   }
   return (

@@ -11,9 +11,20 @@ const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const ProductRegister = () => {
-  const { categories, providers, showToast, navigate } = useContext(customContext)
+  const { categories, fetchFromDatabase, isDataComplete, providers, showToast, navigate } = useContext(customContext)
 
-  const [productData, setProductData] = useState('')
+  const [productData, setProductData] = useState({
+    name: '',
+    description: '',
+    category: '',
+    thumbnail: '',
+    price: '',
+    provider: '',
+    code: '',
+    stock: '',
+    profitEmployee: '',
+    profitSaloon: '',
+  })
   const [imagenPreview, setImagenPreview] = useState('')
 
   const handleInputChange = (e) => {
@@ -26,14 +37,19 @@ const ProductRegister = () => {
       [name]: value,
     })
   }
+
   const handleAddProduct = async (e) => {
     e.preventDefault()
     try {
-      const res = await registerProduct(productData)
+      if (!isDataComplete(productData)) return showToast('Faltan propiedades', 500)
 
+      const res = await registerProduct(productData)
       if (res.code !== 201) {
-        showToast('Error in the registration process', 500)
+        setProductData('')
+        setImagenPreview('')
+        return showToast('Error in the registration process', 500)
       }
+      await fetchFromDatabase()
       showToast('Successfully registered product', 200)
       setProductData('')
       setImagenPreview('')
