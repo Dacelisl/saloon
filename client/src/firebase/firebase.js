@@ -1,5 +1,7 @@
 import { auth } from './firebaseApp'
 import { formattUpdate, formatDate } from '../utils/utils.js'
+import photo_default from '../assets/img/photo_default.jpeg'
+import product_default from '../assets/img/product_default.jpeg'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
@@ -164,7 +166,7 @@ export const passwordRecovery = async (email) => {
 }
 export const registerEmployeeMongo = async (dataUser) => {
   try {
-    const url = await uploadFire(dataUser.thumbnail, `employee/${dataUser.dni}`)
+    const url = await uploadFire(dataUser.thumbnail ? dataUser.thumbnail : photo_default, `employee/${dataUser.dni}`)
     dataUser.thumbnail = url
     const response = await makeRequest('POST', '/employee', dataUser)
     return response.data
@@ -196,7 +198,7 @@ export const uploadFire = async (data, url) => {
 /* PRODUCTS */
 export const registerProduct = async (dataProduct) => {
   try {
-    const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
+    const url = await uploadFire(dataProduct.thumbnail ? dataProduct.thumbnail : product_default, `products/${dataProduct.code}`)
     dataProduct.thumbnail = url
     const response = await makeRequest('POST', '/products', dataProduct)
     return response.data
@@ -247,7 +249,7 @@ export const getClients = async () => {
 }
 export const registerClient = async (dataUser) => {
   try {
-    const url = await uploadFire(dataUser.thumbnail, `client/${dataUser.dni}`)
+    const url = await uploadFire(dataUser.thumbnail ? dataUser.thumbnail : photo_default, `client/${dataUser.dni}`)
     dataUser.thumbnail = url
     const response = await makeRequest('POST', '/users', dataUser)
     return response.data
@@ -297,7 +299,7 @@ export const getProviders = async () => {
 }
 export const registerProvider = async (dataUser) => {
   try {
-    const url = await uploadFire(dataUser.contact.thumbnail, `provider/${dataUser.contact.dni}`)
+    const url = await uploadFire(dataUser.contact.thumbnail ? dataUser.contact.thumbnail : photo_default, `provider/${dataUser.contact.dni}`)
     dataUser.contact.thumbnail = url
     const response = await makeRequest('POST', '/provider', dataUser)
     return response.data
@@ -339,9 +341,9 @@ export const getDiagnosticById = async (id) => {
 }
 export const registerDiagnostic = async (dataUser) => {
   try {
-    const url1 = await uploadFire(dataUser.photoBefore, `diagnostics/${dataUser.userId}-before-${dateNow}`)
+    const url1 = await uploadFire(dataUser.photoBefore ? dataUser.photoBefore : photo_default, `diagnostics/${dataUser.userId}-before-${dateNow}`)
     dataUser.photoBefore = url1
-    const url2 = await uploadFire(dataUser.photoAfter, `diagnostics/${dataUser.userId}-after-${dateNow}`)
+    const url2 = await uploadFire(dataUser.photoAfter ? dataUser.photoAfter : photo_default, `diagnostics/${dataUser.userId}-after-${dateNow}`)
     dataUser.photoAfter = url2
     const response = await makeRequest('POST', '/diagnostic', dataUser)
     return response.data
