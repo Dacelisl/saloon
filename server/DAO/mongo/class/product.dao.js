@@ -96,8 +96,7 @@ class ProductDAO {
   }
   async updateProduct(dataProduct) {
     try {
-      const { id, name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon } = dataProduct
-      const result = await ProductModel.updateOne({ _id: id }, { id, name, description, category, price, thumbnail, code, provider, stock, profitEmployee, profitSaloon })
+      const result = await ProductModel.updateOne({ _id: dataProduct.id }, dataProduct)
       return result
     } catch (error) {
       throw new Error(`function DAO updateProduct ${error}`)

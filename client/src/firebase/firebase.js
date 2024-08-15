@@ -16,8 +16,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`, */
-      url: `http://localhost:3000/api${url}`,
+      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`,
+      /* url: `http://localhost:3000/api${url}`, */
       data: data,
       headers: headers,
     })
@@ -315,7 +315,6 @@ export const updateProvider = async (data) => {
     }
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
-
     const response = await makeRequest('PUT', `/provider/${data.id}`, data)
     return response.data
   } catch (error) {

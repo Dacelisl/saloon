@@ -21,6 +21,7 @@ import {
   getScalpTypes,
 } from '../../firebase/firebase'
 const Toast = lazy(() => import('../utils/Toast.jsx'))
+const Cube = lazy(() => import('../utils/Cube.jsx'))
 
 export const customContext = createContext()
 
@@ -90,6 +91,7 @@ const CustomContext = ({ children }) => {
   const [ticket, setTicket] = useState(ticketDefault)
   const [nextBirthDay, setNextBirthDay] = useState('')
   const [toastMessage, setToastMessage] = useState(null)
+  const [spinner, setSpinner] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -104,7 +106,7 @@ const CustomContext = ({ children }) => {
       if (!user) return setLoading(false)
       try {
         const employee = await getEmployeeByEmail(user.email)
-        if (!employee.code || employee.code !== 200) {          
+        if (!employee.code || employee.code !== 200) {
           setToastMessage({ message: 'Usuario no Encontrado o Eliminado', code: 500 })
           await auth.signOut()
           return
@@ -138,11 +140,11 @@ const CustomContext = ({ children }) => {
       const hairs = await getHairTypes()
       const scalp = await getScalpTypes()
 
-      const employees = allEmployee.map((emp) => ({
+      const employees = allEmployee?.map((emp) => ({
         ...emp,
         fullName: `${emp.firstName} ${emp.lastName}`,
       }))
-      const clients = allClients.map((user) => ({
+      const clients = allClients?.map((user) => ({
         ...user,
         fullName: `${user.firstName} ${user.lastName}`,
       }))
@@ -169,7 +171,7 @@ const CustomContext = ({ children }) => {
     const birthday = getUpcomingBirthdays(clients)
     setNextBirthDay(birthday)
   }, [clients])
-  
+
   const handleSearch = (searchTerm, data) => {
     if (searchTerm === '') return data
     const filteredData = data.filter((item) => Object.values(item).some((value) => typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())))
@@ -223,10 +225,12 @@ const CustomContext = ({ children }) => {
         setTicket,
         nextBirthDay,
         defaultDiagnostic,
+        setSpinner,
       }}
     >
       {children}
       {toastMessage && <Toast message={toastMessage.message} code={toastMessage.code} time={4000} />}
+      {!spinner && <Cube hiden={spinner} dark={false} />}
     </customContext.Provider>
   )
 }

@@ -9,7 +9,7 @@ const ClientTable = lazy(() => import('./ClientTable.jsx'))
 const ClientDetail = lazy(() => import('./ClientDetail.jsx'))
 
 const ClientList = () => {
-  const { clients, selectedClient, tickets, diagnostics, loggedEmployee, setSelectedClient, handleSearch, showToast, fetchFromDatabase } = useContext(customContext)
+  const { clients, selectedClient, tickets, diagnostics, loggedEmployee, setSelectedClient, handleSearch, showToast, setSpinner, fetchFromDatabase } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
@@ -36,11 +36,13 @@ const ClientList = () => {
   }
 
   const saveChange = async () => {
+    setSpinner(false)
     const res = await updateClients(selectedClient)
     setEditable(false)
     await fetchFromDatabase()
     setSelectedClient('')
     setImagenPreview('')
+    setSpinner(true)
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }

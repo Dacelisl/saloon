@@ -22,7 +22,7 @@ const defaultProduct = {
 }
 
 const ProductList = () => {
-  const { allProducts, handleSearch, fetchFromDatabase, role, showToast } = useContext(customContext)
+  const { allProducts, handleSearch, fetchFromDatabase, role, showToast, setSpinner } = useContext(customContext)
   const [search, setSearch] = useState('')
   const [selectedProduct, setSelectedProduct] = useState(defaultProduct)
   const [filteredProduct, setFilteredProduct] = useState([])
@@ -45,11 +45,13 @@ const ProductList = () => {
 
   const saveChange = async () => {
     if (role !== 'admin') return
-    const res = await updateProduct(selectedProduct)
+    setSpinner(false)
+    const res = await updateProduct(selectedProduct)    
     setEditable(false)
     await fetchFromDatabase()
     setSelectedProduct(defaultProduct)
     setImagenPreview('')
+    setSpinner(true)
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }

@@ -10,7 +10,7 @@ const HistoricalClientTable = lazy(() => import('../HistoricalClient/HistoricalC
 const HistoricalClientCredit = lazy(() => import('../HistoricalClient/HistoricalClientCredit.jsx'))
 
 const HistoricalClientList = () => {
-  const { tickets, selectedClient, fetchFromDatabase, showToast } = useContext(customContext)
+  const { tickets, selectedClient, fetchFromDatabase, setSpinner, showToast } = useContext(customContext)
 
   const [selectedTicket, setSelectedTicket] = useState('')
   const [ticketsClient, setTicketsClient] = useState('')
@@ -26,8 +26,10 @@ const HistoricalClientList = () => {
   }
 
   const saveData = async (data) => {
+    setSpinner(false)
     const res = await updateTicket(selectedTicket, data)
     await fetchFromDatabase()
+    setSpinner(true)
     if (res.code > 200) return showToast('Problemas con el pago', res.code)
     showToast('Pago realizado', res.code)
   }

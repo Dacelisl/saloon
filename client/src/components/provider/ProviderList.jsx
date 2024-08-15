@@ -27,7 +27,7 @@ const providerDefault = {
 }
 
 const ProviderList = () => {
-  const { providers, handleSearch, fetchFromDatabase, showToast } = useContext(customContext)
+  const { providers, handleSearch, fetchFromDatabase, showToast, setSpinner } = useContext(customContext)
   const [selectedProvider, setSelectedProvider] = useState(providerDefault)
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
@@ -46,11 +46,13 @@ const ProviderList = () => {
   }
 
   const saveChange = async () => {
+    setSpinner(false)
     const res = await updateProvider(selectedProvider)
     setEditable(false)
     await fetchFromDatabase()
     setSelectedProvider(providerDefault)
     setImagenPreview('')
+    setSpinner(true)
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }

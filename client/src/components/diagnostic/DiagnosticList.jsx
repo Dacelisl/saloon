@@ -28,7 +28,7 @@ const defaultDiagnostic = {
 }
 
 const DiagnosticList = () => {
-  const { diagnostics, selectedClient, showToast, fetchFromDatabase } = useContext(customContext)
+  const { diagnostics, selectedClient, showToast, setSpinner, fetchFromDatabase } = useContext(customContext)
 
   const [selectedDiagnostic, setSelectedDiagnostic] = useState(defaultDiagnostic)
   const [diagnosticsFilter, setDiagnosticsFilter] = useState('')
@@ -52,12 +52,14 @@ const DiagnosticList = () => {
   }
 
   const saveChange = async () => {
+    setSpinner(false)
     const res = await updateDiagnostic(selectedDiagnostic)
     setEditable(false)
     await fetchFromDatabase()
     setSelectedDiagnostic('')
     setImagenAfterPreview('')
     setImagenBeforePreview('')
+    setSpinner(true)
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }

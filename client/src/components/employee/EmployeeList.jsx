@@ -9,7 +9,7 @@ const EmployeeDetail = lazy(() => import('./EmployeeDetail.jsx'))
 const EmployeeTable = lazy(() => import('./EmployeeTable.jsx'))
 
 const EmployeeList = () => {
-  const { employees, setEmployees, handleSearch, roles, showToast } = useContext(customContext)
+  const { employees, setEmployees, handleSearch, roles, setSpinner, showToast } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
@@ -30,12 +30,14 @@ const EmployeeList = () => {
   }
 
   const saveChange = async () => {
+    setSpinner(false)
     const res = await updateEmployee(selectedEmployee)
     setEditable(false)
     const employeeUpdate = await getEmployee()
     setEmployees(employeeUpdate)
     setSelectedEmployee('')
-    if (res.code !== 200) showToast('Cambios NO Guardados ', res.code)
+    setSpinner(true)
+    if (res !== 200) showToast('Cambios NO Guardados ', 500)
     showToast('Se guardaron los cambios ', 200)
   }
 

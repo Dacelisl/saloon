@@ -10,7 +10,7 @@ const InputArea = lazy(() => import('../utils/InputArea.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const ServiceList = () => {
-  const { allServices, fetchFromDatabase, showToast } = useContext(customContext)
+  const { allServices, fetchFromDatabase, showToast, setSpinner } = useContext(customContext)
 
   const [selectedService, setSelectedService] = useState('')
   const [editable, setEditable] = useState(false)
@@ -30,6 +30,7 @@ const ServiceList = () => {
   }
   const saveChange = async (e) => {
     e.preventDefault()
+    setSpinner(false)
     let res = ''
     if (!isCreateServiceVisible) {
       res = await updateServices(selectedService)
@@ -39,6 +40,7 @@ const ServiceList = () => {
     setEditable(false)
     await fetchFromDatabase()
     setSelectedService('')
+    setSpinner(true)
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }
@@ -60,8 +62,8 @@ const ServiceList = () => {
         <div className='bg-gray-100 text-gray-800 mt-3 xl:h-full'>
           <div className='container mx-auto p-4 contents h-full'>
             <div className='flex flex-wrap xl:flex-nowrap h-full'>
-            <aside className='w-full xl:w-[35%] h-[40vh] bg-white p-4 pt-2 shadow-md rounded-lg overflow-auto mb-1 xl:m-2 xl:mr-0 xl:h-[95%]'>
-            <h2 className='text-lg text-center font-semibold mb-4'>Lista de Servicios</h2>
+              <aside className='w-full xl:w-[35%] h-[40vh] bg-white p-4 pt-2 shadow-md rounded-lg overflow-auto mb-1 xl:m-2 xl:mr-0 xl:h-[95%]'>
+                <h2 className='text-lg text-center font-semibold mb-4'>Lista de Servicios</h2>
                 <ul className='space-y-2'>
                   {allServices.map((item) => (
                     <li key={item.id} className='p-2 bg-[#d9e7cb] rounded-lg cursor-pointer hover:bg-gray-300' onClick={() => setSelectedService(item)}>
