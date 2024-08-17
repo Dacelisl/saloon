@@ -6,24 +6,56 @@ import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 
-const instance = axios.create({
-  withCredentials: true,
-})
 const date = new Date()
 const dateNow = formatDate(date)
+
+const instance = axios.create()
+instance.interceptors.request.use(
+  async (config) => {
+    try {
+      const token = await getAccessToken()
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      } else {
+        throw new Error('Not authenticated')
+      }
+    } catch (error) {
+      throw new Error('Error getting token', error)
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+async function getAccessToken() {
+  return new Promise((resolve, reject) => {
+    auth.currentUser
+      .getIdToken()
+      .then((accessToken) => {
+        resolve(accessToken)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
 
 async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`,
-      /* url: `http://localhost:3000/api${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
     return response
   } catch (error) {
-    throw new Error(error.response.data.message)
+    if (error.response && error.response.status === 401 && error.response.data.message === 'invalid-argument') {
+      await signOut(auth)
+    } else {
+      throw new Error(error.response.data.message)
+    }
   }
 }
 
@@ -138,10 +170,8 @@ export const getEmployeeByEmail = async (mail) => {
 /* LOGIN */
 export const singIn = async (email, password) => {
   try {
-    const response = await signInWithEmailAndPassword(auth, email, password)
-    if (!response) return response
-    await makeRequest('POST', '/employee/login', null, { Authorization: `Bearer ${response.user.accessToken}` })
-    return response
+    await signInWithEmailAndPassword(auth, email, password)
+    /* await makeRequest('POST', '/employee/login', null, { Authorization: `Bearer ${response.user.accessToken}` }) */
   } catch (error) {
     return error
   }
@@ -149,7 +179,6 @@ export const singIn = async (email, password) => {
 export const logOut = async () => {
   const res = await signOut(auth)
     .then(async () => {
-      await makeRequest('DELETE', '/employee/logOut')
       return true
     })
     .catch(() => {
@@ -176,9 +205,10 @@ export const registerEmployeeMongo = async (dataUser) => {
 }
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
-    const response = await createUserWithEmailAndPassword(auth, email, password)
-    await makeRequest('POST', '/employee/create', { accessToken: response.user.uid, rol })
-    return response.user
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    const uid = userCredential.user.uid
+    await makeRequest('POST', '/employee/create', { uid, rol })
+    return userCredential.user
   } catch (error) {
     return error
   }
@@ -316,7 +346,7 @@ export const updateProvider = async (data) => {
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
     const response = await makeRequest('PUT', `/provider/${data.id}`, data)
-    return response.data
+    return response.status
   } catch (error) {
     return error
   }

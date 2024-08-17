@@ -47,14 +47,14 @@ const ProviderList = () => {
 
   const saveChange = async () => {
     setSpinner(false)
-    const res = await updateProvider(selectedProvider)
+    const res = await updateProvider(selectedProvider)    
     setEditable(false)
     await fetchFromDatabase()
     setSelectedProvider(providerDefault)
     setImagenPreview('')
     setSpinner(true)
-    if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
-    showToast('Se guardaron los cambios ', res.code)
+    if (res !== 200) return showToast('Cambios NO Guardados ', 500)
+    showToast('Se guardaron los cambios ', 200)
   }
 
   const handleSearchInProvider = (searchTerm) => {

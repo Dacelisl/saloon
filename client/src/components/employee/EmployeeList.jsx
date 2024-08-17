@@ -31,7 +31,7 @@ const EmployeeList = () => {
 
   const saveChange = async () => {
     setSpinner(false)
-    const res = await updateEmployee(selectedEmployee)
+    const res = await updateEmployee(selectedEmployee)    
     setEditable(false)
     const employeeUpdate = await getEmployee()
     setEmployees(employeeUpdate)

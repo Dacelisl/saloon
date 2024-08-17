@@ -13,9 +13,9 @@ class EmployeeController {
     }
   }
   async createRol(req, res) {
-    const { accessToken, rol } = req.body
+    const { uid, rol } = req.body
     try {
-      await admin.auth().setCustomUserClaims(accessToken, { rol })
+      const res = await admin.auth().setCustomUserClaims(uid, { rol })
       res.status(200).json({ success: true })
     } catch (error) {
       res.status(500).json({ success: false, error: 'Error creating custom claims' })
@@ -24,15 +24,7 @@ class EmployeeController {
 
   async getLogOut(req, res) {
     try {
-      req.session.destroy(async (err) => {
-        if (err) throw new Error(`Error server getLogOut ${err}`)
-        res.clearCookie('session', {
-          httpOnly: true,
-          secure: true, // Set to true if using https
-          sameSite: 'none',
-        })
-        res.json({ status: true, message: 'logOut ok' })
-      })
+      /* TODO: limpieza con el logout */
     } catch (error) {
       res.status(500).send('Error logging out')
     }
@@ -42,22 +34,18 @@ class EmployeeController {
     const token = authHeader && authHeader.split(' ')[1]
     try {
       const decodedToken = await admin.auth().verifyIdToken(token)
-      const customClaims = await employeeService.getEmployeeByEmail(decodedToken.email)
-
-      const sessionCookie = await admin.auth().createSessionCookie(customClaims, { expiresIn: 60 * 60 * 24 * 1000 }) // 1 day
-      const options = {
-        maxAge: 60 * 60 * 24 * 1000, // 1 day
-        httpOnly: true,
-        secure: true, // Set to true if using https
-        sameSite: 'none', // Set to 'none' to allow cross-site cookies
+      const dataEmployee = await employeeService.getEmployeeByEmail(decodedToken.email)
+      const customClaims = {
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        role: dataEmployee.payload.role,
       }
-      res.cookie('session', sessionCookie, options)
-      res.json({ message: 'Login successful' })
+      const customToken = await admin.auth().createCustomToken(decodedToken.uid, customClaims)
+      res.json({ customToken })
     } catch (error) {
       res.json('Error: authentication server')
     }
   }
-
   async getEmployeeById(req, res) {
     const employeeId = req.params.id
     try {

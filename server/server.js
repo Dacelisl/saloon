@@ -6,7 +6,6 @@ import { connectMongo } from './utils/connectMongo.js'
 import { router } from './routes/index.routes.js'
 import dataConfig from './config/process.config.js'
 import corsOptions from './middleware/cors.js'
-import { sessions } from './middleware/sessions.js'
 
 const app = express()
 app.use(cors(corsOptions))
@@ -16,8 +15,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(__dirname + '/public'))
 app.use(addLogger)
-
-app.use(sessions)
 
 app.use(router)
 connectMongo()

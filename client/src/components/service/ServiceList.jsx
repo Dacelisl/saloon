@@ -36,7 +36,7 @@ const ServiceList = () => {
       res = await updateServices(selectedService)
     } else {
       res = await createServices(selectedService)
-    }
+    }    
     setEditable(false)
     await fetchFromDatabase()
     setSelectedService('')
