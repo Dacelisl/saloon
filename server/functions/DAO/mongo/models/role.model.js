@@ -5,7 +5,6 @@ const schema = new Schema({
     type: String,
     required: true,
     unique: true,
-    message: 'The name is not unique',
   },
   permissions: [
     {

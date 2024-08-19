@@ -5,45 +5,24 @@ function extractTokenFromHeader(req) {
   return authHeader && authHeader.split(' ')[1]
 }
 
-export async function registeredUser(req, res, next) {
+export async function authorize(req, res, next) {
   try {
     const token = extractTokenFromHeader(req)
-    if (!token) {
-      return res.status(401).json({ message: 'Not authenticated' })
-    }
-    next()
-  } catch (error) {
-    req.logger.warning('registeredUser Internal Server Error!', error)
-    res.status(401).json({ message: 'Not authenticated' })
-  }
-}
+    const ruta = req.originalUrl.split('?')[0]
+    const method = req.method.toLowerCase()
+    if (!token) return res.status(401).json({ message: 'Not authenticated' })
 
-export async function adminAccess(req, res, next) {
-  try {
-    const token = extractTokenFromHeader(req)
-    if (!token) {
-      return res.status(401).json({ message: 'Not authenticated' })
-    }
     const decodedClaims = await admin.auth().verifyIdToken(token)
-    if (decodedClaims.rol === 'admin') {
+    const permissions = decodedClaims.permissions || []
+
+    const hasPermission = permissions.some((permission) => permission.module === ruta && permission.actions.includes(method))
+    if (hasPermission) {
       return next()
     } else {
-      const ruta = req.originalUrl
-      req.logger.warning(`Unauthorized access  ${req.method} ${ruta}`)
-      return res.status(403).json({
-        status: 'error',
-        code: 403,
-        message: `authorization error!: ${error}`,
-        payload: {},
-      })
+      return res.status(403).json({ message: 'Permission denied' })
     }
   } catch (error) {
-    req.logger.warning('Internal Server Error!', error)
-    return res.status(500).json({
-      status: 'error',
-      code: 500,
-      message: `Internal Server Error!: ${error}`,
-      payload: {},
-    })
+    req.logger.warning('authorize Internal Server Error!', error)
+    res.status(401).json({ message: 'Not authenticated' })
   }
 }

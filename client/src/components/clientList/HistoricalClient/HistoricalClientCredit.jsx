@@ -7,7 +7,7 @@ const InputEdit = lazy(() => import('../../utils/InputEdit.jsx'))
 const ModalAux = lazy(() => import('../../utils/ModalAux.jsx'))
 
 const HistoricalClientCredit = ({ isOpen, onClose, saveData, balanceDue = '' }) => {
-  const { paymentMethods } = useContext(customContext)
+  const { paymentMethods, isTimeAllowed } = useContext(customContext)
   const [dataChange, setDataChange] = useState({
     paymentMethod: '',
     amount: balanceDue,
@@ -63,7 +63,7 @@ const HistoricalClientCredit = ({ isOpen, onClose, saveData, balanceDue = '' }) 
         )}
 
         <span className=' flex justify-center mb-2 '>
-          <ButtonDefault title='Pagar' onClick={handleClick} disabled={send} />
+          <ButtonDefault title='Pagar' onClick={handleClick} disabled={send && !isTimeAllowed()} />
         </span>
       </ModalAux>
     </>

@@ -1,6 +1,5 @@
 import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
 import { employeeService } from '../services/employee.services.js'
-import admin from '../firebase.js'
 
 class EmployeeController {
   async getAllEmployees(req, res) {
@@ -12,17 +11,16 @@ class EmployeeController {
       return sendErrorResponse(res, error)
     }
   }
-  async addRol(req, res) {
-    const { accessToken, rol } = req.body
+  async addRoleEmployee(req, res) {
+    const { uid, rolId } = req.body
     try {
-      const result = await employeeService.addRol(accessToken, rol)
+      const result = await employeeService.addRoleEmployee(uid, rolId)
       return sendSuccessResponse(res, result)
     } catch (error) {
       req.logger.error(error)
       return sendErrorResponse(res, error)
     }
   }
-
   async getLogOut(req, res) {
     try {
       /* TODO: limpieza con el logout */
@@ -31,14 +29,16 @@ class EmployeeController {
     }
   }
   async getLogin(req, res) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
     try {
-      /* TODO: registrar login en mongo */
-      res.json({ message: 'Login successful' })
+      const result = await employeeService.getLogin(token)
+      return sendSuccessResponse(res, result)
     } catch (error) {
-      res.json('Error: authentication server')
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
     }
   }
-
   async getEmployeeById(req, res) {
     const employeeId = req.params.id
     try {
@@ -90,7 +90,6 @@ class EmployeeController {
       return sendErrorResponse(res, error)
     }
   }
-
   async getDocuments(req, res) {
     const email = req.params.email
     try {

@@ -188,6 +188,12 @@ const CustomContext = ({ children }) => {
     }
     return true
   }
+  const isTimeAllowed = () => {
+    const startHour = 7 
+    const endHour = 20
+    const currentHour = new Date().getHours()
+    return currentHour >= startHour && currentHour < endHour
+  }
 
   return (
     <customContext.Provider
@@ -226,6 +232,7 @@ const CustomContext = ({ children }) => {
         nextBirthDay,
         defaultDiagnostic,
         setSpinner,
+        isTimeAllowed,
       }}
     >
       {children}

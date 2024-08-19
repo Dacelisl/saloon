@@ -19,7 +19,7 @@ const DiagnosticDetail = ({
   toast,
 }) => {
   const [prevData, setPrevData] = useState('')
-  const { navigate } = useContext(customContext)
+  const { navigate, isTimeAllowed } = useContext(customContext)
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
@@ -93,10 +93,10 @@ const DiagnosticDetail = ({
       {selectedDiagnostic.client.firstName ? (
         <div className={` ${editable ? 'hidden' : 'flex relative mx-auto mt-8 mb-3'}`}>
           <span className='contents'>
-            <ButtonDefault title='Editar' onClick={handleEdit} />
+            <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed()} />
           </span>
           <span className='contents'>
-            <ButtonDefault title='Agregar' onClick={() => navigate('/registerDiagnostic')} />
+            <ButtonDefault title='Agregar' onClick={() => navigate('/registerDiagnostic')} disabled={!isTimeAllowed()} />
           </span>
         </div>
       ) : (

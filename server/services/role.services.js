@@ -95,6 +95,18 @@ class RoleServices {
       }
       const updateRole = await roleFactory.updateRole(roleId, updatedData)
       if (updateRole) {
+        const claims = {
+          role: updatedData.name,
+          permissions: updatedData.permissions,
+        }
+        const users = await admin.auth().listUsers()
+        const updatePromises = users.users.map(async (userRecord) => {
+          if (userRecord.customClaims?.role === updatedData.name) {
+            await admin.auth().setCustomUserClaims(userRecord.uid, claims)
+            await admin.auth().revokeRefreshTokens(userRecord.uid)
+          }
+        })
+        await Promise.all(updatePromises)
         return {
           status: 'Success',
           code: 200,

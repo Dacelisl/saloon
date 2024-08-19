@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useState, lazy } from 'react'
+import { useState, useContext, lazy } from 'react'
 import { Link } from 'react-router-dom'
+import { customContext } from '../context/CustomContext.jsx'
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
 
 const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast, showData }) => {
+  const { isTimeAllowed } = useContext(customContext)
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -23,6 +25,7 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
     setImagenPreview(prevData.thumbnail)
     setEditable(!editable)
   }
+  console.log('data', showData.diagnostic)
 
   return (
     <>
@@ -54,17 +57,17 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
         <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
           {loggedEmployee.role === 'admin' ? (
             <span className='contents'>
-              <ButtonDefault title='Editar' onClick={handleEdit} />
+              <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed()} />
             </span>
           ) : (
             ''
           )}
 
           <Link to={'/ticket'} className='contents'>
-            <ButtonDefault title='Ticket' />
+            <ButtonDefault title='Ticket' disabled={!isTimeAllowed()} />
           </Link>
           <Link to={showData.diagnostic ? '/diagnostic' : '/registerDiagnostic'} className='contents'>
-            <ButtonDefault title='Diagnostico' />
+            <ButtonDefault title='Diagnostico' disabled={!showData.diagnostic && !isTimeAllowed()} />
           </Link>
 
           {showData.historical ? (

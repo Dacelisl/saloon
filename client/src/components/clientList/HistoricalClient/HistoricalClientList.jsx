@@ -10,7 +10,7 @@ const HistoricalClientTable = lazy(() => import('../HistoricalClient/HistoricalC
 const HistoricalClientCredit = lazy(() => import('../HistoricalClient/HistoricalClientCredit.jsx'))
 
 const HistoricalClientList = () => {
-  const { tickets, selectedClient, fetchFromDatabase, setSpinner, showToast } = useContext(customContext)
+  const { tickets, selectedClient, fetchFromDatabase, setSpinner, isTimeAllowed, showToast } = useContext(customContext)
 
   const [selectedTicket, setSelectedTicket] = useState('')
   const [ticketsClient, setTicketsClient] = useState('')
@@ -50,7 +50,7 @@ const HistoricalClientList = () => {
         <div className='mt-10 h-[50%]'>
           <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
         </div>
-        <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} /> : <span className=' mt-6'></span>}</div>
+        <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} disabled={!isTimeAllowed()} /> : <span className=' mt-6'></span>}</div>
       </Modal>
       <HistoricalClientCredit isOpen={isModalCreditOpen} onClose={handleCloseCreditModal} saveData={saveData} balanceDue={selectedTicket.balanceDue} />
     </>

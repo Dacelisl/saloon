@@ -1,11 +1,11 @@
 import express from 'express'
 import { employeePerformanceController } from '../controllers/employeePerformance.controller.js'
-import { registeredUser } from '../middleware/auth.js'
+import { authorize } from '../middleware/auth.js'
 
 export const EmployeePerformanceRoutes = express.Router()
 
-EmployeePerformanceRoutes.get('/', registeredUser, employeePerformanceController.getAllEmployeePerformances)
-EmployeePerformanceRoutes.get('/customer/:cid', registeredUser, employeePerformanceController.getPerformancesByCustomerDNI)
-EmployeePerformanceRoutes.get('/employee/:eid', registeredUser, employeePerformanceController.getPerformancesByEmployeeDNI)
-EmployeePerformanceRoutes.get('/range/', registeredUser, employeePerformanceController.getPerformanceByDate)
-EmployeePerformanceRoutes.get('/company/', registeredUser, employeePerformanceController.getCompanyPerformance)
+EmployeePerformanceRoutes.get('/', authorize, employeePerformanceController.getAllEmployeePerformances)
+EmployeePerformanceRoutes.get('/customer/:cid', authorize, employeePerformanceController.getPerformancesByCustomerDNI)
+EmployeePerformanceRoutes.get('/employee/:eid', authorize, employeePerformanceController.getPerformancesByEmployeeDNI)
+EmployeePerformanceRoutes.get('/range/', authorize, employeePerformanceController.getPerformanceByDate)
+EmployeePerformanceRoutes.get('/company/', authorize, employeePerformanceController.getCompanyPerformance)

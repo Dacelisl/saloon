@@ -1,6 +1,5 @@
 import { sendErrorResponse, sendSuccessResponse } from '../utils/utils.js'
 import { employeeService } from '../services/employee.services.js'
-import admin from '../firebase.js'
 
 class EmployeeController {
   async getAllEmployees(req, res) {
@@ -12,16 +11,16 @@ class EmployeeController {
       return sendErrorResponse(res, error)
     }
   }
-  async createRol(req, res) {
-    const { uid, rol } = req.body
+  async addRoleEmployee(req, res) {
+    const { uid, rolId } = req.body
     try {
-      const res = await admin.auth().setCustomUserClaims(uid, { rol })
-      res.status(200).json({ success: true })
+      const result = await employeeService.addRoleEmployee(uid, rolId)
+      return sendSuccessResponse(res, result)
     } catch (error) {
-      res.status(500).json({ success: false, error: 'Error creating custom claims' })
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
     }
   }
-
   async getLogOut(req, res) {
     try {
       /* TODO: limpieza con el logout */
@@ -33,17 +32,11 @@ class EmployeeController {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     try {
-      const decodedToken = await admin.auth().verifyIdToken(token)
-      const dataEmployee = await employeeService.getEmployeeByEmail(decodedToken.email)
-      const customClaims = {
-        uid: decodedToken.uid,
-        email: decodedToken.email,
-        role: dataEmployee.payload.role,
-      }
-      const customToken = await admin.auth().createCustomToken(decodedToken.uid, customClaims)
-      res.json({ customToken })
+      const result = await employeeService.getLogin(token)
+      return sendSuccessResponse(res, result)
     } catch (error) {
-      res.json('Error: authentication server')
+      req.logger.error(error)
+      return sendErrorResponse(res, error)
     }
   }
   async getEmployeeById(req, res) {
@@ -97,7 +90,6 @@ class EmployeeController {
       return sendErrorResponse(res, error)
     }
   }
-
   async getDocuments(req, res) {
     const email = req.params.email
     try {

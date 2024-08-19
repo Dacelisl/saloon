@@ -1,8 +1,6 @@
 import { employeeFactory, roleFactory } from '../DAO/factory.js'
 import { isValid } from '../utils/utils.js'
 import admin from '../firebase.js'
-import dataConfig from '../config/process.config.js'
-import { logger } from '../utils/logger.js'
 
 class EmployeeServices {
   validateEmployee(dataEmployee) {
@@ -121,8 +119,66 @@ class EmployeeServices {
       }
     }
   }
+  async getLogin(token) {
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(token)
+      const dataEmployee = await employeeFactory.getEmployeeByEmail(decodedToken.email)
+      const customClaims = {
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        role: dataEmployee.role,
+      }
+      const customToken = await admin.auth().createCustomToken(decodedToken.uid, customClaims)
+      return {
+        status: 'Success',
+        code: 201,
+        message: 'Custom claims set successfully',
+        payload: customToken,
+      }
+    } catch (error) {
+      return {
+        code: 500,
+        status: 'error',
+        message: `Error creating custom claims: ${error}`,
+        payload: {},
+      }
+    }
+  }
+  async addRoleEmployee(uid, rolId) {
+    try {
+      const roleFound = await roleFactory.getRoleByID(rolId)
+      if (!roleFound) {
+        return {
+          status: 'Fail',
+          code: 404,
+          message: 'role not exist : addRoleEmployee',
+          payload: {},
+        }
+      }
+      const claims = {
+        role: roleFound.name,
+        permissions: roleFound.permissions,
+      }
+      await admin.auth().setCustomUserClaims(uid, { claims })
+      return {
+        status: 'Success',
+        code: 201,
+        message: 'Custom claims set successfully',
+        payload: {},
+      }
+    } catch (error) {
+      return {
+        code: 500,
+        status: 'error',
+        message: `Error creating custom claims: ${error}`,
+        payload: {},
+      }
+    }
+  }
+
   async updateEmployee(employee, id) {
     try {
+      /* verificar si dentro del data a actualizar se encuentra el rol realizar  la actualizacion del token firebase */
       const employeeFound = await employeeFactory.getEmployeeById(id)
       if (!employeeFound) {
         return {
@@ -134,19 +190,23 @@ class EmployeeServices {
       }
       const rol = await roleFactory.getRoleByName(employee.role)
       employee.role = rol._id
+      if (employeeFound.role !== employee.role) {
+        const claims = {
+          role: rol.name,
+          permissions: rol.permissions,
+        }
+        const userRecord = await admin.auth().getUserByEmail(employee.email)
+        await admin.auth().revokeRefreshTokens(userRecord.uid)
+        admin.auth().setCustomUserClaims(userRecord.uid, claims)
+      }
       const employeeUpdate = await employeeFactory.updateEmployee(employee, id)
       if (employeeUpdate.modifiedCount > 0) {
-        if (employeeFound.role !== rol.name) {
-          const userRecord = await admin.auth().getUserByEmail(employee.email)
-          await admin.auth().setCustomUserClaims(userRecord.uid, { rol: rol.name })
-          await admin.auth().revokeRefreshTokens(userRecord.uid)
-        }
-        const newEmployee = await employeeFactory.getEmployeeById(id)
+        const employee = await employeeFactory.getEmployeeById(id)
         return {
           status: 'success',
           code: 200,
           message: 'employee update successfully',
-          payload: newEmployee,
+          payload: employee,
         }
       } else {
         return {
@@ -197,24 +257,6 @@ class EmployeeServices {
         status: 'error',
         code: 500,
         message: `Something went wrong deleteEmployee: ${error}`,
-        payload: {},
-      }
-    }
-  }
-  async addRol(token, rol) {
-    try {
-      await admin.auth().setCustomUserClaims(token, { rol })
-      return {
-        status: 'Success',
-        code: 200,
-        message: 'rol add successfully',
-        payload: {},
-      }
-    } catch (error) {
-      return {
-        status: 'error',
-        code: 500,
-        message: `Error creating custom claims ${error}`,
         payload: {},
       }
     }

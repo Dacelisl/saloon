@@ -1,12 +1,12 @@
 import express from 'express'
 import { providerController } from '../controllers/provider.controller.js'
-import { adminAccess, registeredUser } from '../middleware/auth.js'
+import { authorize } from '../middleware/auth.js'
 
 export const ProviderRoutes = express.Router()
 
-ProviderRoutes.get('/', registeredUser, providerController.getAllProviders)
-ProviderRoutes.get('/:pid', registeredUser, providerController.getProviderByID)
-ProviderRoutes.get('/name/:name', registeredUser, providerController.getProviderByName)
-ProviderRoutes.post('/', adminAccess, providerController.createProvider)
-ProviderRoutes.put('/:rid', adminAccess, providerController.updateProvider)
-ProviderRoutes.delete('/:rid', adminAccess, providerController.deleteProvider)
+ProviderRoutes.get('/', authorize, providerController.getAllProviders)
+ProviderRoutes.get('/:pid', authorize, providerController.getProviderByID)
+ProviderRoutes.get('/name/:name', authorize, providerController.getProviderByName)
+ProviderRoutes.post('/', authorize, providerController.createProvider)
+ProviderRoutes.put('/:rid', authorize, providerController.updateProvider)
+ProviderRoutes.delete('/:rid', authorize, providerController.deleteProvider)
