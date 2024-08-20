@@ -144,9 +144,9 @@ class EmployeeServices {
       }
     }
   }
-  async addRoleEmployee(uid, rolId) {
+  async addRoleEmployee(email, password, rol) {
     try {
-      const roleFound = await roleFactory.getRoleByID(rolId)
+      const roleFound = await roleFactory.getRoleByName(rol)
       if (!roleFound) {
         return {
           status: 'Fail',
@@ -155,16 +155,21 @@ class EmployeeServices {
           payload: {},
         }
       }
+      const userRecord = await admin.auth().createUser({
+        email: email,
+        password: password,
+      })
+
       const claims = {
         role: roleFound.name,
         permissions: roleFound.permissions,
       }
-      await admin.auth().setCustomUserClaims(uid, { claims })
+      await admin.auth().setCustomUserClaims(userRecord.uid, { claims })
       return {
         status: 'Success',
         code: 201,
         message: 'Custom claims set successfully',
-        payload: {},
+        payload: userRecord,
       }
     } catch (error) {
       return {

@@ -12,9 +12,9 @@ class EmployeeController {
     }
   }
   async addRoleEmployee(req, res) {
-    const { uid, rolId } = req.body
+    const { email, password, rol } = req.body
     try {
-      const result = await employeeService.addRoleEmployee(uid, rolId)
+      const result = await employeeService.addRoleEmployee(email, password, rol)
       return sendSuccessResponse(res, result)
     } catch (error) {
       req.logger.error(error)

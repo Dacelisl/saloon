@@ -4,7 +4,7 @@ import photo_default from '../assets/img/photo_default.jpeg'
 import product_default from '../assets/img/product_default.jpeg'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
+import { signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 
 const date = new Date()
 const dateNow = formatDate(date)
@@ -45,8 +45,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back${url}`,
-      /* url: `http://localhost:3000/api${url}`, */
+      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
@@ -206,10 +206,8 @@ export const registerEmployeeMongo = async (dataUser) => {
 }
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    const uid = userCredential.user.uid
-    await makeRequest('POST', '/employee/create', { uid, rol })
-    return userCredential.user
+    const res = await makeRequest('POST', '/employee/create', { email, password, rol })
+    return res.data
   } catch (error) {
     return error
   }

@@ -25,8 +25,6 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
     setImagenPreview(prevData.thumbnail)
     setEditable(!editable)
   }
-  console.log('data', showData.diagnostic)
-
   return (
     <>
       <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
