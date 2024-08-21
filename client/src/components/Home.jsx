@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div className='flex'>
       <Logo />
-      <Modal>
+      <Modal className={'!bg-transparent !shadow-none !w-full xl:!top-[12%]'} >
         <div className='grid z-30 grid-rows-[auto,1fr,auto] relative h-full'>
           <div  className='relative contents overflow-auto'>
             <PanelBirthday />

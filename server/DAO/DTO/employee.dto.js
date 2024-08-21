@@ -10,8 +10,6 @@ class EmployeeDTO {
     this.address = employee.address
     this.email = employee.email
     this.thumbnail = employee.thumbnail
-      ? employee.thumbnail
-      : 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/photo_default.jpeg?alt=media&token=9e28057e-52a2-4a5d-87d0-509fc7be2eac'
     this.dateBirthday = formatDate(employee.dateBirthday)
     this.role = employee.role ? employee.role.name : null
     this.documents = employee.documents

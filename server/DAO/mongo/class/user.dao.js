@@ -13,7 +13,6 @@ class UserDAO {
         .populate('shopping.employeeId', 'firstName lastName')
         .populate('shopping.products.product', 'name price')
       const formattedUsers = users.map((user) => (user ? new UserDTO(user) : null))
-
       return formattedUsers
     } catch (error) {
       throw new Error(`function DAO getAllUsers: ${error}`)
@@ -105,6 +104,7 @@ class UserDAO {
             address: updatedData.address,
             dateBirthday: updatedData.dateBirthday,
             thumbnail: updatedData.thumbnail,
+            lastDate: Date.now(),
           },
         }
       )

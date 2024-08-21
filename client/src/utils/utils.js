@@ -106,20 +106,33 @@ export function formatDate(date) {
 
 export const getUpcomingBirthdays = (clients) => {
   const today = new Date()
-  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000) // Obtener la fecha de hoy más 7 días
+  const todayDay = today.getDate()
+  const todayMonth = today.getMonth() + 1 // Se usa 'getMonth() + 1' para que los meses estén en un rango de 1-12
+  // Obtener la fecha de hoy más 7 días
+  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
+  const nextWeekDay = nextWeek.getDate()
+  const nextWeekMonth = nextWeek.getMonth() + 1
+
+  // Filtrar los clientes que cumplen años entre hoy y los próximos 7 días, ignorando el año
   const upcomingBirthdays = clients.filter((client) => {
     const birthday = new Date(client.dateBirthday)
     const birthdayMonth = birthday.getMonth() + 1
     const birthdayDay = birthday.getDate()
-    const todayMonth = today.getMonth() + 1
-    const todayDay = today.getDate()
-    const nextWeekMonth = nextWeek.getMonth() + 1
-    const nextWeekDay = nextWeek.getDate()
-    const isThisMonthBirthday = birthdayMonth === todayMonth && birthdayDay >= todayDay
-    const isNextWeekBirthday = birthdayMonth === nextWeekMonth && birthdayDay <= nextWeekDay
-    return isThisMonthBirthday || isNextWeekBirthday
+
+    // Si el cumpleaños está en el mismo mes y cae entre hoy y dentro de los próximos 7 días
+    if (birthdayMonth === todayMonth && birthdayDay >= todayDay && birthdayDay <= nextWeekDay) {
+      return true
+    }
+
+    // Si el cumpleaños está al principio del próximo mes dentro de los próximos 7 días
+    if (todayMonth !== nextWeekMonth && birthdayMonth === nextWeekMonth && birthdayDay <= nextWeekDay) {
+      return true
+    }
+
+    return false
   })
-  // Format the day and month for display
+
+  // Formatear para mostrar los cumpleaños próximos
   const formattedUpcomingBirthdays = upcomingBirthdays.map((client) => {
     const birthday = new Date(client.dateBirthday)
     const birthdayMonth = birthday.toLocaleString('default', { month: 'long' })
@@ -131,11 +144,14 @@ export const getUpcomingBirthdays = (clients) => {
       birthdayDate: birthday,
     }
   })
+
+  // Ordenar los cumpleaños por fecha (día y mes)
   const sortedData = formattedUpcomingBirthdays.sort((a, b) => {
     const dateA = new Date(2000, a.birthdayDate.getMonth(), a.birthdayDate.getDate())
     const dateB = new Date(2000, b.birthdayDate.getMonth(), b.birthdayDate.getDate())
     return dateA.getTime() - dateB.getTime()
   })
+
   return sortedData
 }
 

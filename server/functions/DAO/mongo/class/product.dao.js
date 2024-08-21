@@ -17,7 +17,7 @@ class ProductDAO {
   }
   async getAllProducts() {
     try {
-      const allProducts = await ProductModel.find().lean()
+      const allProducts = await ProductModel.find().populate('provider').lean()
       const formattedProducts = allProducts.map((product) => (product ? new ProductDTO(product) : null))
       return formattedProducts
     } catch (error) {
@@ -34,7 +34,7 @@ class ProductDAO {
   }
   async getProductByID(id) {
     try {
-      const product = await ProductModel.findById(id).lean()
+      const product = await ProductModel.findById(id).populate('provider').lean()
       return product ? new ProductDTO(product) : null
     } catch (error) {
       throw new Error(`function DAO getProductByID  ${error}`)
@@ -42,7 +42,7 @@ class ProductDAO {
   }
   async getProductByCode(code) {
     try {
-      const product = await ProductModel.findOne({ code: code })
+      const product = await ProductModel.findOne({ code: code }).populate('provider').lean()
       return product ? new ProductDTO(product) : null
     } catch (error) {
       throw new Error(`function DAO getProductByCode ${error}`)
@@ -63,7 +63,9 @@ class ProductDAO {
             },
           },
         ],
-      }).lean()
+      })
+        .populate('provider')
+        .lean()
       const formattedProducts = products.map((product) => (product ? new ProductDTO(product) : null))
       return formattedProducts
     } catch (error) {
@@ -80,8 +82,11 @@ class ProductDAO {
   }
   async saveProduct(dataProduct) {
     try {
-      const result = await ProductModel.create(dataProduct)
-      return result
+      const newProduct = await ProductModel.create({
+        ...dataProduct,
+        priceHistory: [{ price: dataProduct.price }],
+      })
+      return newProduct
     } catch (error) {
       throw new Error(`function DAO saveProduct ${error}`)
     }
@@ -94,10 +99,22 @@ class ProductDAO {
       throw new Error(`function DAO deleteProduct ${error}`)
     }
   }
-  async updateProduct(dataProduct) {
+  async updateProduct(updateData) {
     try {
-      const result = await ProductModel.updateOne({ _id: dataProduct.id }, dataProduct)
-      return result
+      const product = await ProductModel.findById(updateData.id)
+      if (!product) throw new Error('Product not found')        
+      if (updateData.price && Number(updateData.price) !== Number(product.price)) {
+        product.priceHistory.push({ price: product.price, date: Date.now() })
+        product.price = updateData.price
+      }
+      // Actualizar cualquier otro campo que se haya modificado
+      for (const key in updateData) {
+        if (key !== 'price') {
+          product[key] = updateData[key]
+        }
+      }
+      await product.save()
+      return product
     } catch (error) {
       throw new Error(`function DAO updateProduct ${error}`)
     }

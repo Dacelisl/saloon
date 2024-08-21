@@ -24,6 +24,7 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
     setImagenPreview(prevData.thumbnail)
     setEditable(!editable)
   }
+  
   return (
     <>
       <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
@@ -34,7 +35,16 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
         </div>
         <div>
           <InputEdit labelName={'Nombre'} value={selectedProduct.name} edit={editable} onChange={handleFieldChange} type={'text'} name={'name'} />
-          <InputSelect label={'Proveedor'} name={'provider'} itemOption={providers} itemValue={selectedProduct.provider} handleFieldChange={handleFieldChange} editable={editable} />
+          <InputSelect
+            label={'Proveedor'}
+            name={'provider'}
+            itemOption={providers}
+            itemValue={selectedProduct.provider}
+            optionValueKey='id'
+            optionDisplayKey='name'
+            handleFieldChange={handleFieldChange}
+            editable={editable} 
+          />
           <InputSelect label={'Categoria'} name={'category'} itemOption={categories} itemValue={selectedProduct.category} handleFieldChange={handleFieldChange} editable={editable} />
           <InputEdit labelName={'Code'} value={selectedProduct.code} onChange={handleFieldChange} type={'text'} name={'code'} />
           <InputEdit labelName={'Stock'} value={selectedProduct.stock} edit={editable} onChange={handleFieldChange} type={'number'} name={'stock'} />

@@ -4,7 +4,7 @@ import { authorize } from '../middleware/auth.js'
 
 export const EmployeeRoutes = express.Router()
 
-EmployeeRoutes.post('/create', authorize, employeeController.addRol)
+EmployeeRoutes.post('/create', authorize, employeeController.addRoleEmployee)
 EmployeeRoutes.delete('/logOut', authorize, employeeController.getLogOut)
 EmployeeRoutes.post('/login', employeeController.getLogin)
 EmployeeRoutes.get('/', authorize, employeeController.getAllEmployees)

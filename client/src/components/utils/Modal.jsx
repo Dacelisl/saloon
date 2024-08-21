@@ -18,7 +18,7 @@ const Modal = ({ children, className, type = 1 }) => {
         <div
           className={`z-20 relative px-4 pt-2 sm:pb-2 mx-auto rounded-lg shadow-md shadow-slate-500 ${
             type === 1
-              ? 'bg-[#030313] w-[90%] h-[80%] top-[8%] max-w-md'
+              ? `bg-[#030313] w-[90%] h-[80%] top-[8%] max-w-md ${className}`
               : `bg-primary-light sm:w-[95%] sm:top-[5%] sm:h-[80%] lg:max-w-fit xl:px-7 xxl:w-[60%] overflow-y-scroll scrollbar-thin scrollbar-track-[#ddd4b4] scrollbar-thumb-[#fffcf1] ${className}`
           } `}
         >

@@ -8,7 +8,7 @@ export class ProductDTO {
     this.price = product.price
     this.thumbnail = product.thumbnail
     this.code = product.code
-    this.provider = product.provider
+    this.provider = product.provider.name
     this.stock = product.stock
     this.dateCreation = formatDate(product.dateCreation)
     this.profitEmployee = product.profitEmployee

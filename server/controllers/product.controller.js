@@ -91,20 +91,7 @@ class ProductController {
   async updateProduct(req, res) {
     try {
       const data = req.body
-      const newProduct = {
-        name: data.name,
-        description: data.description,
-        category: data.category,
-        price: data.price,
-        thumbnail: data.thumbnail,
-        code: data.code,
-        provider: data.provider,
-        stock: data.stock,
-        profitEmployee: data.profitEmployee,
-        profitSaloon: data.profitSaloon,
-      }
-      newProduct.id = req.params.pid
-      const resUpdate = await productService.updateProduct(newProduct)
+      const resUpdate = await productService.updateProduct(data)
       return sendSuccessResponse(res, resUpdate)
     } catch (error) {
       req.logger.error(error)

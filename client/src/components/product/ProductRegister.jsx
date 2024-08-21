@@ -69,7 +69,19 @@ const ProductRegister = () => {
         </div>
         <div>
           <InputEdit labelName={'Nombres'} value={productData.name} name={'name'} onChange={handleInputChange} className='h-8' edit />
-          <InputSelect name={'provider'} label={'Proveedor'} itemOption={providers} itemValue={productData.provider} handleFieldChange={handleInputChange} className='h-8' editable />
+
+          <InputSelect
+            label={'Proveedor'}
+            name={'provider'}
+            itemOption={providers}
+            itemValue={productData.provider}
+            optionValueKey='id'
+            optionDisplayKey='name'
+            handleFieldChange={handleInputChange}
+            className='h-8'
+            editable
+          />
+
           <InputSelect name={'category'} label={'Categoria'} itemOption={categories} itemValue={productData.category} handleFieldChange={handleInputChange} className='h-8' editable />
           <InputEdit labelName={'Codigo'} value={productData.code} name={'code'} onChange={handleInputChange} edit className='h-8' />
           <InputEdit labelName={'Stock'} type='number' value={productData.stock} name={'stock'} onChange={handleInputChange} edit className='h-8' />

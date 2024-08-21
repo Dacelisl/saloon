@@ -258,12 +258,12 @@ class ProductServices {
         return {
           status: 'Fail',
           code: 404,
-          message: 'product not exist deleteProduct',
+          message: 'product not exist updateProduct',
           payload: {},
         }
       }
       const updateProduct = await productFactory.updateProduct(product)
-      if (updateProduct.modifiedCount > 0) {
+      if (updateProduct._id) {
         const productUpdate = await productFactory.getProductByID(product.id)
         return {
           status: 'Success',
@@ -276,7 +276,7 @@ class ProductServices {
           status: 'Fail',
           code: 404,
           message: `Error updateProduct`,
-          payload: updateProduct,
+          payload: {},
         }
       }
     } catch (error) {

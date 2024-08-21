@@ -29,7 +29,7 @@ class UserServices {
         message: 'all users',
         payload: users,
       }
-    } catch (error) {
+    } catch (error) {      
       return {
         status: 'error',
         code: 500,

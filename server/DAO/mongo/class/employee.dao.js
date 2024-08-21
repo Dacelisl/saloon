@@ -45,18 +45,11 @@ class EmployeeDAO {
   }
   async updateEmployee(employeeData, id) {
     try {
+      employeeData.lastConnection = Date.now()
       const result = await EmployeeModel.updateOne({ _id: id }, employeeData)
       return result
     } catch (error) {
       throw new Error(`function DAO updateEmployee: ${error}`)
-    }
-  }
-  async updateLastConnection(employeeEmail, lastConnection) {
-    try {
-      const result = await EmployeeModel.updateOne({ email: employeeEmail }, { lastConnection })
-      return result
-    } catch (error) {
-      throw new Error(`function DAO updateLastConnection: ${error}`)
     }
   }
   async updateEmployeeDocuments(employeeEmail, documents) {
