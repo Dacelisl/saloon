@@ -2,6 +2,7 @@
 import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
+const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const InputArea = lazy(() => import('../utils/InputArea.jsx'))
@@ -19,7 +20,7 @@ const DiagnosticDetail = ({
   toast,
 }) => {
   const [prevData, setPrevData] = useState('')
-  const { navigate, isTimeAllowed } = useContext(customContext)
+  const { navigate, isTimeAllowed, scalpTypes, HairTypes, allServices } = useContext(customContext)
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
@@ -41,19 +42,41 @@ const DiagnosticDetail = ({
       <form className='grid gap-1 mb-2' style={{ gridTemplateRows: 'auto auto 0.7fr' }}>
         <div className='grid grid-cols-2 gap-4'>
           <div>
-            <InputEdit
-              labelName={'Estilista'}
-              value={`${selectedDiagnostic.employee.firstName}${selectedDiagnostic.employee.lastName}`}
-              onChange={handleFieldChange}
-              name={'employee'}
-              className='mb-2'
+            <InputEdit labelName={'Estilista'} value={`${selectedDiagnostic.employee.firstName} ${selectedDiagnostic.employee.lastName}`} name={'employee'} className='mb-2' />
+
+            <InputSelect
+              label={'Cabello'}
+              name={'hairCondition'}
+              itemOption={HairTypes}
+              itemValue={selectedDiagnostic.hairCondition}
+              handleFieldChange={handleFieldChange}
+              optionValueKey='name'
+              optionDisplayKey='name'
+              className='h-8'
             />
-            <InputEdit labelName={'Cabello'} value={selectedDiagnostic.hairCondition} onChange={handleFieldChange} name={'hairCondition'} className='mb-2' />
-            <InputEdit labelName={'Procedimiento'} value={selectedDiagnostic.procedureType} onChange={handleFieldChange} name={'procedureType'} className='mb-2' />
+            <InputSelect
+              label={'Procedimiento'}
+              name={'procedureType'}
+              itemOption={allServices}
+              itemValue={selectedDiagnostic.procedureType.id}
+              handleFieldChange={handleFieldChange}
+              optionValueKey='id'
+              optionDisplayKey='name'
+              className='h-8'
+            />
           </div>
           <div>
             <InputEdit labelName={'Fecha'} value={selectedDiagnostic.date} type={'date'} onChange={handleFieldChange} name={'date'} className='mb-2' />
-            <InputEdit labelName={'Cuero cabelludo'} value={selectedDiagnostic.scalpCondition} onChange={handleFieldChange} name={'scalpCondition'} className='mb-2' />
+            <InputSelect
+              label={'Cuero cabelludo'}
+              name={'scalpCondition'}
+              itemOption={scalpTypes}
+              itemValue={selectedDiagnostic.scalpCondition}
+              handleFieldChange={handleFieldChange}
+              optionValueKey='name'
+              optionDisplayKey='name'
+              className='h-8'
+            />
             <InputEdit labelName={'Proxima cita'} value={selectedDiagnostic.nextAppointment} type={'date'} onChange={handleFieldChange} name={'nextAppointment'} className='mb-2' />
           </div>
         </div>
@@ -73,6 +96,7 @@ const DiagnosticDetail = ({
               toast={toast}
               className={'!h-full'}
               sizeImg={'w-[40vw]'}
+              name='photoBefore'
             />
           </div>
           <div>
@@ -85,6 +109,7 @@ const DiagnosticDetail = ({
               toast={toast}
               className={'!h-full'}
               sizeImg={'w-[40vw]'}
+              name='photoAfter'
             />
           </div>
         </div>

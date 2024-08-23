@@ -8,7 +8,7 @@ const DiagnosticTable = ({ data, onDiagnosticSelected }) => {
   const columns = [
     {
       header: 'Procedimiento',
-      accessorFn: (row) => `${row.procedureType} `,
+      accessorFn: (row) => `${row.procedureType.name} `,
     },
     {
       header: 'Estilista',

@@ -1,13 +1,12 @@
 import { auth } from './firebaseApp'
 import { formattUpdate, formatDate } from '../utils/utils.js'
-import photo_default from '../assets/img/photo_default.jpeg'
-import product_default from '../assets/img/product_default.jpeg'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth'
 
 const date = new Date()
 const dateNow = formatDate(date)
+const photo_default = 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/photo_default.jpeg?alt=media&token=9e28057e-52a2-4a5d-87d0-509fc7be2eac'
 
 const instance = axios.create()
 instance.interceptors.request.use(
@@ -45,8 +44,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`,
-      /* url: `http://localhost:3000/api${url}`, */
+      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
@@ -196,12 +195,16 @@ export const passwordRecovery = async (email) => {
 }
 export const registerEmployeeMongo = async (dataUser) => {
   try {
-    const url = await uploadFire(dataUser.thumbnail ? dataUser.thumbnail : photo_default, `employee/${dataUser.dni}`)
-    dataUser.thumbnail = url
+    if (typeof dataUser.thumbnail === 'object') {
+      const url = await uploadFire(dataUser.thumbnail, `employee/${dataUser.dni}`)
+      dataUser.thumbnail = url
+    } else {
+      dataUser.thumbnail = photo_default
+    }
     const response = await makeRequest('POST', '/employee', dataUser)
     return response.data
   } catch (error) {
-    return error.response.data
+    return error
   }
 }
 export const registerEmployeeFire = async (email, password, rol) => {
@@ -227,8 +230,10 @@ export const uploadFire = async (data, url) => {
 /* PRODUCTS */
 export const registerProduct = async (dataProduct) => {
   try {
-    const url = await uploadFire(dataProduct.thumbnail ? dataProduct.thumbnail : product_default, `products/${dataProduct.code}`)
-    dataProduct.thumbnail = url
+    if (typeof dataProduct.thumbnail === 'object') {
+      const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
+      dataProduct.thumbnail = url
+    }
     const response = await makeRequest('POST', '/products', dataProduct)
     return response.data
   } catch (error) {
@@ -278,8 +283,12 @@ export const getClients = async () => {
 }
 export const registerClient = async (dataUser) => {
   try {
-    const url = await uploadFire(dataUser.thumbnail ? dataUser.thumbnail : photo_default, `client/${dataUser.dni}`)
-    dataUser.thumbnail = url
+    if (typeof dataUser.thumbnail === 'object') {
+      const url = await uploadFire(dataUser.thumbnail, `client/${dataUser.dni}`)
+      dataUser.thumbnail = url
+    } else {
+      dataUser.thumbnail = photo_default
+    }
     const response = await makeRequest('POST', '/users', dataUser)
     return response.data
   } catch (error) {
@@ -328,8 +337,12 @@ export const getProviders = async () => {
 }
 export const registerProvider = async (dataUser) => {
   try {
-    const url = await uploadFire(dataUser.contact.thumbnail ? dataUser.contact.thumbnail : photo_default, `provider/${dataUser.contact.dni}`)
-    dataUser.contact.thumbnail = url
+    if (typeof dataUser.thumbnail === 'object') {
+      const url = await uploadFire(dataUser.contact.thumbnail, `provider/${dataUser.contact.dni}`)
+      dataUser.contact.thumbnail = url
+    } else {
+      dataUser.thumbnail = photo_default
+    }
     const response = await makeRequest('POST', '/provider', dataUser)
     return response.data
   } catch (error) {
@@ -369,10 +382,15 @@ export const getDiagnosticById = async (id) => {
 }
 export const registerDiagnostic = async (dataUser) => {
   try {
-    const url1 = await uploadFire(dataUser.photoBefore ? dataUser.photoBefore : photo_default, `diagnostics/${dataUser.userId}-before-${dateNow}`)
-    dataUser.photoBefore = url1
-    const url2 = await uploadFire(dataUser.photoAfter ? dataUser.photoAfter : photo_default, `diagnostics/${dataUser.userId}-after-${dateNow}`)
-    dataUser.photoAfter = url2
+    if (typeof dataUser.photoBefore === 'object') {
+      const url1 = await uploadFire(dataUser.photoBefore, `diagnostics/${dataUser.userId}-before-${dateNow}`)
+      dataUser.photoBefore = url1
+      const url2 = await uploadFire(dataUser.photoAfter, `diagnostics/${dataUser.userId}-after-${dateNow}`)
+      dataUser.photoAfter = url2
+    } else {
+      dataUser.photoBefore = photo_default
+      dataUser.photoAfter = photo_default
+    }
     const response = await makeRequest('POST', '/diagnostic', dataUser)
     return response.data
   } catch (error) {
@@ -399,17 +417,6 @@ export const updateDiagnostic = async (data) => {
 export const getScalpTypes = async () => {
   try {
     const response = await makeRequest('GET', '/diagnostic/scalpTypes/')
-    const options = response.data.payload.map((item, index) => {
-      return { id: index.toString(), name: item }
-    })
-    return options
-  } catch (error) {
-    return error
-  }
-}
-export const getProcedureTypes = async () => {
-  try {
-    const response = await makeRequest('GET', '/diagnostic/procedureTypes/')
     const options = response.data.payload.map((item, index) => {
       return { id: index.toString(), name: item }
     })

@@ -9,7 +9,7 @@ const Modal = lazy(() => import('../utils/Modal.jsx'))
 const Register = lazy(() => import('../utils/Register.jsx'))
 
 const ProviderRegister = () => {
-  const { showToast, isDataComplete } = useContext(customContext)
+  const { showToast, isDataComplete, setSpinner } = useContext(customContext)
   const [providerData, setProviderData] = useState({
     name: '',
     description: '',
@@ -53,8 +53,10 @@ const ProviderRegister = () => {
 
   const handleAddUser = async () => {
     try {
+      setSpinner(false)
       const resMongo = await registerProvider(providerData)
       if (resMongo.code !== 200) showToast('Error in the registration process', resMongo.code)
+      setSpinner(true)
       showToast('Successfully registered user', resMongo.code)
       setProviderData('')
       setContactData('')

@@ -2,7 +2,7 @@
 import { useState, useContext, useEffect, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
-const { updateDiagnostic } = lazy(() => import('../../firebase/firebase.js'))
+import { updateDiagnostic } from '../../firebase/firebase.js'
 const Modal = lazy(() => import('../utils/Modal.jsx'))
 const DiagnosticTable = lazy(() => import('./DiagnosticTable.jsx'))
 const DiagnosticDetail = lazy(() => import('./DiagnosticDetail.jsx'))
@@ -13,6 +13,7 @@ const defaultDiagnostic = {
     lastName: '',
   },
   employee: {
+    id: '',
     firstName: '',
     lastName: '',
   },
@@ -28,7 +29,7 @@ const defaultDiagnostic = {
 }
 
 const DiagnosticList = () => {
-  const { diagnostics, selectedClient, showToast, setSpinner, fetchFromDatabase } = useContext(customContext)
+  const { diagnostics, selectedClient, showToast, setSpinner,navigate, fetchFromDatabase } = useContext(customContext)
 
   const [selectedDiagnostic, setSelectedDiagnostic] = useState(defaultDiagnostic)
   const [diagnosticsFilter, setDiagnosticsFilter] = useState('')
@@ -37,7 +38,7 @@ const DiagnosticList = () => {
   const [editable, setEditable] = useState(false)
 
   useEffect(() => {
-    if (!selectedClient.dni) return
+    if (!selectedClient.dni) return navigate(-1)
     const selected = diagnostics.filter((data) => data.client.dni === selectedClient.dni).sort((a, b) => new Date(b.date) - new Date(a.date))
     setDiagnosticsFilter(selected)
     setSelectedDiagnostic(selected[0])
@@ -56,7 +57,6 @@ const DiagnosticList = () => {
     const res = await updateDiagnostic(selectedDiagnostic)
     setEditable(false)
     await fetchFromDatabase()
-    setSelectedDiagnostic('')
     setImagenAfterPreview('')
     setImagenBeforePreview('')
     setSpinner(true)

@@ -17,7 +17,6 @@ import {
   getEmployeeByEmail,
   getDiagnostics,
   getHairTypes,
-  getProcedureTypes,
   getScalpTypes,
 } from '../../firebase/firebase'
 const Toast = lazy(() => import('../utils/Toast.jsx'))
@@ -79,7 +78,6 @@ const CustomContext = ({ children }) => {
   const [diagnostics, setDiagnostics] = useState([])
 
   const [scalpTypes, setScalpTypes] = useState([])
-  const [procedureTypes, setProcedureTypes] = useState([])
   const [HairTypes, setHairTypes] = useState([])
 
   const [roles, setRoles] = useState([])
@@ -136,7 +134,6 @@ const CustomContext = ({ children }) => {
       const categ = await getCategories()
       const prov = await getProviders()
       const rols = await getRoles()
-      const procedures = await getProcedureTypes()
       const hairs = await getHairTypes()
       const scalp = await getScalpTypes()
 
@@ -161,7 +158,6 @@ const CustomContext = ({ children }) => {
       setDiagnostics(allDiagnostic)
       setScalpTypes(scalp)
       setHairTypes(hairs)
-      setProcedureTypes(procedures)
     } catch (error) {
       throw new Error(`Error getting data: ${error}`)
     }
@@ -189,7 +185,8 @@ const CustomContext = ({ children }) => {
     return true
   }
   const isTimeAllowed = () => {
-    const startHour = 7 
+    if (role === 'admin') return true
+    const startHour = 7
     const endHour = 20
     const currentHour = new Date().getHours()
     return currentHour >= startHour && currentHour < endHour
@@ -207,7 +204,6 @@ const CustomContext = ({ children }) => {
         categories,
         scalpTypes,
         HairTypes,
-        procedureTypes,
         providers,
         setClients,
         tickets,

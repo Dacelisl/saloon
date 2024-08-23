@@ -11,13 +11,13 @@ const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const ProductRegister = () => {
-  const { categories, fetchFromDatabase, isDataComplete, providers, showToast, navigate } = useContext(customContext)
+  const { categories, fetchFromDatabase, isDataComplete, providers, showToast, navigate, setSpinner } = useContext(customContext)
 
   const [productData, setProductData] = useState({
     name: '',
     description: '',
     category: '',
-    thumbnail: '',
+    thumbnail: 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/product_default.jpeg?alt=media&token=2759e34e-9ba5-48da-8c0f-1810828c740b',
     price: '',
     provider: '',
     code: '',
@@ -42,7 +42,7 @@ const ProductRegister = () => {
     e.preventDefault()
     try {
       if (!isDataComplete(productData)) return showToast('Faltan propiedades', 500)
-
+      setSpinner(false)
       const res = await registerProduct(productData)
       if (res.code !== 201) {
         setProductData('')
@@ -50,6 +50,7 @@ const ProductRegister = () => {
         return showToast('Error in the registration process', 500)
       }
       await fetchFromDatabase()
+      setSpinner(true)
       showToast('Successfully registered product', 200)
       setProductData('')
       setImagenPreview('')

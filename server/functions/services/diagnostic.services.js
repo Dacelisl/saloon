@@ -210,33 +210,6 @@ class DiagnosticServices {
       }
     }
   }
-
-  async getProcedureTypes() {
-    try {
-      const payload = await diagnosticFactory.getProcedureTypes()
-      if (!payload) {
-        return {
-          status: 'Fail',
-          code: 404,
-          message: `Error, ProcedureTypes not found getProcedureTypes`,
-          payload: {},
-        }
-      }
-      return {
-        status: 'Success',
-        code: 200,
-        message: 'ProcedureTypes found getProcedureTypes',
-        payload: payload,
-      }
-    } catch (error) {
-      return {
-        status: 'Fail',
-        code: 500,
-        message: `Internal Server Error getProcedureTypes ${error}`,
-        payload: {},
-      }
-    }
-  }
   async getHairTypes() {
     try {
       const payload = await diagnosticFactory.getHairTypes()

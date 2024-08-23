@@ -12,7 +12,7 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target    
     setSelectedProduct({ ...selectedProduct, [name]: value })
   }
   const handleEdit = () => {
@@ -40,8 +40,6 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
             name={'provider'}
             itemOption={providers}
             itemValue={selectedProduct.provider}
-            optionValueKey='id'
-            optionDisplayKey='name'
             handleFieldChange={handleFieldChange}
             editable={editable} 
           />

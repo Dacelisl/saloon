@@ -8,7 +8,6 @@ DiagnosticRoutes.get('/', authorize, diagnosticController.getAllUsersDiagnostics
 DiagnosticRoutes.get('/user/:did', authorize, diagnosticController.getAllDiagnosticsByUserId)
 DiagnosticRoutes.get('/id/:did', authorize, diagnosticController.getDiagnosticById)
 DiagnosticRoutes.get('/scalpTypes', authorize, diagnosticController.getScalpTypes)
-DiagnosticRoutes.get('/procedureTypes', authorize, diagnosticController.getProcedureTypes)
 DiagnosticRoutes.get('/hairTypes', authorize, diagnosticController.getHairTypes)
 DiagnosticRoutes.post('/', authorize, diagnosticController.createDiagnostic)
 DiagnosticRoutes.put('/:did', authorize, diagnosticController.updateDiagnostic)

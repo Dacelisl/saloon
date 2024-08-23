@@ -6,7 +6,7 @@ class DiagnosticDTO {
     this.client = this.mapClient(diagnostic.userId)
     this.employee = this.mapEmployee(diagnostic.employeeId)
     this.date = formatDate(diagnostic.date)
-    this.procedureType = diagnostic.procedureType
+    this.procedureType = this.mapProcedure(diagnostic.procedureType)
     this.hairCondition = diagnostic.hairCondition
     this.scalpCondition = diagnostic.scalpCondition
     this.stylistNotes = diagnostic.stylistNotes
@@ -17,6 +17,7 @@ class DiagnosticDTO {
   }
   mapClient(client) {
     return {
+      id: client._id,
       dni: client.dni,
       firstName: client.firstName,
       lastName: client.lastName,
@@ -26,8 +27,15 @@ class DiagnosticDTO {
   }
   mapEmployee(employee) {
     return {
+      id: employee._id,
       firstName: employee.firstName,
       lastName: employee.lastName,
+    }
+  }
+  mapProcedure(procedure) {
+    return {
+      id: procedure._id,
+      name: procedure.name,
     }
   }
 }

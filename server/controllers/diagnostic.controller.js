@@ -40,15 +40,6 @@ class DiagnosticController {
       return sendErrorResponse(res, error)
     }
   }
-  async getProcedureTypes(req, res) {
-    try {
-      const procedureTypesFound = await diagnosticServices.getProcedureTypes()
-      return sendSuccessResponse(res, procedureTypesFound)
-    } catch (error) {
-      req.logger.error(error)
-      return sendErrorResponse(res, error)
-    }
-  }
   async getHairTypes(req, res) {
     try {
       const hairTypesFound = await diagnosticServices.getHairTypes()

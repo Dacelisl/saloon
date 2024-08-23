@@ -95,7 +95,7 @@ class EmployeeServices {
   async saveEmployee(employee) {
     try {
       this.validateEmployee(employee)
-      const newEmployee = await employeeFactory.saveEmployee(employee)
+      const newEmployee = await employeeFactory.saveEmployee(employee)      
       if (!newEmployee) {
         return {
           status: 'Fail',
@@ -110,7 +110,7 @@ class EmployeeServices {
         message: 'employee created',
         payload: newEmployee,
       }
-    } catch (error) {
+    } catch (error) {      
       return {
         code: 500,
         status: 'error',

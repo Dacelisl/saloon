@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+
 import { useState, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { registerEmployeeMongo, registerEmployeeFire } from '../../firebase/firebase.js'
@@ -15,13 +16,13 @@ const employeeDefault = {
   address: '',
   email: '',
   dateBirthday: '',
-  thumbnail: '',
+  thumbnail: 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/photo_default.jpeg?alt=media&token=9e28057e-52a2-4a5d-87d0-509fc7be2eac',
   role: '',
   password: '',
 }
 
 const EmployeeRegister = () => {
-  const { roles, showToast } = useContext(customContext)
+  const { fetchFromDatabase, roles, showToast, setSpinner } = useContext(customContext)
 
   const [userData, setUserData] = useState(employeeDefault)
 
@@ -29,41 +30,24 @@ const EmployeeRegister = () => {
     try {
       const rol = roles.filter((item) => item.name == userData.role)
       userData.role = rol[0].id
-      userData.roleName = rol[0].name
       userData.phone = parseInt(userData.phone)
+      userData.roleName = rol[0].name
       if (!PasswordValid(userData.password)) {
         showToast('Password must contain: 8 characters between uppercase, lowercase, and numbers', 500)
         return
       }
+      setSpinner(false)
       const resMongo = await registerEmployeeMongo(userData)
-      switch (resMongo.code) {
-        case 201:
-          await registerEmployeeFire(userData.email, userData.password, userData.roleName)
-          showToast('Empleado Creado', resMongo.code)
-          setUserData(employeeDefault)
-          break
-        case 400:
-          showToast('Some properties are missing or undefined', resMongo.code)
-          break
-        case 500:
-          if (resMongo.message.includes('phone')) {
-            showToast('Phone Number is not valid', resMongo.code)
-          } else if (resMongo.message.includes('dateBirthday')) {
-            showToast('DateBirthday is required', resMongo.code)
-          } else if (resMongo.message.includes('dni')) {
-            showToast('That DNI already exists', resMongo.code)
-          } else if (resMongo.message.includes('role')) {
-            showToast('Select a role from the list', resMongo.code)
-          } else if (resMongo.message.includes(userData.email)) {
-            showToast('Email Duplicate', resMongo.code)
-          } else {
-            showToast('Error in the registration process', resMongo.code)
-          }
-          break
-        default:
-          showToast('Unhandled Error', resMongo.code)
-          break
+      if (resMongo.code !== 201) {
+        setSpinner(true)
+        setUserData(employeeDefault)
+        return showToast('Some properties are missing or undefined', 500)
       }
+      await registerEmployeeFire(userData.email, userData.password, userData.roleName)
+      showToast('Empleado Creado', resMongo.code)
+      setUserData(employeeDefault)
+      await fetchFromDatabase()
+      setSpinner(true)
     } catch (error) {
       showToast('Unhandled Error', 500)
     }

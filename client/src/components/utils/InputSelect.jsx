@@ -3,13 +3,11 @@ import { useEffect } from 'react'
 
 const InputSelect = ({ label, name, itemValue, itemOption, handleFieldChange, editable = false, className = '', optionValueKey = 'name', optionDisplayKey = 'name' }) => {
   useEffect(() => {
-    if (itemOption.length > 0) {
-      const selectedOption = itemOption.find((option) => option[optionDisplayKey] === itemValue)
-      if (selectedOption && selectedOption[optionValueKey] !== itemValue) {
-        handleFieldChange({ target: { name, value: selectedOption[optionValueKey] } })
-      }
+    // Si no hay valor seleccionado y existen opciones, establecer el primer valor
+    if (!itemValue && itemOption.length > 0) {
+      handleFieldChange({ target: { name, value: itemOption[0][optionValueKey] } })
     }
-  }, [itemValue, itemOption, optionDisplayKey, optionValueKey, handleFieldChange, name])
+  }, [itemValue, itemOption, handleFieldChange, name, optionValueKey])
 
   return (
     <div className='mb-2'>
@@ -23,7 +21,7 @@ const InputSelect = ({ label, name, itemValue, itemOption, handleFieldChange, ed
           className={`w-full h-9 px-2 mt-1 text-sm py-1 border rounded-md focus:outline-red-200 ${className}`}
         >
           {itemOption.map((option) => (
-            <option key={option[optionValueKey]} value={option[optionValueKey]}>
+            <option key={option.id} value={option[optionValueKey]}>
               {option[optionDisplayKey]}
             </option>
           ))}

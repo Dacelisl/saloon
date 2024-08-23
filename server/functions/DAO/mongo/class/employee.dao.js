@@ -30,7 +30,8 @@ class EmployeeDAO {
   async saveEmployee(employeeData) {
     try {
       const result = await EmployeeModel.create(employeeData)
-      return result ? new EmployeeDTO(result) : null
+      const employee = await EmployeeModel.findById(result._id).populate('role').lean()
+      return employee ? new EmployeeDTO(employee) : null
     } catch (error) {
       throw new Error(`function DAO saveEmployee: ${error}`)
     }

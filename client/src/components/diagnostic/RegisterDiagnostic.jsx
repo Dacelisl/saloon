@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, lazy, useContext } from 'react'
+import { useState, lazy, useContext, useEffect } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { formatDate } from '../../utils/utils.js'
 import { registerDiagnostic } from '../../firebase/firebase.js'
@@ -18,14 +18,14 @@ const defaultDiagnostic = {
   hairCondition: '',
   scalpCondition: '',
   stylistNotes: '',
-  recommendations: '',
+  recommendations: 'N/a',
   nextAppointment: '',
-  photoBefore: '',
-  photoAfter: '',
+  photoBefore: 'photo',
+  photoAfter: 'photo',
 }
 
 const RegisterDiagnostic = () => {
-  const { clients, selectedClient, scalpTypes, HairTypes, procedureTypes, loggedEmployee, showToast, fetchFromDatabase, navigate } = useContext(customContext)
+  const { clients, selectedClient, scalpTypes, HairTypes, allServices, loggedEmployee, showToast, fetchFromDatabase, navigate } = useContext(customContext)
 
   const [userData, setUserData] = useState(defaultDiagnostic)
   const [imagenAfterPreview, setImagenAfterPreview] = useState('')
@@ -34,6 +34,12 @@ const RegisterDiagnostic = () => {
   const date = new Date()
   const dateNow = formatDate(date)
 
+  useEffect(() => {
+    userData.date = dateNow
+    userData.employeeId = loggedEmployee.id
+    userData.userId = selectedClient.id
+  }, [dateNow, loggedEmployee.id, selectedClient.id, userData])
+
   const handleAddUser = async () => {
     try {
       const resMongo = await registerDiagnostic(userData)
@@ -41,6 +47,7 @@ const RegisterDiagnostic = () => {
       resetData()
       showToast('Diagnostico agregado', resMongo.code)
       await fetchFromDatabase()
+      navigate(-1)
     } catch (error) {
       showToast('Error Inesperado', 500)
       throw new Error('Unhandled Error:', error)
@@ -48,14 +55,12 @@ const RegisterDiagnostic = () => {
   }
 
   const sendAction = () => {
-    userData.date = dateNow
-    userData.employeeId = loggedEmployee.id
     const isFormValid = Object.values(userData).every((value) => {
       return value !== undefined && value !== null && value !== ''
     })
     if (isFormValid) {
       handleAddUser()
-    } else {
+    } else {      
       showToast('Falta Informacion', 500)
     }
   }
@@ -66,9 +71,6 @@ const RegisterDiagnostic = () => {
   }
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    if (selectedClient !== '' && name === 'userId') {
-      userData.userId = selectedClient.id
-    }
     setUserData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -98,13 +100,25 @@ const RegisterDiagnostic = () => {
                 />
               )}
 
-              <InputSelect label={'Cabello'} name={'hairCondition'} itemOption={HairTypes} itemValue={userData.hairCondition} handleFieldChange={handleInputChange} editable className='h-8' />
+              <InputSelect
+                label={'Cabello'}
+                name={'hairCondition'}
+                itemOption={HairTypes}
+                itemValue={userData.hairCondition}
+                handleFieldChange={handleInputChange}
+                optionValueKey='name'
+                optionDisplayKey='name'
+                editable
+                className='h-8'
+              />
               <InputSelect
                 label={'Procedimiento'}
                 name={'procedureType'}
-                itemOption={procedureTypes}
+                itemOption={allServices}
                 itemValue={userData.procedureType}
                 handleFieldChange={handleInputChange}
+                optionValueKey='id'
+                optionDisplayKey='name'
                 editable
                 className='h-8'
               />
@@ -117,6 +131,8 @@ const RegisterDiagnostic = () => {
                 itemOption={scalpTypes}
                 itemValue={userData.scalpCondition}
                 handleFieldChange={handleInputChange}
+                optionValueKey='name'
+                optionDisplayKey='name'
                 editable
                 className='h-8'
               />
