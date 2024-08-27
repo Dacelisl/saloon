@@ -14,7 +14,7 @@ const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const Modal = lazy(() => import('../utils/Modal.jsx'))
 
 const EarningsEmployee = () => {
-  const { loggedEmployee, employees, showToast } = useContext(customContext)  
+  const { loggedEmployee, employees, showToast } = useContext(customContext)
 
   const [data, setData] = useState([])
   const [minDate, setMinDate] = useState('')
@@ -33,9 +33,9 @@ const EarningsEmployee = () => {
     const loadData = async () => {
       const selected = await getEarningsEmployeeById(filteredEmployee.id)
       const allEarnings = await getEarningsEmployees()
-      setAllEarningsData(allEarnings)
-      if (!selected.message) {
-        const sortedData = selected.sort((a, b) => new Date(b.date) - new Date(a.date))
+      setAllEarningsData(allEarnings.payload)
+      if (selected.code === 200) {
+        const sortedData = selected.payload.sort((a, b) => new Date(b.date) - new Date(a.date))
         setMinDate(sortedData.length > 0 ? sortedData[0].date : '')
         setMaxDate(sortedData.length > 0 ? sortedData[sortedData.length - 1].date : '')
         setData(sortedData)

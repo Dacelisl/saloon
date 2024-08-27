@@ -36,30 +36,30 @@ const HamburguerMenu = () => {
             </div>
             <div className={`fixed z-[-40] top-0 right-0 w-full h-full bg-opacity-50 ${changeAction ? 'block' : 'hidden'}`} onClick={menuOnClick}></div>
             <nav
-              className={`fixed top-0 right-0 w-[40vw] xl:w-[22vw] xxl:w-[18vw] xxxl:w-[12vw] h-full bg-[#709e83] transform ${
+              className={`fixed top-0 right-0 w-[42vw] xl:w-[22vw] xxl:w-[18vw] xxxl:w-[12vw] h-full bg-[#709e83] transform ${
                 changeAction ? 'translate-x-0' : 'translate-x-full'
               } transition-transform duration-300 ease-out z-[-40]`}
             >
-              <ul className='px-[10%] mt-[10vh] z-[-51]'>
+              <ul className='px-[10%] mt-[13vh] z-[-51]'>
                 <li className=' text-slate-50 font-bold sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/'}>Home</Link>
                 </li>
-                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                <li className=' text-slate-50 font-bold my-3 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/users'}>Clientes</Link>
                 </li>
-                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                <li className=' text-slate-50 font-bold my-3 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/products'}>Productos</Link>
                 </li>
 
                 {loggedEmployee.role === 'admin' ? (
                   <>
-                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                    <li className=' text-slate-50 font-bold my-3 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/employeeList'}>Empleados</Link>
                     </li>
-                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                    <li className=' text-slate-50 font-bold my-3 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/provider'}>Proveedores</Link>
                     </li>
-                    <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                    <li className=' text-slate-50 font-bold my-3 sm:text-xl xl:text-2xl hover:font-bold'>
                       <Link to={'/services'}>Servicios</Link>
                     </li>
                   </>
@@ -67,11 +67,11 @@ const HamburguerMenu = () => {
                   ''
                 )}
 
-                <li className=' text-slate-50 font-bold mt-1 sm:text-xl xl:text-2xl hover:font-bold'>
+                <li className=' text-slate-50 font-bold my-3 sm:text-xl xl:text-2xl hover:font-bold'>
                   <Link to={'/earnings'}>Wallet</Link>
                 </li>
 
-                <li className={loggedEmployee.role === 'admin' ? 'mt-7 ml-[10%] xl:mt-8' : 'mt-7 ml-[18%] xl:mt-10'}>
+                <li className={loggedEmployee.role === 'admin' ? 'mt-8 ml-[15%] xl:mt-12' : 'mt-7 ml-[18%] xl:mt-10'}>
                   <a href='#' className=' text-slate-50 font-bold text-lg border-2 p-1 rounded-sm shadow shadow-slate-300 hover:font-bold' onClick={singOut}>
                     LogOut
                   </a>

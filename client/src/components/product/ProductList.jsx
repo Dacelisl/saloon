@@ -60,7 +60,7 @@ const ProductList = () => {
   return (
     <>
       <Modal type={2} className={'md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:top-[3%] xxl:h-[90%]'}>
-        <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1 mt-3'>Products</h2>
+        <h2 className='text-xl pl-4 text-gray-500 text-center font-bold mb-1 mt-3'>Productos</h2>
         <ProductDetail
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
