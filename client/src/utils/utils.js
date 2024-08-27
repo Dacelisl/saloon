@@ -104,7 +104,7 @@ export function formatDate(date) {
   return formattedDate
 }
 
-export const getUpcomingBirthdays = (clients) => {
+export const getUpcomingBirthdays = (clients) => {  
   const today = new Date()
   const todayDay = today.getDate()
   const todayMonth = today.getMonth() + 1 // Se usa 'getMonth() + 1' para que los meses estén en un rango de 1-12

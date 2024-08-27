@@ -46,7 +46,10 @@ class DiagnosticDAO {
   async getScalpTypes() {
     try {
       const enumValues = Object.values(DiagnosticModel.schema.path('scalpCondition').enumValues)
-      return enumValues
+      const response = enumValues.map((item, index) => {
+        return { id: `scalpCondition-${index.toString()}`, name: item }
+      })
+      return response
     } catch (error) {
       throw new Error(`function DAO getscalpTypes  ${error}`)
     }
@@ -54,7 +57,10 @@ class DiagnosticDAO {
   async getHairTypes() {
     try {
       const enumValues = Object.values(DiagnosticModel.schema.path('hairCondition').enumValues)
-      return enumValues
+      const response = enumValues.map((item, index) => {
+        return { id: `hairCondition-${index.toString()}`, name: item }
+      })
+      return response
     } catch (error) {
       throw new Error(`function DAO getHairTypes  ${error}`)
     }
@@ -78,7 +84,7 @@ class DiagnosticDAO {
   }
   async updateDiagnostic(id, updatedData) {
     try {
-      const dataFormatt = new DiagnosticUpdateDTO(updatedData)      
+      const dataFormatt = new DiagnosticUpdateDTO(updatedData)
       const result = await DiagnosticModel.updateOne({ _id: id }, dataFormatt)
       return result
     } catch (error) {

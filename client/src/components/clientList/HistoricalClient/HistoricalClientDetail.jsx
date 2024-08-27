@@ -25,7 +25,7 @@ const HistoricalClientDetail = ({ selectedClient, ticket }) => {
           </div>
         </div>
         {ticket ? (
-          <div className='h-[30%] overflow-auto mb-3'>
+          <div className='h-[30%] overflow-auto mb-2'>
             <table className='text-center m-auto overflow-scroll'>
               <thead className='bg-button-primary px-4 text-button-text_primary text-xs font-extralight'>
                 <tr>
@@ -49,7 +49,7 @@ const HistoricalClientDetail = ({ selectedClient, ticket }) => {
           ''
         )}
       </div>
-      <div className='w-[30%] mt-3'>
+      <div className='w-[30%] mt-2'>
         <ImagePreview imagenPreview={selectedClient.thumbnail} className='w-[100px] py-0 px-0' />
       </div>
     </div>

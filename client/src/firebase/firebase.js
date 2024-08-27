@@ -44,17 +44,17 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`, */
-      url: `http://localhost:3000/api${url}`,
+      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`,
+      /* url: `http://localhost:3000/api${url}`, */
       data: data,
       headers: headers,
     })
-    return response
+    return response.data
   } catch (error) {
     if (error.response && error.response.status === 401 && error.response.data.message === 'invalid-argument') {
       await signOut(auth)
     } else {
-      throw new Error(error.response.data.message)
+      return error.response.data
     }
   }
 }
@@ -63,10 +63,10 @@ async function makeRequest(method, url, data = null, headers = {}) {
 export const getRoles = async () => {
   try {
     const response = await makeRequest('GET', '/role')
-    const roles = response.data.payload.map((r) => {
+    /* const response = roles.data.payload.map((r) => {
       return { name: r.name, id: r._id, permissions: r.permissions }
-    })
-    return roles
+    }) */
+    return response
   } catch (error) {
     return error
   }
@@ -74,10 +74,7 @@ export const getRoles = async () => {
 export const getCategories = async () => {
   try {
     const response = await makeRequest('GET', '/products/categories/')
-    const options = response.data.payload.map((item, index) => {
-      return { id: index.toString(), name: item }
-    })
-    return options
+    return response
   } catch (error) {
     return error
   }
@@ -85,10 +82,7 @@ export const getCategories = async () => {
 export const getPaymentsMethod = async () => {
   try {
     const response = await makeRequest('GET', '/tickets/paymentMethods')
-    const options = response.data.payload.map((item, index) => {
-      return { id: index.toString(), name: item }
-    })
-    return options
+    return response
   } catch (error) {
     return error
   }
@@ -96,7 +90,7 @@ export const getPaymentsMethod = async () => {
 export const getServices = async () => {
   try {
     const response = await makeRequest('GET', '/service')
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -104,7 +98,7 @@ export const getServices = async () => {
 export const updateServices = async (data) => {
   try {
     const response = await makeRequest('PUT', `/service/${data.id}`, data)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -112,7 +106,7 @@ export const updateServices = async (data) => {
 export const createServices = async (data) => {
   try {
     const response = await makeRequest('POST', `/service`, data)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -122,7 +116,7 @@ export const createServices = async (data) => {
 export const getEmployee = async () => {
   try {
     const response = await makeRequest('GET', '/employee')
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -137,7 +131,7 @@ export const updateEmployee = async (dataUser) => {
     }
     const userFormatted = formattUpdate(dataUser)
     const response = await makeRequest('PUT', `/employee/${dataUser.id}`, userFormatted, { 'Content-Type': 'application/json' })
-    return response.status
+    return response
   } catch (error) {
     return error
   }
@@ -145,7 +139,7 @@ export const updateEmployee = async (dataUser) => {
 export const getEarningsEmployees = async () => {
   try {
     const response = await makeRequest('GET', '/performance')
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -153,7 +147,7 @@ export const getEarningsEmployees = async () => {
 export const getEarningsEmployeeById = async (id) => {
   try {
     const response = await makeRequest('GET', `/performance/employee/${id}`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -161,7 +155,7 @@ export const getEarningsEmployeeById = async (id) => {
 export const getEmployeeByEmail = async (mail) => {
   try {
     const response = await makeRequest('GET', `/employee/email/${mail}`)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -202,20 +196,19 @@ export const registerEmployeeMongo = async (dataUser) => {
       dataUser.thumbnail = photo_default
     }
     const response = await makeRequest('POST', '/employee', dataUser)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
 }
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
-    const res = await makeRequest('POST', '/employee/create', { email, password, rol })
-    return res.data
+    const response = await makeRequest('POST', '/employee/create', { email, password, rol })
+    return response
   } catch (error) {
     return error
   }
 }
-
 export const uploadFire = async (data, url) => {
   try {
     const storage = getStorage()
@@ -235,7 +228,7 @@ export const registerProduct = async (dataProduct) => {
       dataProduct.thumbnail = url
     }
     const response = await makeRequest('POST', '/products', dataProduct)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -243,7 +236,7 @@ export const registerProduct = async (dataProduct) => {
 export const getProducts = async () => {
   try {
     const response = await makeRequest('GET', '/products')
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -251,22 +244,22 @@ export const getProducts = async () => {
 export const getProductsByName = async (name) => {
   try {
     const response = await makeRequest('GET', `/products/name/${name}`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
 }
 export const updateProduct = async (dataProduct) => {
-  try {
+  try {    
     if (typeof dataProduct.thumbnail === 'object') {
       const url = await uploadFire(dataProduct.thumbnail, `products/${dataProduct.code}`)
       dataProduct.thumbnail = url
     } else {
       dataProduct.thumbnail = ''
     }
-    const productFormatted = formattUpdate(dataProduct)
+    const productFormatted = formattUpdate(dataProduct)    
     const response = await makeRequest('PUT', `/products/${dataProduct.id}`, productFormatted)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -276,7 +269,7 @@ export const updateProduct = async (dataProduct) => {
 export const getClients = async () => {
   try {
     const response = await makeRequest('GET', `/users`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -290,15 +283,15 @@ export const registerClient = async (dataUser) => {
       dataUser.thumbnail = photo_default
     }
     const response = await makeRequest('POST', '/users', dataUser)
-    return response.data
+    return response
   } catch (error) {
-    return error.response.data
+    return error
   }
 }
 export const getClientsByName = async (name) => {
   try {
     const response = await makeRequest('GET', `/users/name/${name}`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -306,7 +299,7 @@ export const getClientsByName = async (name) => {
 export const getClientsById = async (id) => {
   try {
     const response = await makeRequest('GET', `/users/${id}`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -321,7 +314,7 @@ export const updateClients = async (dataClient) => {
     }
     const userFormatted = formattUpdate(dataClient)
     const response = await makeRequest('PUT', `/users/${dataClient.id}`, userFormatted)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -330,7 +323,7 @@ export const updateClients = async (dataClient) => {
 export const getProviders = async () => {
   try {
     const response = await makeRequest('GET', `/provider`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -344,9 +337,9 @@ export const registerProvider = async (dataUser) => {
       dataUser.thumbnail = photo_default
     }
     const response = await makeRequest('POST', '/provider', dataUser)
-    return response.data
+    return response
   } catch (error) {
-    return error.response.data
+    return error
   }
 }
 export const updateProvider = async (data) => {
@@ -358,7 +351,7 @@ export const updateProvider = async (data) => {
     const contactFormatted = formattUpdate(data.contact)
     data.contact = contactFormatted
     const response = await makeRequest('PUT', `/provider/${data.id}`, data)
-    return response.status
+    return response
   } catch (error) {
     return error
   }
@@ -367,7 +360,7 @@ export const updateProvider = async (data) => {
 export const getDiagnostics = async () => {
   try {
     const response = await makeRequest('GET', `/diagnostic`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -375,7 +368,7 @@ export const getDiagnostics = async () => {
 export const getDiagnosticById = async (id) => {
   try {
     const response = await makeRequest('GET', `/diagnostic/id/${id}`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -392,7 +385,7 @@ export const registerDiagnostic = async (dataUser) => {
       dataUser.photoAfter = photo_default
     }
     const response = await makeRequest('POST', '/diagnostic', dataUser)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -408,19 +401,15 @@ export const updateDiagnostic = async (data) => {
       data.photoAfter = url
     }
     const response = await makeRequest('PUT', `/diagnostic/${data.id}`, data)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
 }
-
 export const getScalpTypes = async () => {
   try {
     const response = await makeRequest('GET', '/diagnostic/scalpTypes/')
-    const options = response.data.payload.map((item, index) => {
-      return { id: index.toString(), name: item }
-    })
-    return options
+    return response
   } catch (error) {
     return error
   }
@@ -428,10 +417,7 @@ export const getScalpTypes = async () => {
 export const getHairTypes = async () => {
   try {
     const response = await makeRequest('GET', '/diagnostic/hairTypes/')
-    const options = response.data.payload.map((item, index) => {
-      return { id: index.toString(), name: item }
-    })
-    return options
+    return response
   } catch (error) {
     return error
   }
@@ -441,7 +427,7 @@ export const getHairTypes = async () => {
 export const getTickets = async () => {
   try {
     const response = await makeRequest('GET', `/tickets`)
-    return response.data.payload
+    return response
   } catch (error) {
     return error
   }
@@ -454,7 +440,7 @@ export const updateTicket = async (ticket, data) => {
       partialPayments: data,
     }
     const response = await makeRequest('PUT', `/tickets/${ticket.ticketNumber}`, dataChange)
-    return response.data
+    return response
   } catch (error) {
     return error
   }
@@ -462,8 +448,8 @@ export const updateTicket = async (ticket, data) => {
 export const createTicket = async (dataTicket) => {
   try {
     const response = await makeRequest('POST', '/tickets', dataTicket)
-    return response.data
+    return response
   } catch (error) {
-    return error.response.data
+    return error
   }
 }

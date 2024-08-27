@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext, lazy } from 'react'
 import WithAuthentication from '../../utils/WithAuthentication.jsx'
 import { customContext } from '../../context/CustomContext.jsx'
-const updateTicket = lazy(() => import('../../../firebase/firebase.js'))
+import { updateTicket } from '../../../firebase/firebase.js'
 const Modal = lazy(() => import('../../utils/Modal.jsx'))
 const ButtonDefault = lazy(() => import('../../utils/ButtonDefault.jsx'))
 const HistoricalClientDetail = lazy(() => import('../HistoricalClient/HistoricalClientDetail.jsx'))
@@ -10,12 +10,13 @@ const HistoricalClientTable = lazy(() => import('../HistoricalClient/HistoricalC
 const HistoricalClientCredit = lazy(() => import('../HistoricalClient/HistoricalClientCredit.jsx'))
 
 const HistoricalClientList = () => {
-  const { tickets, selectedClient, fetchFromDatabase, setSpinner, isTimeAllowed, showToast } = useContext(customContext)
+  const { tickets, selectedClient, fetchFromDatabase, setSpinner, isTimeAllowed, navigate, showToast } = useContext(customContext)
 
   const [selectedTicket, setSelectedTicket] = useState('')
   const [ticketsClient, setTicketsClient] = useState('')
   const [isModalCreditOpen, setIsModalCreditOpen] = useState(false)
   useEffect(() => {
+    if (selectedClient.id === '') return navigate(-1)
     const selected = tickets.filter((ticket) => ticket.customer.id === selectedClient.id).sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate))
     setTicketsClient(selected)
     setSelectedTicket(selected[0])
@@ -47,7 +48,7 @@ const HistoricalClientList = () => {
           <h2 className='text-xl pl-4 text-gray-500 font-bold mb-1'>{selectedClient.firstName + ' ' + selectedClient.lastName}</h2>
           <HistoricalClientDetail selectedClient={selectedClient} ticket={selectedTicket} />
         </div>
-        <div className='mt-10 h-[50%]'>
+        <div className='mt-8 h-[50%]'>
           <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
         </div>
         <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} disabled={!isTimeAllowed()} /> : <span className=' mt-6'></span>}</div>

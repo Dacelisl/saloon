@@ -25,7 +25,7 @@ class UserServices {
       }
       return {
         status: 'success',
-        code: 201,
+        code: 200,
         message: 'all users',
         payload: users,
       }

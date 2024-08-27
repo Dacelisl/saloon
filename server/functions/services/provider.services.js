@@ -97,7 +97,7 @@ class ProviderServices {
       }
       return {
         status: 'Success',
-        code: 200,
+        code: 201,
         message: 'Provider created',
         payload: newProvider,
       }

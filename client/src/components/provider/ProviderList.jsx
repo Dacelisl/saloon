@@ -53,7 +53,7 @@ const ProviderList = () => {
     setSelectedProvider(providerDefault)
     setImagenPreview('')
     setSpinner(true)
-    if (res !== 200) return showToast('Cambios NO Guardados ', 500)
+    if (res.code !== 200) return showToast('Cambios NO Guardados ', 500)
     showToast('Se guardaron los cambios ', 200)
   }
 

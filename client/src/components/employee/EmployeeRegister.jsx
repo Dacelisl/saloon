@@ -22,7 +22,7 @@ const employeeDefault = {
 }
 
 const EmployeeRegister = () => {
-  const { fetchFromDatabase, roles, showToast, setSpinner } = useContext(customContext)
+  const { fetchFromDatabase, roles, showToast, navigate, setSpinner } = useContext(customContext)
 
   const [userData, setUserData] = useState(employeeDefault)
 
@@ -36,20 +36,42 @@ const EmployeeRegister = () => {
         showToast('Password must contain: 8 characters between uppercase, lowercase, and numbers', 500)
         return
       }
-      setSpinner(false)
       const resMongo = await registerEmployeeMongo(userData)
-      if (resMongo.code !== 201) {
-        setSpinner(true)
-        setUserData(employeeDefault)
-        return showToast('Some properties are missing or undefined', 500)
+      setSpinner(false)
+      switch (resMongo.code) {
+        case 201:
+          await registerEmployeeFire(userData.email, userData.password, userData.roleName)
+          showToast('Successfully registered Employee', resMongo.code)
+          await fetchFromDatabase()
+          navigate(-1)
+          break
+        case 400:
+          showToast('Some properties are missing or undefined', resMongo.code)
+          break
+        case 500:
+          if (resMongo.message.includes('phone')) {
+            showToast('Phone Number is not valid', resMongo.code)
+          } else if (resMongo.message.includes('dateBirthday')) {
+            showToast('DateBirthday is required', resMongo.code)
+          } else if (resMongo.message.includes('dni')) {
+            showToast('That DNI already exists', resMongo.code)
+          } else if (resMongo.message.includes('role')) {
+            showToast('Select a role from the list', resMongo.code)
+          } else if (resMongo.message.includes(userData.email)) {
+            showToast('Email Duplicate', resMongo.code)
+          } else {
+            showToast('Error in the registration process', resMongo.code)
+          }
+          break
+        default:
+          showToast('Unhandled Error', resMongo.code)
+          break
       }
-      await registerEmployeeFire(userData.email, userData.password, userData.roleName)
-      showToast('Empleado Creado', resMongo.code)
-      setUserData(employeeDefault)
-      await fetchFromDatabase()
-      setSpinner(true)
     } catch (error) {
       showToast('Unhandled Error', 500)
+    } finally {
+      setUserData(employeeDefault)
+      setSpinner(true)
     }
   }
   return (

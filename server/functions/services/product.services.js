@@ -1,4 +1,4 @@
-import { productFactory } from '../DAO/factory.js'
+import { productFactory, providerFactory } from '../DAO/factory.js'
 import { parsedQuery, isValid } from '../utils/utils.js'
 import dataConfig from '../config/process.config.js'
 
@@ -26,7 +26,7 @@ class ProductServices {
       }
       return {
         status: 'Success',
-        code: 201,
+        code: 200,
         message: 'products found getAllProducts',
         payload: payload,
       }
@@ -52,7 +52,7 @@ class ProductServices {
       }
       return {
         status: 'Success',
-        code: 201,
+        code: 200,
         message: 'categories found getCategories',
         payload: payload,
       }
@@ -113,7 +113,7 @@ class ProductServices {
       if (payload) {
         return {
           status: 'Success',
-          code: 201,
+          code: 200,
           message: 'product found',
           payload: payload,
         }
@@ -140,7 +140,7 @@ class ProductServices {
       if (payload) {
         return {
           status: 'Success',
-          code: 201,
+          code: 200,
           message: 'product found',
           payload: payload,
         }
@@ -167,7 +167,7 @@ class ProductServices {
       if (payload) {
         return {
           status: 'Success',
-          code: 201,
+          code: 200,
           message: 'product found',
           payload: payload,
         }
@@ -262,6 +262,9 @@ class ProductServices {
           payload: {},
         }
       }
+      const productProvider = await providerFactory.getProviderByName(product.provider)
+      product.provider = productProvider.id
+
       const updateProduct = await productFactory.updateProduct(product)
       if (updateProduct._id) {
         const productUpdate = await productFactory.getProductByID(product.id)

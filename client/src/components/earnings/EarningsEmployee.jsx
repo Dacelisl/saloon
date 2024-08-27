@@ -14,7 +14,7 @@ const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const Modal = lazy(() => import('../utils/Modal.jsx'))
 
 const EarningsEmployee = () => {
-  const { loggedEmployee, employees, showToast } = useContext(customContext)
+  const { loggedEmployee, employees, showToast } = useContext(customContext)  
 
   const [data, setData] = useState([])
   const [minDate, setMinDate] = useState('')

@@ -5,18 +5,21 @@ const Modal = lazy(() => import('../utils/Modal.jsx'))
 const Register = lazy(() => import('../utils/Register.jsx'))
 
 const RegisterClient = () => {
-  const { fetchFromDatabase, showToast } = useContext(customContext)
+  const { fetchFromDatabase, navigate, setSpinner, showToast } = useContext(customContext)
 
   const [userData, setUserData] = useState('')
 
   const handleAddUser = async () => {
     try {
+      setSpinner(false)
       const resMongo = await registerClient(userData)
+
       switch (resMongo.code) {
         case 201:
           showToast('Successfully registered user', resMongo.code)
           setUserData('')
           await fetchFromDatabase()
+          navigate(-1)
           break
         case 400:
           showToast('Some properties are missing or undefined', resMongo.code)
@@ -40,6 +43,8 @@ const RegisterClient = () => {
       }
     } catch (error) {
       throw new Error('Unhandled Error:', error)
+    } finally {
+      setSpinner(true)
     }
   }
   return (

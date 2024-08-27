@@ -29,14 +29,14 @@ const defaultDiagnostic = {
 }
 
 const DiagnosticList = () => {
-  const { diagnostics, selectedClient, showToast, setSpinner,navigate, fetchFromDatabase } = useContext(customContext)
+  const { diagnostics, selectedClient, showToast, setSpinner, navigate, fetchFromDatabase } = useContext(customContext)
 
   const [selectedDiagnostic, setSelectedDiagnostic] = useState(defaultDiagnostic)
   const [diagnosticsFilter, setDiagnosticsFilter] = useState('')
   const [imagenAfterPreview, setImagenAfterPreview] = useState('')
   const [imagenBeforePreview, setImagenBeforePreview] = useState('')
   const [editable, setEditable] = useState(false)
-
+  
   useEffect(() => {
     if (!selectedClient.dni) return navigate(-1)
     const selected = diagnostics.filter((data) => data.client.dni === selectedClient.dni).sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -55,12 +55,14 @@ const DiagnosticList = () => {
   const saveChange = async () => {
     setSpinner(false)
     const res = await updateDiagnostic(selectedDiagnostic)
+    if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     setEditable(false)
     await fetchFromDatabase()
+    setSelectedDiagnostic(defaultDiagnostic)
     setImagenAfterPreview('')
     setImagenBeforePreview('')
+    navigate(-1)
     setSpinner(true)
-    if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }
 

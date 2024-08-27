@@ -56,8 +56,7 @@ const TicketDetail = ({ ticket, setTicket }) => {
 
   const showModal = async () => {
     setIsModalOpen(!isModalOpen)
-  }
-
+  }  
   return (
     <>
       <div className='block mb-1 border-solid border-2 border-gray-200'>

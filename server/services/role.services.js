@@ -69,7 +69,7 @@ class RoleServices {
       }
       return {
         status: 'Success',
-        code: 200,
+        code: 201,
         message: 'Role created',
         payload: newRole,
       }

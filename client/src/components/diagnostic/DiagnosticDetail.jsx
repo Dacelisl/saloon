@@ -36,7 +36,7 @@ const DiagnosticDetail = ({
     setImagenAfterPreview(prevData.photoAfter)
     setImagenBeforePreview(prevData.photoBefore)
     setEditable(!editable)
-  }
+  }  
   return (
     <>
       <form className='grid gap-1 mb-2' style={{ gridTemplateRows: 'auto auto 0.7fr' }}>

@@ -1,8 +1,11 @@
 import { RoleModel } from '../models/role.model.js'
+import { RoleDTO } from '../../DTO/role.dto.js'
 class RoleDAO {
   async getAllRoles() {
     try {
-      return await RoleModel.find().lean()
+      const response = await RoleModel.find().lean()
+      const formattedProducts = response.map((role) => (role ? new RoleDTO(role) : null))
+      return formattedProducts
     } catch (error) {
       throw new Error(`function DAO getAllRoles  ${error}`)
     }

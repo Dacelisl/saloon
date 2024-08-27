@@ -137,27 +137,37 @@ const CustomContext = ({ children }) => {
       const hairs = await getHairTypes()
       const scalp = await getScalpTypes()
 
-      const employees = allEmployee?.map((emp) => ({
+      const employeesFormatted = allEmployee.payload?.map((emp) => ({
         ...emp,
         fullName: `${emp.firstName} ${emp.lastName}`,
       }))
-      const clients = allClients?.map((user) => ({
+      const clientsFormatted = allClients.payload?.map((user) => ({
         ...user,
         fullName: `${user.firstName} ${user.lastName}`,
       }))
 
-      setEmployees(employees)
-      setRoles(rols)
-      setCategories(categ)
-      setProviders(prov)
-      setAllServices(services)
-      setAllProducts(products)
-      setClients(clients)
-      setTickets(allTickets)
-      setPaymentMethods(method)
-      setDiagnostics(allDiagnostic)
-      setScalpTypes(scalp)
-      setHairTypes(hairs)
+      const serviceSort = services.payload.sort((a, b) => {
+        if (a.name < b.name) {
+          return -1
+        }
+        if (a.name > b.name) {
+          return 1
+        }
+        return 0
+      })
+
+      setEmployees(employeesFormatted)
+      setRoles(rols.payload)
+      setCategories(categ.payload)
+      setProviders(prov.payload)
+      setAllServices(serviceSort)
+      setAllProducts(products.payload)
+      setClients(clientsFormatted)
+      setTickets(allTickets.payload)
+      setPaymentMethods(method.payload)
+      setDiagnostics(allDiagnostic.payload)
+      setScalpTypes(scalp.payload)
+      setHairTypes(hairs.payload)
     } catch (error) {
       throw new Error(`Error getting data: ${error}`)
     }

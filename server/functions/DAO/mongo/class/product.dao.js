@@ -27,7 +27,10 @@ class ProductDAO {
   async getCategories() {
     try {
       const enumValues = Object.values(ProductModel.schema.path('category').enumValues)
-      return enumValues
+      const response = enumValues.map((item, index) => {
+        return { id: `category-${index.toString()}`, name: item }
+      })
+      return response
     } catch (error) {
       throw new Error(`function DAO getCategories  ${error}`)
     }
@@ -102,7 +105,7 @@ class ProductDAO {
   async updateProduct(updateData) {
     try {
       const product = await ProductModel.findById(updateData.id)
-      if (!product) throw new Error('Product not found')        
+      if (!product) throw new Error('Product not found')
       if (updateData.price && Number(updateData.price) !== Number(product.price)) {
         product.priceHistory.push({ price: product.price, date: Date.now() })
         product.price = updateData.price

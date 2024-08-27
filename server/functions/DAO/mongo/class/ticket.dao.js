@@ -100,13 +100,16 @@ class TicketDAO {
   async getPaymentMethods() {
     try {
       const enumValues = Object.values(TicketModel.schema.path('partialPayments.paymentMethod').enumValues)
-      return enumValues
+      const response = enumValues.map((item, index) => {
+        return { id: `paymentMethod-${index.toString()}`, name: item }
+      })
+      return response
     } catch (error) {
       throw new Error(`function DAO getPaymentMethods  ${error}`)
     }
   }
 
-  async createTicket(ticketData) {  
+  async createTicket(ticketData) {
     try {
       let ticket = totalPrice(ticketData)
       ticket.items = await this.mapItemNames(ticket.items)

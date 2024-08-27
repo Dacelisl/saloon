@@ -30,7 +30,7 @@ const ProductList = () => {
   const [editable, setEditable] = useState(false)
 
   useEffect(() => {
-    const selected = allProducts.sort((a, b) => a.provider.toLowerCase().localeCompare(b.provider.toLowerCase()))
+    const selected = allProducts.sort((a, b) => b.provider.toLowerCase().localeCompare(a.provider.toLowerCase()))    
     if (selected.length > 0) {
       setFilteredProduct(selected)
       setSelectedProduct(selected[0])
@@ -43,14 +43,12 @@ const ProductList = () => {
     setImagenPreview(productId.thumbnail)
   }
 
-  const saveChange = async () => {
+  const saveChange = async () => {    
     if (role !== 'admin') return
     setSpinner(false)
     const res = await updateProduct(selectedProduct)    
     setEditable(false)
     await fetchFromDatabase()
-    setSelectedProduct(defaultProduct)
-    setImagenPreview('')
     setSpinner(true)
     if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)

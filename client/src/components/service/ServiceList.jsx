@@ -36,12 +36,13 @@ const ServiceList = () => {
       res = await updateServices(selectedService)
     } else {
       res = await createServices(selectedService)
-    }    
+      setIsCreateServiceVisible(!isCreateServiceVisible)
+    }
     setEditable(false)
     await fetchFromDatabase()
     setSelectedService('')
     setSpinner(true)
-    if (res.code !== 200) return showToast('Cambios NO Guardados ', res.code)
+    if (res.status !== 'Success') return showToast('Cambios NO Guardados ', res.code)
     showToast('Se guardaron los cambios ', res.code)
   }
 

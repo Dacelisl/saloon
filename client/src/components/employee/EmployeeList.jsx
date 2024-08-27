@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useContext, useEffect, lazy } from 'react'
-import { getEmployee, updateEmployee } from '../../firebase/firebase'
+import { updateEmployee } from '../../firebase/firebase'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
 import { customContext } from '../context/CustomContext.jsx'
 const InputSearch = lazy(() => import('../utils/InputSearch.jsx'))
@@ -9,7 +9,7 @@ const EmployeeDetail = lazy(() => import('./EmployeeDetail.jsx'))
 const EmployeeTable = lazy(() => import('./EmployeeTable.jsx'))
 
 const EmployeeList = () => {
-  const { employees, setEmployees, handleSearch, roles, setSpinner, showToast } = useContext(customContext)
+  const { employees, fetchFromDatabase, handleSearch, roles, setSpinner, showToast } = useContext(customContext)
 
   const [search, setSearch] = useState('')
   const [imagenPreview, setImagenPreview] = useState('')
@@ -31,20 +31,18 @@ const EmployeeList = () => {
 
   const saveChange = async () => {
     setSpinner(false)
-    const res = await updateEmployee(selectedEmployee)    
+    const res = await updateEmployee(selectedEmployee)
     setEditable(false)
-    const employeeUpdate = await getEmployee()
-    setEmployees(employeeUpdate)
     setSelectedEmployee('')
+    fetchFromDatabase()
     setSpinner(true)
-    if (res !== 200) showToast('Cambios NO Guardados ', 500)
+    if (res.code !== 200) return showToast('Cambios NO Guardados ', 500)
     showToast('Se guardaron los cambios ', 200)
   }
 
   const handleSearchEmployee = (searchTerm) => {
     setSearch(handleSearch(searchTerm, employees))
   }
-
   return (
     <>
       <Modal type={2} className={'!py-6 md:h-[85%] md:top-[3%] lg:top-[5%] lg:h-[88%] xl:!top-[3%] xl:!h-[85%] xxl:!h-[90%]'}>

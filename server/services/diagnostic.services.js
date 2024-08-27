@@ -212,7 +212,7 @@ class DiagnosticServices {
   }
   async getHairTypes() {
     try {
-      const payload = await diagnosticFactory.getHairTypes()
+      const payload = await diagnosticFactory.getHairTypes()      
       if (!payload) {
         return {
           status: 'Fail',

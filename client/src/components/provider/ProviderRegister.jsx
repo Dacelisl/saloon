@@ -9,7 +9,7 @@ const Modal = lazy(() => import('../utils/Modal.jsx'))
 const Register = lazy(() => import('../utils/Register.jsx'))
 
 const ProviderRegister = () => {
-  const { showToast, isDataComplete, setSpinner } = useContext(customContext)
+  const { fetchFromDatabase, navigate, showToast, isDataComplete, setSpinner } = useContext(customContext)
   const [providerData, setProviderData] = useState({
     name: '',
     description: '',
@@ -23,6 +23,7 @@ const ProviderRegister = () => {
     dni: '',
     phone: '',
     email: '',
+    thumbnail: 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/photo_default.jpeg?alt=media&token=9e28057e-52a2-4a5d-87d0-509fc7be2eac',
   })
 
   const handleInputChange = (e) => {
@@ -36,7 +37,6 @@ const ProviderRegister = () => {
   const sendAction = () => {
     if (!isDataComplete(providerData)) return showToast('Faltan propiedades', 500)
     if (!isDataComplete(contactData)) return showToast('Faltan propiedades en contacto', 500)
-
     providerData.contact = contactData
     const isFormValid = Object.values(providerData).every((value) => {
       if (typeof value === 'string') {
@@ -55,13 +55,41 @@ const ProviderRegister = () => {
     try {
       setSpinner(false)
       const resMongo = await registerProvider(providerData)
-      if (resMongo.code !== 200) showToast('Error in the registration process', resMongo.code)
-      setSpinner(true)
-      showToast('Successfully registered user', resMongo.code)
-      setProviderData('')
-      setContactData('')
+      setSpinner(false)
+      switch (resMongo.code) {
+        case 201:
+          setProviderData('')
+          setContactData('')
+          showToast('Successfully registered Employee', resMongo.code)
+          await fetchFromDatabase()
+          navigate(-1)
+          break
+        case 400:
+          showToast('Some properties are missing or undefined', resMongo.code)
+          break
+        case 500:
+          if (resMongo.message.includes('phone')) {
+            showToast('Phone Number is not valid', resMongo.code)
+          } else if (resMongo.message.includes('dateBirthday')) {
+            showToast('DateBirthday is required', resMongo.code)
+          } else if (resMongo.message.includes('dni')) {
+            showToast('That DNI already exists', resMongo.code)
+          } else if (resMongo.message.includes('role')) {
+            showToast('Select a role from the list', resMongo.code)
+          } else if (resMongo.message.includes(providerData.contact.email)) {
+            showToast('Email Duplicate', resMongo.code)
+          } else {
+            showToast('Error in the registration process', resMongo.code)
+          }
+          break
+        default:
+          showToast('Unhandled Error', resMongo.code)
+          break
+      }
     } catch (error) {
       throw new Error('Unhandled Error:', error)
+    } finally {
+      setSpinner(true)
     }
   }
 
@@ -80,7 +108,6 @@ const ProviderRegister = () => {
             <InputArea labelName={'Descripcion'} name={'description'} onChange={handleInputChange} value={providerData.description} edit />
           </div>
         </div>
-
         <div className='h-[55%] mt-1'>
           <div className='p-4 mb-1'>
             <Register labelName={'Datos Contacto'} userData={contactData} handleAddUser={sendAction} setUserData={setContactData} toast={showToast} />

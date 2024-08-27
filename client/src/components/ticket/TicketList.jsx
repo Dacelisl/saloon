@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useContext, lazy } from 'react'
+import { useState, useEffect, useContext, lazy } from 'react'
 import { customContext } from '../context/CustomContext'
 import { createTicket } from '../../firebase/firebase.js'
 import WithAuthentication from '../utils/WithAuthentication.jsx'
@@ -9,9 +9,12 @@ const TicketDetail = lazy(() => import('./TicketDetail.jsx'))
 const TicketPayment = lazy(() => import('./TicketPayment.jsx'))
 
 const TicketList = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { selectedClient, navigate, ticket, setTicket, showToast, fetchFromDatabase } = useContext(customContext)
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  useEffect(() => {
+    if (selectedClient.id === '') return navigate(-1)
+  }, [])
 
   const saveData = async (data) => {
     if (data.amount === '') data.amount = ticket.totalPayment

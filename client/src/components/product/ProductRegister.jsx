@@ -45,23 +45,23 @@ const ProductRegister = () => {
       setSpinner(false)
       const res = await registerProduct(productData)
       if (res.code !== 201) {
-        setProductData('')
-        setImagenPreview('')
         return showToast('Error in the registration process', 500)
       }
       await fetchFromDatabase()
-      setSpinner(true)
       showToast('Successfully registered product', 200)
-      setProductData('')
-      setImagenPreview('')
+      navigate(-1)
     } catch (error) {
       throw new Error('Unhandled Error:', error)
+    } finally {
+      setProductData('')
+      setImagenPreview('')
+      setSpinner(true)
     }
   }
 
   return (
     <Modal type={2} className={'!p-3 md:top-[3%] md:h-[85%] lg:top-[5%] lg:h-[88%] xl:top-[3%] xxl:h-[90%]'}>
-      <h2 className='text-xl pl-4 font-bold mb-1 xxl:mb-4'>New Product</h2>
+      <h2 className='text-xl pl-4 font-bold mb-1 xxl:mb-4'>Producto Nuevo</h2>
       <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
         <div className='lg:hidden '>
           <div className='mt-2'>

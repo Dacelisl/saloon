@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 const InputSelect = ({ label, name, itemValue, itemOption, handleFieldChange, editable = false, className = '', optionValueKey = 'name', optionDisplayKey = 'name' }) => {
   useEffect(() => {
     // Si no hay valor seleccionado y existen opciones, establecer el primer valor
-    if (!itemValue && itemOption.length > 0) {
+    if (!itemValue && itemOption.length > 0) {      
       handleFieldChange({ target: { name, value: itemOption[0][optionValueKey] } })
     }
   }, [itemValue, itemOption, handleFieldChange, name, optionValueKey])

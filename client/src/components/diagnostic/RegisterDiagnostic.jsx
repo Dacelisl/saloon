@@ -35,6 +35,7 @@ const RegisterDiagnostic = () => {
   const dateNow = formatDate(date)
 
   useEffect(() => {
+    if (!selectedClient.id ) return navigate(-1)
     userData.date = dateNow
     userData.employeeId = loggedEmployee.id
     userData.userId = selectedClient.id
