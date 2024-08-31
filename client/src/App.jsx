@@ -1,7 +1,8 @@
 import { Suspense, useEffect, useState, lazy } from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import CustomContext from './components/context/CustomContext'
 import { initializeFirebase } from './firebase/firebaseApp.js'
+import CustomContext from './components/context/CustomContext'
+import OfflinePage from './components/404/OfflinePage.jsx'
 const Login = lazy(() => import('./components/login/Login.jsx'))
 const TicketList = lazy(() => import('./components/ticket/TicketList.jsx'))
 const ClientList = lazy(() => import('./components/clientList/ClientList.jsx'))
@@ -25,19 +26,41 @@ const Home = lazy(() => import('./components/Home.jsx'))
 
 function App() {
   const [isFirebaseInitialized, setIsFirebaseInitialized] = useState(false)
+  const [isOffline, setIsOffline] = useState(!navigator.onLine)
 
   useEffect(() => {
+    const handleOffline = () => setIsOffline(true)
+    const handleOnline = () => setIsOffline(false)
+
+    window.addEventListener('offline', handleOffline)
+    window.addEventListener('online', handleOnline)
+
+    const timer = setTimeout(() => {
+      if (!isFirebaseInitialized) {
+        setIsOffline(true)
+      }
+    }, 10000)
     const initialize = async () => {
       await initializeFirebase()
         .then(() => {
           setIsFirebaseInitialized(true)
         })
         .catch((error) => {
+          setIsOffline(true)
           throw new Error('Error initializing Firebase in App.jsx:', error)
         })
     }
     initialize()
-  }, [])
+    return () => {
+      window.removeEventListener('offline', handleOffline)
+      window.removeEventListener('online', handleOnline)
+      clearTimeout(timer)
+    }
+  }, [isFirebaseInitialized])
+
+  if (isOffline) {
+    return <OfflinePage />
+  }
 
   if (!isFirebaseInitialized) {
     return (
@@ -76,7 +99,7 @@ function App() {
               <Route path='provider' element={<ProviderList />} />
               <Route path='services' element={<ServiceList />} />
               <Route path='providerRegister' element={<ProviderRegister />} />
-              <Route path='404' element={<NotFound />} />
+              <Route path='404' element={<NotFound code={'404'} text={'We have a problem'} />} />
               <Route path='403' element={<AccessDenied />} />
               <Route path='/*' element={<Navigate to='/404' />} />
             </Routes>

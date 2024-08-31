@@ -7,8 +7,8 @@ const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
 
-const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview, role, toast }) => {
-  const { categories, providers, navigate } = useContext(customContext)
+const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEditable, saveChange, imagenPreview, setImagenPreview, toast }) => {
+  const { categories, providers, isTimeAllowed, isUserAllowed, navigate } = useContext(customContext)
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -52,16 +52,13 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
         </div>
       </form>
 
-      {role === 'admin' ? (
-        <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Editar' onClick={handleEdit} />
-            <ButtonDefault title='Agregar' onClick={() => navigate('/registerProduct')} />
-          </span>
-        </div>
-      ) : (
-        ''
-      )}
+      <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
+        <span className={` ${isUserAllowed(['admin', 'auxiliary']) ? 'contents' : 'hidden'}`}>
+          <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed(['admin', 'auxiliary'])} />
+          <ButtonDefault title='Agregar' onClick={() => navigate('/registerProduct')} disabled={!isTimeAllowed(['admin', 'auxiliary'])} />
+        </span>
+      </div>
+
       {editable ? (
         <div className='flex my-2'>
           <ButtonDefault title='Guardar' onClick={saveChange} />

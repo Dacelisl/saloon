@@ -10,11 +10,12 @@ class RoleDAO {
       throw new Error(`function DAO getAllRoles  ${error}`)
     }
   }
-  async createRole(name, permissions) {
+  async createRole(name, permissions, workingHours) {
     try {
       const role = await RoleModel.create({
         name,
         permissions,
+        workingHours
       })
       return role
     } catch (error) {

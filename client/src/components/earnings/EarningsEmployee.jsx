@@ -148,4 +148,4 @@ const EarningsEmployee = () => {
   )
 }
 
-export default WithAuthentication(['stylist', 'admin'])(EarningsEmployee)
+export default WithAuthentication(['stylist', 'admin', 'auxiliary'])(EarningsEmployee)

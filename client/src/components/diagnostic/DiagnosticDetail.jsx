@@ -36,7 +36,7 @@ const DiagnosticDetail = ({
     setImagenAfterPreview(prevData.photoAfter)
     setImagenBeforePreview(prevData.photoBefore)
     setEditable(!editable)
-  }  
+  }
   return (
     <>
       <form className='grid gap-1 mb-2' style={{ gridTemplateRows: 'auto auto 0.7fr' }}>
@@ -114,24 +114,18 @@ const DiagnosticDetail = ({
           </div>
         </div>
       </form>
-
       {selectedDiagnostic.client.firstName ? (
         <div className={` ${editable ? 'hidden' : 'flex relative mx-auto mt-8 mb-3'}`}>
           <span className='contents'>
-            <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed()} />
+            <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed(['admin', 'stylist'])} />
           </span>
           <span className='contents'>
-            <ButtonDefault title='Agregar' onClick={() => navigate('/registerDiagnostic')} disabled={!isTimeAllowed()} />
+            <ButtonDefault title='Agregar' onClick={() => navigate('/registerDiagnostic')} disabled={!isTimeAllowed(['admin', 'stylist'])} />
           </span>
         </div>
       ) : (
-        <div className={` ${editable ? 'hidden' : 'flex relative mx-auto mb-4'}`}>
-          <span className='contents'>
-            <ButtonDefault title='Agregar' onClick={() => navigate('/registerDiagnostic')} />
-          </span>
-        </div>
+        ''
       )}
-
       {editable ? (
         <div className='flex mt-8 mb-4'>
           <ButtonDefault title='Guardar' onClick={saveChange} />

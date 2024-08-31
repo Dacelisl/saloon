@@ -63,7 +63,7 @@ const HistoricalClientCredit = ({ isOpen, onClose, saveData, balanceDue = '' }) 
         )}
 
         <span className=' flex justify-center mb-2 '>
-          <ButtonDefault title='Pagar' onClick={handleClick} disabled={send && !isTimeAllowed()} />
+          <ButtonDefault title='Pagar' onClick={handleClick} disabled={send && !isTimeAllowed(['admin', 'auxiliary'])} />
         </span>
       </ModalAux>
     </>

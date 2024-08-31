@@ -80,6 +80,7 @@ const CustomContext = ({ children }) => {
   const [scalpTypes, setScalpTypes] = useState([])
   const [HairTypes, setHairTypes] = useState([])
 
+  const [decodedClaims, setDecodedClaims] = useState(null)
   const [roles, setRoles] = useState([])
   const [role, setRole] = useState('')
 
@@ -103,6 +104,10 @@ const CustomContext = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) return setLoading(false)
       try {
+        const idTokenResult = await user.getIdTokenResult()
+        const claims = idTokenResult.claims        
+        setDecodedClaims(claims)
+
         const employee = await getEmployeeByEmail(user.email)
         if (!employee.code || employee.code !== 200) {
           setToastMessage({ message: 'Usuario no Encontrado o Eliminado', code: 500 })
@@ -194,12 +199,16 @@ const CustomContext = ({ children }) => {
     }
     return true
   }
-  const isTimeAllowed = () => {
-    if (role === 'admin') return true
-    const startHour = 7
-    const endHour = 20
+  const isTimeAllowed = (typeUser) => {
+    return true
+    const userAllowed = Array.isArray(typeUser) ? typeUser.some((user) => user === decodedClaims.role) : typeUser === decodedClaims.role
     const currentHour = new Date().getHours()
-    return currentHour >= startHour && currentHour < endHour
+    return userAllowed && currentHour >= decodedClaims.workingHours.startTime && currentHour < decodedClaims.workingHours.endTime
+  }
+  const isUserAllowed = (typeUser) => {
+    return true
+    
+    return Array.isArray(typeUser) ? typeUser.some((user) => user === decodedClaims.role) : typeUser === decodedClaims.role
   }
 
   return (
@@ -239,6 +248,7 @@ const CustomContext = ({ children }) => {
         defaultDiagnostic,
         setSpinner,
         isTimeAllowed,
+        isUserAllowed,
       }}
     >
       {children}

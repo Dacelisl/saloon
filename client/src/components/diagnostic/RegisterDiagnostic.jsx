@@ -1,8 +1,10 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { useState, lazy, useContext, useEffect } from 'react'
 import { customContext } from '../context/CustomContext.jsx'
 import { formatDate } from '../../utils/utils.js'
 import { registerDiagnostic } from '../../firebase/firebase.js'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
 import Modal from '../utils/Modal.jsx'
 const InputEdit = lazy(() => import('../utils/InputEdit.jsx'))
 const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
@@ -35,7 +37,7 @@ const RegisterDiagnostic = () => {
   const dateNow = formatDate(date)
 
   useEffect(() => {
-    if (!selectedClient.id ) return navigate(-1)
+    if (!selectedClient.id) return navigate(-1)
     userData.date = dateNow
     userData.employeeId = loggedEmployee.id
     userData.userId = selectedClient.id
@@ -61,7 +63,7 @@ const RegisterDiagnostic = () => {
     })
     if (isFormValid) {
       handleAddUser()
-    } else {      
+    } else {
       showToast('Falta Informacion', 500)
     }
   }
@@ -183,5 +185,4 @@ const RegisterDiagnostic = () => {
     </>
   )
 }
-
-export default RegisterDiagnostic
+export default WithAuthentication(['stylist', 'admin'])(RegisterDiagnostic)

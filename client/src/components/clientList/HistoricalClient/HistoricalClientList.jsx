@@ -51,11 +51,11 @@ const HistoricalClientList = () => {
         <div className='mt-8 h-[50%]'>
           <HistoricalClientTable onClientSelected={handleTicketSelect} data={ticketsClient} />
         </div>
-        <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} disabled={!isTimeAllowed()} /> : <span className=' mt-6'></span>}</div>
+        <div className='flex mt-1 -mb-2'>{selectedTicket.balanceDue > 0 ? <ButtonDefault title='Abonar' onClick={openModal} disabled={!isTimeAllowed(['admin', 'auxiliary'])} /> : <span className=' mt-6'></span>}</div>
       </Modal>
       <HistoricalClientCredit isOpen={isModalCreditOpen} onClose={handleCloseCreditModal} saveData={saveData} balanceDue={selectedTicket.balanceDue} />
     </>
   )
 }
 
-export default WithAuthentication(['stylist', 'admin'])(HistoricalClientList)
+export default WithAuthentication(['stylist', 'admin', 'auxiliary'])(HistoricalClientList)

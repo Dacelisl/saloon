@@ -6,6 +6,7 @@ const GenericTable = lazy(() => import('../utils/GenericTable.jsx'))
 const TicketTable = ({ data, onItemSelected, openModal }) => {
   const [selectedColumnId, setSelectedColumnId] = useState(null)
 
+
   const showModal = (id) => {
     setSelectedColumnId(id)
     openModal()
@@ -18,7 +19,7 @@ const TicketTable = ({ data, onItemSelected, openModal }) => {
     },
     {
       header: 'Precio',
-      accessorFn: (row) => `${row.price}`,
+      accessorFn: (row) => row.price? row.price : `${row.priceRange.min} - ${row.priceRange.max}`,
     },
     {
       id: 'more-details',

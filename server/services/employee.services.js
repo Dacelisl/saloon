@@ -163,6 +163,7 @@ class EmployeeServices {
       const claims = {
         role: roleFound.name,
         permissions: roleFound.permissions,
+        workingHours: roleFound.workingHours,
       }
       await admin.auth().setCustomUserClaims(userRecord.uid, { claims })
       return {

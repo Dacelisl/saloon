@@ -13,7 +13,7 @@ const providerSchema = new Schema({
       required: true,
       validate: {
         validator: async function (value) {
-          return /^\d{10,}$/.test(value.toString())
+          return /^\d{10,12}$/.test(value.toString())
         },
         message: 'The phone number is not valid',
       },

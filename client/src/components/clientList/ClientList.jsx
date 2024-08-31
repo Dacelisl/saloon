@@ -76,4 +76,4 @@ const ClientList = () => {
   )
 }
 
-export default WithAuthentication(['stylist', 'admin'])(ClientList)
+export default WithAuthentication(['stylist', 'admin','auxiliary'])(ClientList)

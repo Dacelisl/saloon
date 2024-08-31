@@ -56,9 +56,9 @@ class RoleServices {
       }
     }
   }
-  async createRole(name, permissions) {
+  async createRole(name, permissions, hours) {
     try {
-      const newRole = await roleFactory.createRole(name, permissions)
+      const newRole = await roleFactory.createRole(name, permissions, hours)
       if (!newRole) {
         return {
           status: 'Fail',

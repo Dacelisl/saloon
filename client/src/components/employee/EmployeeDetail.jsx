@@ -9,7 +9,7 @@ const InputSelect = lazy(() => import('../utils/InputSelect.jsx'))
 
 const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, setImagenPreview, editable, setEditable, saveChange, roles, toast }) => {
   const [prevData, setPrevData] = useState('')
-  const { navigate } = useContext(customContext)
+  const { navigate, isTimeAllowed } = useContext(customContext)
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
@@ -55,7 +55,7 @@ const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, 
         </div>
       </form>
       <div className={` ${editable ? 'hidden' : 'flex relative mx-auto'}`}>
-        <span className='contents'>
+        <span className={` ${isTimeAllowed(['admin']) ? 'contents' : 'hidden'}`} >
           <ButtonDefault title='Editar' onClick={handleEdit} />
           <ButtonDefault title='Agregar' onClick={() => navigate('/registerEmployee')} />
         </span>

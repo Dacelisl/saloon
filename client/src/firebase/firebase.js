@@ -44,8 +44,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`,
-      /* url: `http://localhost:3000/api${url}`, */
+      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`, */
+      url: `http://localhost:3000/api${url}`,
       data: data,
       headers: headers,
     })
@@ -63,9 +63,6 @@ async function makeRequest(method, url, data = null, headers = {}) {
 export const getRoles = async () => {
   try {
     const response = await makeRequest('GET', '/role')
-    /* const response = roles.data.payload.map((r) => {
-      return { name: r.name, id: r._id, permissions: r.permissions }
-    }) */
     return response
   } catch (error) {
     return error

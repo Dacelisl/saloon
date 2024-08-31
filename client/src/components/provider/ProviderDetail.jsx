@@ -9,7 +9,7 @@ const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
 
 const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast }) => {
   const [prevData, setPrevData] = useState('')
-  const { navigate } = useContext(customContext)
+  const { navigate, isTimeAllowed } = useContext(customContext)
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
@@ -108,8 +108,8 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
       </div>
       <div className={` ${editable ? 'hidden' : 'flex my-1'}`}>
         <span className='contents'>
-          <ButtonDefault title='Editar' onClick={handleEdit} />
-          <ButtonDefault title='Agregar' onClick={() => navigate('/providerRegister')} />
+          <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed(['admin'])}/>
+          <ButtonDefault title='Agregar' onClick={() => navigate('/providerRegister')} disabled={!isTimeAllowed(['admin'])}/>
         </span>
       </div>
 

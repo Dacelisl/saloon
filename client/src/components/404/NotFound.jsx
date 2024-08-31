@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { lazy } from 'react'
 import { NavLink } from 'react-router-dom'
 import notfound_dark from '../../assets/img/notfound_dark.svg'
@@ -5,7 +6,7 @@ import dark from '../../assets/img/dark.jpg'
 const MovingDots = lazy(() => import('../utils/MovingDots.jsx'))
 const FloatingDots = lazy(() => import('../utils/FloatingDots.jsx'))
 
-const NotFound = () => {
+const NotFound = ({code, text}) => {
   return (
     <>
       <div
@@ -23,13 +24,13 @@ const NotFound = () => {
           className='font-sans flex absolute top-3 xl:top-[-5%] left-[50%] right-[50%] justify-center sm:text-[120px] md:text-[130px] xl:text-[180px] font-semibold text-black uppercase '
           style={{ textShadow: '-1px -1px 0 #8400ff, 1px 1px 0 #ff005a' }}
         >
-          404
+          {code}
         </h1>
         <span
           className=' font-sans block relative sm:bottom-[13%] sm:text-2xl md:bottom-[19%] md:text-3xl lg:bottom-[25%] xl:bottom-[20%] xl:text-5xl xxl:bottom-[22%] xxxl:bottom-[25%] text-white uppercase m-auto'
           style={{ textShadow: '0 2px 0 #ff0ab2' }}
         >
-          We have a problem
+          {text}
         </span>
         <NavLink
           to={'/'}

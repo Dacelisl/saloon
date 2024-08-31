@@ -6,6 +6,10 @@ const schema = new Schema({
     required: true,
     unique: true,
   },
+  workingHours: {
+    startTime: { type: Number, required: true },
+    endTime: { type: Number, required: true },
+  },
   permissions: [
     {
       module: { type: String, required: true },

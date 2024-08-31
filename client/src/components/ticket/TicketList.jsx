@@ -54,4 +54,4 @@ const TicketList = () => {
     </>
   )
 }
-export default WithAuthentication(['admin'])(TicketList)
+export default WithAuthentication(['admin', 'auxiliary'])(TicketList)

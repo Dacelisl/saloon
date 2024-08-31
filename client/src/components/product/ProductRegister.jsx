@@ -11,7 +11,7 @@ const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 
 const ProductRegister = () => {
-  const { categories, fetchFromDatabase, isDataComplete, providers, showToast, navigate, setSpinner } = useContext(customContext)
+  const { categories, fetchFromDatabase, isDataComplete, providers, showToast, navigate, isTimeAllowed, setSpinner } = useContext(customContext)
 
   const [productData, setProductData] = useState({
     name: '',
@@ -107,9 +107,9 @@ const ProductRegister = () => {
       <InputArea labelName={'Descripcion'} name={'description'} onChange={handleInputChange} value={productData.description} edit className='h-12' />
       <div className='flex flex-wrap justify-end mt-2 sm:mb-2 xxl:mt-6'>
         <ButtonDefault title='Cancelar' onClick={() => navigate(-1)} />
-        <ButtonDefault title='Agregar' onClick={handleAddProduct} />
+        <ButtonDefault title='Agregar' onClick={handleAddProduct} disabled={!isTimeAllowed(['admin', 'auxiliary'])} />
       </div>
     </Modal>
   )
 }
-export default WithAuthentication(['admin'])(ProductRegister)
+export default WithAuthentication(['admin', 'auxiliary'])(ProductRegister)

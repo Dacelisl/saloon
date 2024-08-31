@@ -1,6 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useState, useContext, lazy } from 'react'
 import { registerClient } from '../../firebase/firebase.js'
 import { customContext } from '../context/CustomContext.jsx'
+import WithAuthentication from '../utils/WithAuthentication.jsx'
 const Modal = lazy(() => import('../utils/Modal.jsx'))
 const Register = lazy(() => import('../utils/Register.jsx'))
 
@@ -55,5 +57,4 @@ const RegisterClient = () => {
     </>
   )
 }
-
-export default RegisterClient
+export default WithAuthentication(['admin', 'stylist', 'auxiliary'])(RegisterClient)

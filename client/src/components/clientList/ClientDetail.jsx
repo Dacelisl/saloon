@@ -7,8 +7,8 @@ const ButtonDefault = lazy(() => import('../utils/ButtonDefault.jsx'))
 const ImagePreview = lazy(() => import('../utils/ImagePreview.jsx'))
 const InputPhone = lazy(() => import('../utils/InputPhone.jsx'))
 
-const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast, showData }) => {
-  const { isTimeAllowed } = useContext(customContext)
+const ClientDetail = ({ selectedClient, setSelectedClient, imagenPreview, setImagenPreview, editable, setEditable, saveChange, toast, showData }) => {
+  const { isTimeAllowed, isUserAllowed } = useContext(customContext)
   const [prevData, setPrevData] = useState('')
 
   const handleFieldChange = (e) => {
@@ -53,21 +53,15 @@ const ClientDetail = ({ loggedEmployee, selectedClient, setSelectedClient, image
 
       {selectedClient.firstName ? (
         <div className={` ${editable ? 'hidden' : 'flex my-2'}`}>
-          {loggedEmployee.role === 'admin' ? (
-            <span className='contents'>
-              <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed()} />
-            </span>
-          ) : (
-            ''
-          )}
-
-          <Link to={'/ticket'} className='contents'>
-            <ButtonDefault title='Ticket' disabled={!isTimeAllowed()} />
+          <span className='contents'>
+            <ButtonDefault title='Editar' onClick={handleEdit} disabled={!isTimeAllowed(['admin', 'stylist', 'auxiliary'])} />
+          </span>
+          <Link to={'/ticket'} className={` ${isUserAllowed(['admin', 'auxiliary']) ? 'contents' : 'hidden'}`}>
+            <ButtonDefault title='Ticket' disabled={!isTimeAllowed(['admin', 'auxiliary'])} />
           </Link>
-          <Link to={showData.diagnostic ? '/diagnostic' : '/registerDiagnostic'} className='contents'>
-            <ButtonDefault title='Diagnostico' disabled={!showData.diagnostic && !isTimeAllowed()} />
+          <Link to={showData.diagnostic ? '/diagnostic' : '/registerDiagnostic'} className={` ${isUserAllowed(['admin', 'stylist']) ? 'contents' : 'hidden'}`}>
+            <ButtonDefault title='Diagnostico' />
           </Link>
-
           {showData.historical ? (
             <Link to={'/historical'} className='contents'>
               <ButtonDefault title='Historial' disabled={selectedClient ? false : true} />

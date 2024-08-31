@@ -22,9 +22,9 @@ class RoleController {
     }
   }
   async createRole(req, res) {
-    const { name, permissions } = req.body
+    const { name, permissions, workingHours } = req.body
     try {
-      const response = await roleService.createRole(name, permissions)
+      const response = await roleService.createRole(name, permissions, workingHours)
       return sendSuccessResponse(res, response)
     } catch (error) {
       req.logger.error(error)

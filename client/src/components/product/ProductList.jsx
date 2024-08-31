@@ -80,4 +80,4 @@ const ProductList = () => {
     </>
   )
 }
-export default WithAuthentication(['stylist', 'admin'])(ProductList)
+export default WithAuthentication(['stylist', 'admin', 'auxiliary'])(ProductList)
