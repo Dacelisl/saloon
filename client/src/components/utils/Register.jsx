@@ -35,7 +35,7 @@ const Register = ({ labelName, userData, setUserData, handleAddUser, employee = 
       <form className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
         <InputEdit labelName={'Nombre'} value={userData.firstName} onChange={handleInputChange} edit name={'firstName'} className='h-9' />
         <InputEdit labelName={'Apellido'} value={userData.lastName} onChange={handleInputChange} edit name={'lastName'} className='h-9' />
-        <InputEdit type='number' labelName={'DNI'} value={userData.dni} onChange={handleInputChange} edit name={'dni'} className='h-9' />
+        <InputEdit type='number' labelName={'Cedula'} value={userData.dni} onChange={handleInputChange} edit name={'dni'} className='h-9' />
         <InputEdit labelName={'Direccion'} value={userData.address} onChange={handleInputChange} edit name={'address'} className='h-9' />
         <InputEdit type='email' labelName={'Email'} value={userData.email} onChange={handleInputChange} edit name={'email'} className='h-9' />
         <InputPhone phoneNumber={userData.phone} setPhoneNumber={handleInputChange} value={userData.phone || ''} className={'h-9'} />
@@ -45,7 +45,7 @@ const Register = ({ labelName, userData, setUserData, handleAddUser, employee = 
       {employee && (
         <>
           <div className='border p-4 mb-4 rounded-md'>
-            <h3 className='text-lg font-semibold mb-2'>User Data</h3>
+            <h3 className='text-lg text-center font-semibold mb-2'>Datos de Usuario</h3>
             <InputEdit labelName={'Nombre de Usuario'} value={userData.email} name={'username'} className='h-9' />
             <InputSelect label={'Rol'} name={'role'} itemOption={roles} itemValue={userData.role} handleFieldChange={handleInputChange} editable />
             <InputPassword labelName={'Contraseña'} name={'password'} onChange={handleInputChange} value={userData.password} edit className='h-10' />

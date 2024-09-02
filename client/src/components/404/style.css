@@ -55,7 +55,7 @@
     color: var(--color-2);
   }
   
-  h3 {
+  #title-error {
     position: relative;
     font-size: 5vw;
     font-weight: 700;
@@ -63,7 +63,7 @@
     animation: blink 1.3s infinite steps(1);
   }
   
-  h3:before, h3:after {
+  #title-error:before, #title-error:after {
     content: 'ERROR 500';
     position: absolute;
     top: -1px;
@@ -72,13 +72,13 @@
     animation: dance 2s infinite steps(2);
   }
   
-  h3:before {
+  #title-error:before {
     clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
     color: var(--color-1);
     animation: shiftright 200ms steps(2) infinite;
   }
   
-  h3:after {
+  #title-error:after {
     clip-path: polygon(0 100%, 100% 100%, 100% 50%, 0 50%);
     color: var(--color-2);
     animation: shiftleft 200ms steps(2) infinite;

@@ -7,7 +7,6 @@ function extractTokenFromHeader(req) {
 
 export async function authorize(req, res, next) {
   try {
-    return next()
     const token = extractTokenFromHeader(req)
     const ruta = req.originalUrl.split('?')[0]
     const method = req.method.toLowerCase()
@@ -18,10 +17,8 @@ export async function authorize(req, res, next) {
     const decodedClaims = await admin.auth().verifyIdToken(token)
     const permissions = decodedClaims.claims.permissions || []
 
-    const hasPermission = permissions.some((permission) => permission.module === ruta && permission.actions.includes(method))
-    const isWithinAllowedHours = () => {
-      return currentHour >= decodedClaims.claims.workingHours.startTime && currentHour < decodedClaims.claims.workingHours.endTime
-    }
+    const hasPermission = permissions.some((permission) => ruta.includes(permission.module) && permission.actions.includes(method))
+    const isWithinAllowedHours = currentHour >= decodedClaims.claims.workingHours.startTime && currentHour < decodedClaims.claims.workingHours.endTime
 
     if (typeUser.some((user) => user === decodedClaims.claims.role)) {
       if ((isWithinAllowedHours && hasPermission) || method === 'get') {
