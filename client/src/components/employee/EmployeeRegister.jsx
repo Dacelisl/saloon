@@ -36,7 +36,7 @@ const EmployeeRegister = () => {
         showToast('Password must contain: 8 characters between uppercase, lowercase, and numbers', 500)
         return
       }
-      const resMongo = await registerEmployeeMongo(userData)
+      const resMongo = await registerEmployeeMongo(userData)      
       setSpinner(false)
       switch (resMongo.code) {
         case 201:
@@ -64,10 +64,10 @@ const EmployeeRegister = () => {
           }
           break
         default:
-          showToast('Unhandled Error', resMongo.code)
+          showToast('Unhandled Error 2', resMongo.code)
           break
       }
-    } catch (error) {
+    } catch (error) {      
       showToast('Unhandled Error', 500)
     } finally {
       setUserData(employeeDefault)

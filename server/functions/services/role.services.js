@@ -98,6 +98,7 @@ class RoleServices {
         const claims = {
           role: updatedData.name,
           permissions: updatedData.permissions,
+          workingHours: updatedData.workingHours,
         }
         const users = await admin.auth().listUsers()
         const updatePromises = users.users.map(async (userRecord) => {

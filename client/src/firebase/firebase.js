@@ -200,7 +200,7 @@ export const registerEmployeeMongo = async (dataUser) => {
 }
 export const registerEmployeeFire = async (email, password, rol) => {
   try {
-    const response = await makeRequest('POST', '/employee/create', { email, password, rol })
+    const response = await makeRequest('POST', '/employee/create', { email, password, rol })    
     return response
   } catch (error) {
     return error

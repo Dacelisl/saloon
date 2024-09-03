@@ -200,6 +200,7 @@ class EmployeeServices {
         const claims = {
           role: rol.name,
           permissions: rol.permissions,
+          workingHours: rol.workingHours,
         }
         const userRecord = await admin.auth().getUserByEmail(employee.email)
         await admin.auth().revokeRefreshTokens(userRecord.uid)

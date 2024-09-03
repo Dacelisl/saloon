@@ -105,7 +105,7 @@ const CustomContext = ({ children }) => {
       if (!user) return setLoading(false)
       try {
         const idTokenResult = await user.getIdTokenResult()
-        const claims = idTokenResult.claims        
+        const claims = idTokenResult.claims
         setDecodedClaims(claims.claims)
 
         const employee = await getEmployeeByEmail(user.email)
@@ -204,7 +204,7 @@ const CustomContext = ({ children }) => {
     const currentHour = new Date().getHours()
     return userAllowed && currentHour >= decodedClaims.workingHours.startTime && currentHour < decodedClaims.workingHours.endTime
   }
-  const isUserAllowed = (typeUser) => {    
+  const isUserAllowed = (typeUser) => {
     return Array.isArray(typeUser) ? typeUser.some((user) => user === decodedClaims.role) : typeUser === decodedClaims.role
   }
 

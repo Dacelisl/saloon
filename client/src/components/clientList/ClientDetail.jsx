@@ -60,7 +60,7 @@ const ClientDetail = ({ selectedClient, setSelectedClient, imagenPreview, setIma
             <ButtonDefault title='Ticket' disabled={!isTimeAllowed(['admin', 'auxiliary'])} />
           </Link>
           <Link to={showData.diagnostic ? '/diagnostic' : '/registerDiagnostic'} className={` ${isUserAllowed(['admin', 'stylist']) ? 'contents' : 'hidden'}`}>
-            <ButtonDefault title='Diagnostico' />
+            <ButtonDefault title='Diagnostico' disabled={!isTimeAllowed(['admin', 'stylist'])}/>
           </Link>
           {showData.historical ? (
             <Link to={'/historical'} className='contents'>
