@@ -44,8 +44,8 @@ async function makeRequest(method, url, data = null, headers = {}) {
   try {
     const response = await instance({
       method: method,
-      /* url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`, */
-      url: `http://localhost:3000/api${url}`,
+      url: `https://us-central1-project-fabiosalon.cloudfunctions.net/back/api${url}`,
+      /* url: `http://localhost:3000/api${url}`, */
       data: data,
       headers: headers,
     })

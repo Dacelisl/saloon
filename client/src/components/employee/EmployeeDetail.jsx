@@ -37,7 +37,7 @@ const EmployeeDetail = ({ selectedEmployee, setSelectedEmployee, imagenPreview, 
           <InputEdit labelName={'Nombre'} value={selectedEmployee.firstName} edit={editable} onChange={handleFieldChange} name={'firstName'} />
           <InputEdit labelName={'Apellido'} value={selectedEmployee.lastName} edit={editable} onChange={handleFieldChange} name={'lastName'} />
           <InputEdit labelName={'Cedula'} value={selectedEmployee.dni} edit={false} onChange={handleFieldChange} type={'number'} name={'dni'} />
-          <InputPhone phoneNumber={selectedEmployee.phone} setPhoneNumber={handleFieldChange} value={selectedEmployee.phone || ''} edit={!editable} />
+          <InputPhone phoneNumber={selectedEmployee.phone} setPhoneNumber={handleFieldChange}  edit={!editable} />
           <InputEdit labelName={'Direccion'} value={selectedEmployee.address} edit={editable} onChange={handleFieldChange} name={'address'} />
           <InputEdit labelName={'Fecha Cumpleaños'} value={selectedEmployee.dateBirthday} edit={editable} onChange={handleFieldChange} type={'date'} name={'dateBirthday'} />
         </div>

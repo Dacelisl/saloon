@@ -15,6 +15,7 @@ export async function authorize(req, res, next) {
     if (!token) return res.status(401).json({ message: 'Not authenticated' })
 
     const decodedClaims = await admin.auth().verifyIdToken(token)
+
     const permissions = decodedClaims.claims.permissions || []
 
     const hasPermission = permissions.some((permission) => ruta.includes(permission.module) && permission.actions.includes(method))

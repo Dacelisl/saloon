@@ -37,7 +37,7 @@ const ClientDetail = ({ selectedClient, setSelectedClient, imagenPreview, setIma
           <InputEdit labelName={'Nombre'} value={selectedClient.firstName} edit={editable} onChange={handleFieldChange} name={'firstName'} />
           <InputEdit labelName={'Apellido'} value={selectedClient.lastName} edit={editable} onChange={handleFieldChange} name={'lastName'} />
           <InputEdit labelName={'Cedula'} value={selectedClient.dni} edit={editable} onChange={handleFieldChange} type={'number'} name={'dni'} />
-          <InputPhone phoneNumber={selectedClient.phone} setPhoneNumber={handleFieldChange} edit={!editable} value={selectedClient.phone || ''} />
+          <InputPhone phoneNumber={selectedClient.phone} setPhoneNumber={handleFieldChange} edit={!editable} />
           <InputEdit labelName={'Direccion'} value={selectedClient.address} edit={editable} onChange={handleFieldChange} name={'address'} />
           <InputEdit labelName={'Email'} value={selectedClient.email} edit={editable} onChange={handleFieldChange} type={'email'} name={'email'} />
         </div>

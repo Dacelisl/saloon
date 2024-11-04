@@ -85,7 +85,7 @@ const ProviderDetail = ({ selectedprovider, setSelectedProvider, imagenPreview, 
               <InputEdit labelName={'Nombre'} value={selectedprovider.contact.firstName} edit={editable} onChange={handleFieldChange} name={'contact.firstName'} className='h-8' />
               <InputEdit labelName={'Apellido'} value={selectedprovider.contact.lastName} edit={editable} onChange={handleFieldChange} name={'contact.lastName'} className='h-8' />
               <InputEdit labelName={'Cedula'} value={selectedprovider.contact.dni} edit={false} onChange={handleFieldChange} type={'number'} name={'contact.dni'} className='h-8' />
-              <InputPhone phoneNumber={selectedprovider.contact.phone} setPhoneNumber={handleFieldChange} edit={!editable} value={selectedprovider.contact.phone || ''} className='h-8' />
+              <InputPhone phoneNumber={selectedprovider.contact.phone} setPhoneNumber={handleFieldChange} edit={!editable}  className='h-8' />
               <InputEdit labelName={'Direccion'} value={selectedprovider.contact.address} edit={editable} onChange={handleFieldChange} name={'contact.address'} className='h-8' />
             </div>
             <div>

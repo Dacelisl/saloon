@@ -29,11 +29,11 @@ class UserServices {
         message: 'all users',
         payload: users,
       }
-    } catch (error) {      
+    } catch (error) {
       return {
         status: 'error',
         code: 500,
-        message: 'error getting all users in Services: getAllUsers',
+        message: `error getting all users in Services: getAllUsers ${error}`,
         payload: {},
       }
     }

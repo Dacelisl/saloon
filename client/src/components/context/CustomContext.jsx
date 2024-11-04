@@ -105,7 +105,7 @@ const CustomContext = ({ children }) => {
       if (!user) return setLoading(false)
       try {
         const idTokenResult = await user.getIdTokenResult()
-        const claims = idTokenResult.claims
+        const claims = idTokenResult.claims        
         setDecodedClaims(claims.claims)
 
         const employee = await getEmployeeByEmail(user.email)

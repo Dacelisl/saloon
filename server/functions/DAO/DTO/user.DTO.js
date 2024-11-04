@@ -6,24 +6,26 @@ class UserDTO {
     this.firstName = user.firstName
     this.lastName = user.lastName
     this.dni = user.dni
-    this.phone = `+${user.phone.toString().slice(0, 2)} ${user.phone.toString().slice(2)}`
+    this.phone = user.phone ? `+${user.phone.toString().slice(0, 2)} ${user.phone.toString().slice(2)}` : null
     this.address = user.address
     this.email = user.email
-    this.dateBirthday = formatDate(user.dateBirthday)
-    this.firstDate = formatDate(user.firstDate)
-    this.lastDate = formatDate(user.lastDate)
+    this.dateBirthday = user.dateBirthday ? formatDate(user.dateBirthday) : null
+    this.firstDate = user.firstDate ? formatDate(user.firstDate) : null
+    this.lastDate = user.lastDate ? formatDate(user.lastDate) : null
     this.thumbnail = user.thumbnail
-    this.serviceHistory = this.mapServiceHistory(user.serviceHistory)
-    this.shopping = this.mapShopping(user.shopping)
+      ? user.thumbnail
+      : 'https://firebasestorage.googleapis.com/v0/b/project-fabiosalon.appspot.com/o/photo_default.jpeg?alt=media&token=9e28057e-52a2-4a5d-87d0-509fc7be2eac'
+    this.serviceHistory = user.serviceHistory ? this.mapServiceHistory(user.serviceHistory) : []
+    this.shopping = user.shopping ? this.mapShopping(user.shopping) : []
   }
 
   mapServiceHistory(serviceHistory) {
     return Array.isArray(serviceHistory)
       ? serviceHistory.map((entry) => ({
-          employeeId: this.mapEmployee(entry.employeeId),
-          service: this.mapService(entry.service),
+          employeeId: entry.employeeId ? this.mapEmployee(entry.employeeId) : null,
+          service: entry.service ? this.mapService(entry.service) : null,
           price: entry.price,
-          date: formatDate(entry.date),
+          date: entry.date ? formatDate(entry.date) : null,
         }))
       : []
   }
@@ -31,9 +33,9 @@ class UserDTO {
   mapShopping(shopping) {
     return Array.isArray(shopping)
       ? shopping.map((entry) => ({
-          products: this.mapProducts(entry.products),
-          date: formatDate(entry.date),
-          employeeId: this.mapEmployee(entry.employeeId),
+          products: Array.isArray(entry.products) ? this.mapProducts(entry.products) : [],
+          date: entry.date ? formatDate(entry.date) : null,
+          employeeId: entry.employeeId ? this.mapEmployee(entry.employeeId) : null,
         }))
       : []
   }
@@ -41,31 +43,37 @@ class UserDTO {
   mapProducts(products) {
     return Array.isArray(products)
       ? products.map((productEntry) => ({
-          product: this.mapProduct(productEntry.product),
+          product: productEntry.product ? this.mapProduct(productEntry.product) : null,
           quantity: productEntry.quantity,
         }))
       : []
   }
 
   mapEmployee(employee) {
-    return {
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-    }
+    return employee
+      ? {
+          firstName: employee.firstName || '',
+          lastName: employee.lastName || '',
+        }
+      : null
   }
 
   mapService(service) {
-    return {
-      name: service.name,
-      description: service.description,
-    }
+    return service
+      ? {
+          name: service.name || '',
+          description: service.description || '',
+        }
+      : null
   }
 
   mapProduct(product) {
-    return {
-      name: product.name,
-      price: product.price,
-    }
+    return product
+      ? {
+          name: product.name || '',
+          price: product.price || 0,
+        }
+      : null
   }
 }
 

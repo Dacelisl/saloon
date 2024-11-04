@@ -38,7 +38,7 @@ const ProductDetail = ({ selectedProduct, setSelectedProduct, editable, setEdita
           <InputSelect label={'Proveedor'} name={'provider'} itemOption={providers} handleFieldChange={handleFieldChange} itemValue={selectedProduct.provider} editable={editable} />
 
           <InputSelect label={'Categoria'} name={'category'} itemOption={categories} itemValue={selectedProduct.category} handleFieldChange={handleFieldChange} editable={editable} />
-          <InputEdit labelName={'Code'} value={selectedProduct.code} onChange={handleFieldChange} type={'text'} name={'code'} />
+          <InputEdit labelName={'Code'} value={selectedProduct.code} onChange={handleFieldChange} edit={editable} type={'text'} name={'code'} />
           <InputEdit labelName={'Stock'} value={selectedProduct.stock} edit={editable} onChange={handleFieldChange} type={'number'} name={'stock'} />
           <InputEdit labelName={'Precio'} value={selectedProduct.price} edit={editable} onChange={handleFieldChange} type={'number'} name={'price'} />
         </div>

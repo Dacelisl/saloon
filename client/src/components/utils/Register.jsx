@@ -38,7 +38,7 @@ const Register = ({ labelName, userData, setUserData, handleAddUser, employee = 
         <InputEdit type='number' labelName={'Cedula'} value={userData.dni} onChange={handleInputChange} edit name={'dni'} className='h-9' />
         <InputEdit labelName={'Direccion'} value={userData.address} onChange={handleInputChange} edit name={'address'} className='h-9' />
         <InputEdit type='email' labelName={'Email'} value={userData.email} onChange={handleInputChange} edit name={'email'} className='h-9' />
-        <InputPhone phoneNumber={userData.phone} setPhoneNumber={handleInputChange} value={userData.phone || ''} className={'h-9'} />
+        <InputPhone phoneNumber={userData.phone} setPhoneNumber={handleInputChange}  className={'h-9'} />
         <InputEdit type='date' labelName={'Fecha Cumpleaños'} value={userData.dateBirthday} onChange={handleInputChange} edit name={'dateBirthday'} className='h-9' />
         <ImagePreview setSelectedItem={handleInputChange} showInputOnly className='h-9' labelName='Foto de perfil' toast={toast} />
       </form>

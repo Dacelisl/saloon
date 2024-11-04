@@ -4,13 +4,16 @@ import { EmployeeDTO } from '../../DTO/employee.dto.js'
 class EmployeeDAO {
   async getAllEmployees() {
     try {
-      const employees = await EmployeeModel.find().populate('role').lean()
+      const employees = await EmployeeModel.find({ firstName: { $ne: 'admin' } })
+        .populate('role')
+        .lean()
       const formattedEmployees = employees.map((user) => (user ? new EmployeeDTO(user) : null))
       return formattedEmployees
     } catch (error) {
       throw new Error(`function DAO getAllEmployees: ${error}`)
     }
   }
+
   async getEmployeeById(id) {
     try {
       const employee = await EmployeeModel.findById(id).populate('role').lean()

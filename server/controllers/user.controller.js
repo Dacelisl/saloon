@@ -3,7 +3,7 @@ import { userService } from '../services/user.services.js'
 
 class UserController {
   async getAllUsers(req, res) {
-    try {
+    try {      
       const response = await userService.getAllUsers()
       return sendSuccessResponse(res, response)
     } catch (error) {
